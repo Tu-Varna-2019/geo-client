@@ -1,0 +1,25 @@
+name: Snyk scan for Kotlin
+
+on: push
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: set up JDK 18
+        uses: actions/setup-java@v1
+        with:
+          java-version: 18
+
+      - name: Change wrapper permissions
+        run: chmod +x ./gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/gradle@master
+        if: false # Disable this, due to unresolved error: ERROR: JAVA_HOME is set to an invalid directory: /opt/hostedtoolcache/jdk/18.0.2/x64
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
