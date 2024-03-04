@@ -1,6 +1,13 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("org.sonarqube") version "4.4.1.3373"
+}
+
+sonar {
+    properties {
+        property ("sonar.projectKey", "Tu-Varna-2019_Masters-Summer-Project-IMD-KotlinAndroid-Client-Geo-System_AY4Jh2hVYmNxNLY6TIyH")
+    }
 }
 
 android {
