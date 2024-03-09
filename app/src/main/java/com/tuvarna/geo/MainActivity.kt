@@ -10,21 +10,41 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.*
 import com.tuvarna.geo.ui.theme.MastersSummerProjectIMDKotlinAndroidClientGeoSystemTheme
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MastersSummerProjectIMDKotlinAndroidClientGeoSystemTheme {
+            MastersSummerProjectIMDKotlinAndroidClientGeoSystemTheme  {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    AppNavigation()
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun AppNavigation() {
+    val navController = rememberNavController()
+    NavHost(
+        navController = navController,
+        startDestination = "login"
+    ) {
+        composable("login") {
+            LoginScreen(onSignUpClick = {
+                navController.navigate("registration")
+            })
+        }
+        composable("registration") {
+            SignUpScreen()
         }
     }
 }
