@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun FeatherAndroidTasksTheme(content: @Composable () -> Unit) {
-    // Customize your theme colors here
     MaterialTheme(
         colorScheme = MaterialTheme.colorScheme.copy(primary = BabyblueColor),
         typography = MaterialTheme.typography,

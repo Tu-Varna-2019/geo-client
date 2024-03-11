@@ -1,12 +1,22 @@
-package com.tuvarna.geo
+package com.tuvarna.geo.view
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -15,39 +25,25 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
+import com.tuvarna.geo.model.User
+import com.tuvarna.geo.navigation.NavigationViewFunction
 import com.tuvarna.geo.ui.theme.FeatherAndroidTasksTheme
 
 
-class LoginScreen : ComponentActivity() {
-
+class LoginView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             FeatherAndroidTasksTheme {
-                val navController = rememberNavController()
-
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    NavHost(
-                        navController = navController,
-                        startDestination = "login"
-                    ) {
-                        composable("login") {
-                            LoginScreen(onSignUpClick = {
-                                navController.navigate("registration")
-                            })
-                        }
-                        composable("registration") {
-                            SignUpScreen()
-                        }
-                    }
-                }
+                NavigationViewFunction(
+                    startDestination = "login",
+                    composableStartDest = "login",
+                    firstView = { navController -> LoginView(navController) },
+                    composableEndDest = "signUp",
+                    secondView = { SignUpView() }
+                )
             }
         }
     }
@@ -55,11 +51,9 @@ class LoginScreen : ComponentActivity() {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun LoginScreen(onSignUpClick: () -> Unit) {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+fun LoginView(navController: NavController) {
+    val user by remember { mutableStateOf(User(0, "", "", "")) }
 
-    // Access the keyboard controller
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
@@ -70,8 +64,8 @@ fun LoginScreen(onSignUpClick: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(
-            value = username,
-            onValueChange = { username = it },
+            value = user.username,
+            onValueChange = { user.username = it },
             label = { Text("Username") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Next
@@ -82,8 +76,8 @@ fun LoginScreen(onSignUpClick: () -> Unit) {
         )
 
         OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
+            value = user.password,
+            onValueChange = { user.password = it },
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -114,7 +108,7 @@ fun LoginScreen(onSignUpClick: () -> Unit) {
 
             Button(
                 onClick = {
-                    onSignUpClick.invoke()
+                    navController.navigate("signUp")
                 },
                 modifier = Modifier
                     .weight(1f)
@@ -131,6 +125,6 @@ fun LoginScreen(onSignUpClick: () -> Unit) {
 @Composable
 fun DefaultPreview() {
     FeatherAndroidTasksTheme {
-        LoginScreen()
+        LoginView()
     }
 }

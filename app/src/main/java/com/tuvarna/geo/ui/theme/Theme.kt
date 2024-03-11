@@ -25,16 +25,6 @@ private val LightColorScheme = lightColorScheme(
     primary = BabyblueColor,
     secondary = BabyblueColor,
     tertiary = BabyblueColor,
-
-/*  Additional colors in case we need them in the future
-    background = BabyblueColor,
-    surface = BabyblueColor,
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = BabyblueColor,
-    onSurface = BabyblueColor*/
-
 )
 
 @Composable

@@ -1,4 +1,4 @@
-package com.tuvarna.geo.ui.theme.helpers
+package com.tuvarna.geo.helpers
 
 import android.util.Patterns
 

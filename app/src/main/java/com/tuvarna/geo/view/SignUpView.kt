@@ -1,6 +1,12 @@
-package com.tuvarna.geo
+package com.tuvarna.geo.view
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,23 +14,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import com.tuvarna.geo.ui.theme.helpers.Utils
+import com.tuvarna.geo.helpers.Utils
+import com.tuvarna.geo.model.User
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SignUpScreen() {
-    var username by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+fun SignUpView() {
+
+    val user by remember { mutableStateOf(User(0, "", "", "")) }
+
     var confirmPassword by remember { mutableStateOf("") }
 
     var isUsernameError by remember { mutableStateOf(false) }
@@ -32,21 +42,22 @@ fun SignUpScreen() {
     var isPasswordError by remember { mutableStateOf(false) }
     var doPasswordsMatchError by remember { mutableStateOf(false) }
 
-    // Access the keyboard controller
     val keyboardController = LocalSoftwareKeyboardController.current
+    val focusRequester = FocusRequester()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.Start
     ) {
         OutlinedTextField(
-            value = username,
+            value = user.username,
             onValueChange = {
-                username = it
-                isUsernameError = false},
+                user.username = it
+                isUsernameError = false
+            },
             label = { Text("Username") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Next
@@ -54,21 +65,25 @@ fun SignUpScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
+                .clickable { focusRequester.requestFocus() }
         )
 
-        // Display error message
+
         if (isUsernameError) {
             Text(
                 text = "Username cannot be empty",
                 color = Color.Red,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp, 0.dp, 0.dp, 0.dp )
             )
         }
 
         OutlinedTextField(
-            value = email,
+            value = user.email,
             onValueChange = {
-                email = it
+                user.email = it
                 isEmailError = false},
             label = { Text("Email") },
 
@@ -80,19 +95,21 @@ fun SignUpScreen() {
                 .padding(10.dp)
         )
 
-        // Display error message
         if (isEmailError) {
             Text(
                 text = "Email is invalid",
                 color = Color.Red,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp, 0.dp, 0.dp, 0.dp)
             )
         }
 
         OutlinedTextField(
-            value = password,
+            value = user.password,
             onValueChange = {
-                password = it
+                user.password = it
                 isPasswordError = false},
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
@@ -104,13 +121,15 @@ fun SignUpScreen() {
                 .padding(10.dp)
         )
 
-        // Display error message
         if (isPasswordError) {
             Text(
                 text =
-                "Password does not conform the rules: minimum 8 characters long, at least 1 lowercase, uppercase and digits ",
+                "Password must contain minimum 8 characters long, at least 1 lowercase, uppercase and digits ",
                 color = Color.Red,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp, 0.dp, 0.dp, 0.dp)
             )
         }
 
@@ -133,7 +152,10 @@ fun SignUpScreen() {
             Text(
                 text = "Passwords do not match",
                 color = Color.Red,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp, 0.dp, 0.dp, 0.dp )
             )
         }
 
@@ -145,12 +167,11 @@ fun SignUpScreen() {
         ) {
             Button(
                 onClick = {
-                    isUsernameError = username.isEmpty()
-                    isEmailError = email.isEmpty() || Utils.isValidEmail(email)
-                    isPasswordError = password.isEmpty() || Utils.isValidPassword(password)
-                    doPasswordsMatchError = password != confirmPassword
+                    isUsernameError = user.username.isEmpty()
+                    isEmailError = user.email.isEmpty() || Utils.isValidEmail(user.email)
+                    isPasswordError = user.password.isEmpty() || Utils.isValidPassword(user.password)
+                    doPasswordsMatchError = user.password != confirmPassword
 
-                    // Update error states
                     if (isUsernameError || isEmailError || isPasswordError) {
                         keyboardController?.hide()
                     }
