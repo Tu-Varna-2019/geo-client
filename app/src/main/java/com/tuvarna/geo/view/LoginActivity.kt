@@ -51,7 +51,7 @@ class LoginActivity : ComponentActivity() {
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LoginView(navController: NavController) {
-    val user by remember { mutableStateOf(User(0, "", "", "")) }
+    val user by remember { mutableStateOf(User(0, "", "", "",false)) }
 
     val keyboardController = LocalSoftwareKeyboardController.current
 

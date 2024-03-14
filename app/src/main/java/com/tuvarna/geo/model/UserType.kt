@@ -1,26 +1,17 @@
 package com.tuvarna.geo.model
 
-
-
-
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 
 class UserType {
 
-    private var isBlocked: Boolean = false
-    private var type = ""
+    var id by mutableIntStateOf(0)
+    var type by mutableStateOf("")
 
-    constructor(type: String){
+    constructor(id: Int, type: String) {
+        this.id = id
         this.type = type
     }
-
-    fun getType(): String{
-        return type
-    }
-
-    fun setType(type: String){
-        this.type = type
-    }
-
-
-
 }
