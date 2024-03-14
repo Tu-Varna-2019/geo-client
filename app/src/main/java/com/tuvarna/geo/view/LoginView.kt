@@ -31,18 +31,17 @@ import com.tuvarna.geo.navigation.NavigationViewFunction
 import com.tuvarna.geo.ui.theme.FeatherAndroidTasksTheme
 
 
-class LoginView : ComponentActivity() {
+class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             FeatherAndroidTasksTheme {
                 NavigationViewFunction(
-                    startDestination = "login",
                     composableStartDest = "login",
-                    firstView = { navController -> LoginView(navController) },
+                    startComposable = { navController -> LoginView(navController) },
                     composableEndDest = "signUp",
-                    secondView = { SignUpView() }
+                    endComposable = { SignUpView() }
                 )
             }
         }
@@ -125,6 +124,6 @@ fun LoginView(navController: NavController) {
 @Composable
 fun DefaultPreview() {
     FeatherAndroidTasksTheme {
-        LoginView()
+        LoginActivity()
     }
 }

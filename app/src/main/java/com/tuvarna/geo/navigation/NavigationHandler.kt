@@ -9,16 +9,16 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun NavigationViewFunction(
-    startDestination: String, composableStartDest: String, firstView: @Composable (NavController) -> Unit,
-    composableEndDest: String, secondView: @Composable () -> Unit) {
+    composableStartDest: String, startComposable : @Composable (NavController) -> Unit,
+    composableEndDest: String, endComposable: @Composable () -> Unit) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = startDestination) {
+    NavHost(navController = navController, startDestination = composableStartDest) {
         composable(composableStartDest) {
-            firstView(navController)
+            startComposable(navController)
         }
         composable(composableEndDest) {
-            secondView()
+            endComposable()
         }
     }
 }

@@ -43,7 +43,6 @@ fun SignUpView() {
     var doPasswordsMatchError by remember { mutableStateOf(false) }
 
     val keyboardController = LocalSoftwareKeyboardController.current
-    val focusRequester = FocusRequester()
 
     Column(
         modifier = Modifier
@@ -65,7 +64,6 @@ fun SignUpView() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
-                .clickable { focusRequester.requestFocus() }
         )
 
 
