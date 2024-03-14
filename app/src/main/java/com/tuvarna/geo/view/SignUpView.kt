@@ -31,153 +31,124 @@ import com.tuvarna.geo.model.User
 @Composable
 fun SignUpView() {
 
-    val user by remember { mutableStateOf(User(0, "", "", "",false)) }
+  val user by remember { mutableStateOf(User(0, "", "", "", false)) }
 
-    var confirmPassword by remember { mutableStateOf("") }
+  var confirmPassword by remember { mutableStateOf("") }
 
-    var isUsernameError by remember { mutableStateOf(false) }
-    var isEmailError by remember { mutableStateOf(false) }
-    var isPasswordError by remember { mutableStateOf(false) }
-    var doPasswordsMatchError by remember { mutableStateOf(false) }
+  var isUsernameError by remember { mutableStateOf(false) }
+  var isEmailError by remember { mutableStateOf(false) }
+  var isPasswordError by remember { mutableStateOf(false) }
+  var doPasswordsMatchError by remember { mutableStateOf(false) }
 
-    val keyboardController = LocalSoftwareKeyboardController.current
+  val keyboardController = LocalSoftwareKeyboardController.current
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.Start
-    ) {
-        OutlinedTextField(
-            value = user.username,
-            onValueChange = {
-                user.username = it
-                isUsernameError = false
-            },
-            label = { Text("Username") },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Next
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp)
-        )
+  Column(
+    modifier = Modifier.fillMaxSize().padding(16.dp),
+    verticalArrangement = Arrangement.Center,
+    horizontalAlignment = Alignment.Start,
+  ) {
+    OutlinedTextField(
+      value = user.username,
+      onValueChange = {
+        user.username = it
+        isUsernameError = false
+      },
+      label = { Text("Username") },
+      keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+      modifier = Modifier.fillMaxWidth().padding(10.dp),
+    )
 
-
-        if (isUsernameError) {
-            Text(
-                text = "Username cannot be empty",
-                color = Color.Red,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp, 0.dp, 0.dp, 0.dp )
-            )
-        }
-
-        OutlinedTextField(
-            value = user.email,
-            onValueChange = {
-                user.email = it
-                isEmailError = false},
-            label = { Text("Email") },
-
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Next
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp)
-        )
-
-        if (isEmailError) {
-            Text(
-                text = "Email is invalid",
-                color = Color.Red,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp, 0.dp, 0.dp, 0.dp)
-            )
-        }
-
-        OutlinedTextField(
-            value = user.password,
-            onValueChange = {
-                user.password = it
-                isPasswordError = false},
-            label = { Text("Password") },
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Next
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp)
-        )
-
-        if (isPasswordError) {
-            Text(
-                text =
-                "Password must contain minimum 8 characters long, at least 1 lowercase, uppercase and digits ",
-                color = Color.Red,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp, 0.dp, 0.dp, 0.dp)
-            )
-        }
-
-        OutlinedTextField(
-            value = confirmPassword,
-            onValueChange = {
-                confirmPassword = it
-                doPasswordsMatchError = false},
-            label = { Text("Confirm Password") },
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp)
-        )
-
-        if (doPasswordsMatchError) {
-            Text(
-                text = "Passwords do not match",
-                color = Color.Red,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp, 0.dp, 0.dp, 0.dp )
-            )
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(
-                onClick = {
-                    isUsernameError = user.username.isEmpty()
-                    isEmailError = user.email.isEmpty() || Utils.isValidEmail(user.email)
-                    isPasswordError = user.password.isEmpty() || Utils.isValidPassword(user.password)
-                    doPasswordsMatchError = user.password != confirmPassword
-
-                    if (isUsernameError || isEmailError || isPasswordError) {
-                        keyboardController?.hide()
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp)
-            ) {
-                Text("Sign up")
-            }
-        }
+    if (isUsernameError) {
+      Text(
+        text = "Username cannot be empty",
+        color = Color.Red,
+        style = MaterialTheme.typography.bodyMedium,
+        modifier = Modifier.fillMaxWidth().padding(10.dp, 0.dp, 0.dp, 0.dp),
+      )
     }
+
+    OutlinedTextField(
+      value = user.email,
+      onValueChange = {
+        user.email = it
+        isEmailError = false
+      },
+      label = { Text("Email") },
+      keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+      modifier = Modifier.fillMaxWidth().padding(10.dp),
+    )
+
+    if (isEmailError) {
+      Text(
+        text = "Email is invalid",
+        color = Color.Red,
+        style = MaterialTheme.typography.bodyMedium,
+        modifier = Modifier.fillMaxWidth().padding(10.dp, 0.dp, 0.dp, 0.dp),
+      )
+    }
+
+    OutlinedTextField(
+      value = user.password,
+      onValueChange = {
+        user.password = it
+        isPasswordError = false
+      },
+      label = { Text("Password") },
+      visualTransformation = PasswordVisualTransformation(),
+      keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+      modifier = Modifier.fillMaxWidth().padding(10.dp),
+    )
+
+    if (isPasswordError) {
+      Text(
+        text =
+          "Password must contain minimum 8 characters long, at least 1 lowercase, uppercase and digits ",
+        color = Color.Red,
+        style = MaterialTheme.typography.bodyMedium,
+        modifier = Modifier.fillMaxWidth().padding(10.dp, 0.dp, 0.dp, 0.dp),
+      )
+    }
+
+    OutlinedTextField(
+      value = confirmPassword,
+      onValueChange = {
+        confirmPassword = it
+        doPasswordsMatchError = false
+      },
+      label = { Text("Confirm Password") },
+      visualTransformation = PasswordVisualTransformation(),
+      keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+      modifier = Modifier.fillMaxWidth().padding(10.dp),
+    )
+
+    if (doPasswordsMatchError) {
+      Text(
+        text = "Passwords do not match",
+        color = Color.Red,
+        style = MaterialTheme.typography.bodyMedium,
+        modifier = Modifier.fillMaxWidth().padding(10.dp, 0.dp, 0.dp, 0.dp),
+      )
+    }
+
+    Row(
+      modifier = Modifier.fillMaxWidth().padding(10.dp),
+      horizontalArrangement = Arrangement.Center,
+    ) {
+      Button(
+        onClick = {
+          isUsernameError = user.username.isEmpty()
+          isEmailError = user.email.isEmpty() || Utils.isValidEmail(user.email)
+          isPasswordError = user.password.isEmpty() || Utils.isValidPassword(user.password)
+          doPasswordsMatchError = user.password != confirmPassword
+
+          if (isUsernameError || isEmailError || isPasswordError) {
+            keyboardController?.hide()
+          }
+        },
+        modifier = Modifier.fillMaxWidth().padding(10.dp),
+      ) {
+        Text("Sign up")
+      }
+    }
+  }
 }

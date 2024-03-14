@@ -7,11 +7,11 @@ import androidx.compose.runtime.setValue
 
 class UserType {
 
-    var id by mutableIntStateOf(0)
-    var type by mutableStateOf("")
+  var id by mutableIntStateOf(0)
+  var type by mutableStateOf("")
 
-    constructor(id: Int, type: String) {
-        this.id = id
-        this.type = type
-    }
+  constructor(id: Int, type: String) {
+    this.id = id
+    this.type = type
+  }
 }

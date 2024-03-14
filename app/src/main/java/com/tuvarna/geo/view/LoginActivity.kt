@@ -30,100 +30,75 @@ import com.tuvarna.geo.model.User
 import com.tuvarna.geo.navigation.NavigationViewFunction
 import com.tuvarna.geo.ui.theme.FeatherAndroidTasksTheme
 
-
 class LoginActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-        setContent {
-            FeatherAndroidTasksTheme {
-                NavigationViewFunction(
-                    composableStartDest = "login",
-                    startComposable = { navController -> LoginView(navController) },
-                    composableEndDest = "signUp",
-                    endComposable = { SignUpView() }
-                )
-            }
-        }
+    setContent {
+      FeatherAndroidTasksTheme {
+        NavigationViewFunction(
+          composableStartDest = "login",
+          startComposable = { navController -> LoginActivity(navController) },
+          composableEndDest = "signUp",
+          endComposable = { SignUpView() },
+        )
+      }
     }
+  }
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun LoginView(navController: NavController) {
-    val user by remember { mutableStateOf(User(0, "", "", "",false)) }
+fun LoginActivity(navController: NavController) {
+  val user by remember { mutableStateOf(User(0, "", "", "", false)) }
 
-    val keyboardController = LocalSoftwareKeyboardController.current
+  val keyboardController = LocalSoftwareKeyboardController.current
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(10.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+  Column(
+    modifier = Modifier.fillMaxSize().padding(10.dp),
+    verticalArrangement = Arrangement.Center,
+    horizontalAlignment = Alignment.CenterHorizontally,
+  ) {
+    OutlinedTextField(
+      value = user.username,
+      onValueChange = { user.username = it },
+      label = { Text("Username") },
+      keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+      modifier = Modifier.fillMaxWidth().padding(10.dp),
+    )
+
+    OutlinedTextField(
+      value = user.password,
+      onValueChange = { user.password = it },
+      label = { Text("Password") },
+      visualTransformation = PasswordVisualTransformation(),
+      keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+      modifier = Modifier.fillMaxWidth().padding(10.dp),
+    )
+
+    Row(
+      modifier = Modifier.fillMaxWidth().padding(10.dp),
+      horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        OutlinedTextField(
-            value = user.username,
-            onValueChange = { user.username = it },
-            label = { Text("Username") },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Next
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp)
-        )
+      Button(
+        onClick = { keyboardController?.hide() },
+        modifier = Modifier.weight(1f).padding(end = 10.dp),
+      ) {
+        Text("Login")
+      }
 
-        OutlinedTextField(
-            value = user.password,
-            onValueChange = { user.password = it },
-            label = { Text("Password") },
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp)
-        )
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Button(
-                onClick = {
-                    keyboardController?.hide()
-                },
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 10.dp)
-
-            ) {
-                Text("Login")
-            }
-
-            Button(
-                onClick = {
-                    navController.navigate("signUp")
-                },
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 10.dp)
-
-            ) {
-                Text("Sign up")
-            }
-        }
+      Button(
+        onClick = { navController.navigate("signUp") },
+        modifier = Modifier.weight(1f).padding(start = 10.dp),
+      ) {
+        Text("Sign up")
+      }
     }
+  }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    FeatherAndroidTasksTheme {
-        LoginActivity()
-    }
+  FeatherAndroidTasksTheme { LoginActivity() }
 }
