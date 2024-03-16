@@ -1,4 +1,4 @@
-package com.tuvarna.geo.model
+package com.tuvarna.geo.entity
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf

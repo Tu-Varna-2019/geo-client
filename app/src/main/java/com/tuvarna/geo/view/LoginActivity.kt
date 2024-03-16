@@ -26,7 +26,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.tuvarna.geo.model.User
+import com.tuvarna.geo.entity.User
 import com.tuvarna.geo.navigation.NavigationViewFunction
 import com.tuvarna.geo.ui.theme.FeatherAndroidTasksTheme
 

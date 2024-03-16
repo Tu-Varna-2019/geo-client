@@ -24,8 +24,8 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import com.tuvarna.geo.entity.User
 import com.tuvarna.geo.helpers.Utils
-import com.tuvarna.geo.model.User
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
