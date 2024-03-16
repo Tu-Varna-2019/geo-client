@@ -1,4 +1,4 @@
-package com.tuvarna.geo.view
+package com.tuvarna.geo.view.public
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,12 +24,13 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.tuvarna.geo.entity.User
 import com.tuvarna.geo.helpers.Utils
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SignUpView() {
+fun SignUpView(navController: NavController) {
 
   val user by remember { mutableStateOf(User(0, "", "", "", false)) }
 
