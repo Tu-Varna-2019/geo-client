@@ -2,6 +2,8 @@ plugins {
   alias(libs.plugins.androidApplication)
   alias(libs.plugins.jetbrainsKotlinAndroid)
   id("org.sonarqube") version "4.4.1.3373"
+  kotlin("kapt")
+  id("com.google.dagger.hilt.android")
 }
 
 sonar {
@@ -12,6 +14,8 @@ sonar {
     )
   }
 }
+
+kapt { correctErrorTypes = true }
 
 android {
   namespace = "com.tuvarna.geo"
@@ -60,6 +64,11 @@ dependencies {
   implementation("com.squareup.moshi:moshi:1.14.0")
   implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
   implementation("io.kotest:kotest-framework-engine:4.6.0")
+  implementation("com.google.dagger:hilt-android:2.51")
+  implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+  kapt("com.google.dagger:hilt-android-compiler:2.51")
+  implementation(libs.androidx.appcompat)
 
   testImplementation("io.kotest:kotest-framework-api-jvm:4.6.0")
   testImplementation("io.kotest:kotest-property:4.6.0")

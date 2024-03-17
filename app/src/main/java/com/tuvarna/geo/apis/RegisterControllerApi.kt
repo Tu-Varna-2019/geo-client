@@ -6,7 +6,6 @@
 
 package com.tuvarna.geo.apis
 
-import com.tuvarna.geo.UserDTO
 import com.tuvarna.geo.infrastructure.ApiClient
 import com.tuvarna.geo.infrastructure.ApiResponse
 import com.tuvarna.geo.infrastructure.ClientError
@@ -18,6 +17,7 @@ import com.tuvarna.geo.infrastructure.ResponseType
 import com.tuvarna.geo.infrastructure.ServerError
 import com.tuvarna.geo.infrastructure.ServerException
 import com.tuvarna.geo.infrastructure.Success
+import com.tuvarna.geo.model.UserDTO
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import java.io.IOException

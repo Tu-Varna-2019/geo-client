@@ -1,4 +1,4 @@
-package com.tuvarna.geo.app
+package com.tuvarna.geo.controller
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost

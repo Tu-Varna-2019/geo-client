@@ -4,7 +4,7 @@
  */
 @file:Suppress("ArrayInDataClass", "EnumEntryName", "RemoveRedundantQualifierName", "UnusedImport")
 
-package com.tuvarna.geo
+package com.tuvarna.geo.model
 
 import com.squareup.moshi.Json
 

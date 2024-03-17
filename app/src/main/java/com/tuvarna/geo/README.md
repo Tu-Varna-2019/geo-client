@@ -58,7 +58,7 @@ All URIs are relative to *http://localhost:8080*
 
 ## Documentation for Models
 
-- [com.tuvarna.geo.UserDTO](docs/UserDTO.md)
+- [com.tuvarna.geo.model.UserDTO](docs/UserDTO.md)
 
 <a id="documentation-for-authorization"></a>
 
