@@ -66,7 +66,7 @@ dependencies {
   implementation("io.kotest:kotest-framework-engine:4.6.0")
   implementation("com.google.dagger:hilt-android:2.51")
   implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
-
+  implementation("com.jakewharton.timber:timber:5.0.1")
   kapt("com.google.dagger:hilt-android-compiler:2.51")
   implementation(libs.androidx.appcompat)
 

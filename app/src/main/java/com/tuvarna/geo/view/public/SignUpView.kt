@@ -46,11 +46,13 @@ fun SignUpView(navController: NavController) {
   val registerViewModel = hiltViewModel<RegisterViewModel>()
 
   val user by remember { mutableStateOf(User(0, "", "", "", false)) }
-
   val confirmPassword = remember { mutableStateOf("") }
 
-  Box(contentAlignment = Alignment.TopCenter) {
-    Column(modifier = Modifier.padding(13.dp)) {
+  Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
+    Column(
+      modifier = Modifier.padding(5.dp).fillMaxWidth(0.8f),
+      verticalArrangement = Arrangement.Center,
+    ) {
       Text(
         text = "Sign Up",
         style = MaterialTheme.typography.bodyMedium,
@@ -59,7 +61,7 @@ fun SignUpView(navController: NavController) {
         fontSize = 30.sp,
       )
 
-      Spacer(modifier = Modifier.height(70.dp))
+      Spacer(modifier = Modifier.height(20.dp))
 
       Image(
         painter = painterResource(id = R.drawable.earth),
@@ -67,12 +69,13 @@ fun SignUpView(navController: NavController) {
         modifier = Modifier.size(110.dp).fillMaxWidth().align(Alignment.CenterHorizontally),
       )
 
-      Spacer(modifier = Modifier.height(60.dp))
+      Spacer(modifier = Modifier.height(20.dp))
 
       SignUpForm(
         user = user,
         confirmPassword = confirmPassword,
         registerViewModel = registerViewModel,
+        navig = navController,
       )
     }
   }
@@ -80,6 +83,7 @@ fun SignUpView(navController: NavController) {
 
 @Composable
 fun SignUpForm(
+  navig: NavController,
   user: User,
   confirmPassword: MutableState<String>,
   registerViewModel: RegisterViewModel,
@@ -95,13 +99,16 @@ fun SignUpForm(
   val isSubmitBtnDisabled =
     isUsernameValid || isEmailValid || isPasswordValid || isConfirmPasswordValid
 
+  val textFieldModifier: Modifier = Modifier.fillMaxWidth().padding(8.dp).height(60.dp)
+  val errorTextModifier: Modifier = Modifier.fillMaxWidth().padding(start = 8.dp)
+
   OutlinedTextField(
     value = user.username,
     isError = isUsernameValid,
     onValueChange = { user.username = it },
     label = { Text("Username") },
     keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-    modifier = Modifier.fillMaxWidth().padding(10.dp),
+    modifier = textFieldModifier,
   )
 
   if (isUsernameValid) {
@@ -109,7 +116,7 @@ fun SignUpForm(
       text = "Username cannot be empty",
       color = Color.Red,
       style = MaterialTheme.typography.bodyMedium,
-      modifier = Modifier.fillMaxWidth().padding(10.dp, 0.dp, 0.dp, 0.dp),
+      modifier = errorTextModifier,
     )
   }
 
@@ -119,7 +126,7 @@ fun SignUpForm(
     onValueChange = { user.email = it },
     label = { Text("Email") },
     keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-    modifier = Modifier.fillMaxWidth().padding(10.dp),
+    modifier = textFieldModifier,
   )
 
   if (isEmailValid) {
@@ -127,7 +134,7 @@ fun SignUpForm(
       text = "Email is invalid",
       color = Color.Red,
       style = MaterialTheme.typography.bodyMedium,
-      modifier = Modifier.fillMaxWidth().padding(10.dp, 0.dp, 0.dp, 0.dp),
+      modifier = errorTextModifier,
     )
   }
 
@@ -138,16 +145,15 @@ fun SignUpForm(
     label = { Text("Password") },
     visualTransformation = PasswordVisualTransformation(),
     keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-    modifier = Modifier.fillMaxWidth().padding(10.dp),
+    modifier = textFieldModifier,
   )
 
   if (isPasswordValid) {
     Text(
-      text =
-        "Password does not conform the rules: minimum 8 characters long, at least 1 lowercase, uppercase and digits",
+      text = "Password does not conform the rules",
       color = Color.Red,
       style = MaterialTheme.typography.bodyMedium,
-      modifier = Modifier.fillMaxWidth().padding(10.dp, 0.dp, 0.dp, 0.dp),
+      modifier = errorTextModifier,
     )
   }
 
@@ -157,7 +163,7 @@ fun SignUpForm(
     label = { Text("Confirm Password") },
     visualTransformation = PasswordVisualTransformation(),
     keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-    modifier = Modifier.fillMaxWidth().padding(10.dp),
+    modifier = textFieldModifier,
   )
 
   if (isConfirmPasswordValid) {
@@ -165,41 +171,37 @@ fun SignUpForm(
       text = "Passwords do not match",
       color = Color.Red,
       style = MaterialTheme.typography.bodyMedium,
-      modifier = Modifier.fillMaxWidth().padding(10.dp, 0.dp, 0.dp, 0.dp),
+      modifier = errorTextModifier,
     )
   }
-
   Row(
-    modifier = Modifier.fillMaxWidth().padding(10.dp),
-    horizontalArrangement = Arrangement.Center,
+    modifier = Modifier.fillMaxWidth().padding(8.dp),
+    horizontalArrangement = Arrangement.SpaceBetween,
   ) {
     Button(
-      onClick = { registerViewModel.register(user, "consumer") },
-      enabled = !isSubmitBtnDisabled,
-      modifier = Modifier.fillMaxWidth().padding(10.dp),
-    ) {
-      Text("Sign up")
-    }
-    Spacer(modifier = Modifier.height(8.dp))
-
-    Button(
-      onClick = { /* TODO: Add back to login screen fun */},
-      modifier = Modifier.fillMaxWidth(),
+      onClick = { navig.navigate("login") },
+      modifier = Modifier.weight(1f).padding(end = 10.dp),
     ) {
       Text("Back")
     }
-
-    when (state) {
-      is RegisterViewModel.RegisterUiState.Loading -> CircularProgressIndicator()
-      is RegisterViewModel.RegisterUiState.Success -> {
-        // Show success snackbar
-        LaunchedEffect(state.message) { SnackbarManager.showSnackbar(state.message) }
-      }
-      is RegisterViewModel.RegisterUiState.Error -> {
-        // Show error snackbar
-        LaunchedEffect(state.message) { SnackbarManager.showSnackbar(state.message) }
-      }
-      else -> {}
+    Button(
+      onClick = { registerViewModel.register(user, "consumer") },
+      enabled = !isSubmitBtnDisabled,
+      modifier = Modifier.weight(1f).padding(end = 10.dp),
+    ) {
+      Text("Sign up")
     }
+  }
+  when (state) {
+    is RegisterViewModel.RegisterUiState.Loading -> CircularProgressIndicator()
+    is RegisterViewModel.RegisterUiState.Success -> {
+      // Show success snackbar
+      LaunchedEffect(state.message) { SnackbarManager.showSnackbar(state.message) }
+    }
+    is RegisterViewModel.RegisterUiState.Error -> {
+      // Show error snackbar
+      LaunchedEffect(state.message) { SnackbarManager.showSnackbar(state.message) }
+    }
+    else -> {}
   }
 }

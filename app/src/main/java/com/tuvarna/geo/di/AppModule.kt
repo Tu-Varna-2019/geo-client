@@ -13,8 +13,7 @@ object AppModule {
   @Singleton
   @Provides
   fun provideRegisterControllerApi(): RegisterControllerApi {
-    // If your RegisterControllerApi doesn't need a custom OkHttpClient,
-    // just return a new instance of it here
+
     return RegisterControllerApi()
   }
 }

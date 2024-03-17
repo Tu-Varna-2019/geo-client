@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,6 +20,7 @@ class RegisterViewModel @Inject constructor(private val userRepository: UserRepo
   val uiState: StateFlow<RegisterUiState> = _uiState
 
   fun register(user: User, userType: String) {
+    Timber.d("Registering user: $user")
     viewModelScope.launch {
       _uiState.value = RegisterUiState.Loading
       val result = userRepository.register(user, userType)
