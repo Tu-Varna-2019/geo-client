@@ -29,4 +29,9 @@ class User {
     this.isblocked = isblocked
     this.usertype = usertype
   }
+
+  @Override
+  override fun toString(): String {
+    return "User(id=$id, username='$username', email='$email', isblocked=$isblocked, password='$password', usertype=$usertype)"
+  }
 }

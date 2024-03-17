@@ -14,4 +14,9 @@ class UserType {
     this.id = id
     this.type = type
   }
+
+  @Override
+  override fun toString(): String {
+    return "UserType(id=$id, type='$type')"
+  }
 }

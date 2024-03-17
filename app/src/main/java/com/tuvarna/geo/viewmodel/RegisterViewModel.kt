@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.tuvarna.geo.controller.ApiResult
 import com.tuvarna.geo.entity.User
 import com.tuvarna.geo.repository.UserRepository
+import com.tuvarna.geo.viewmodel.ui.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,31 +17,20 @@ import javax.inject.Inject
 class RegisterViewModel @Inject constructor(private val userRepository: UserRepository) :
   ViewModel() {
 
-  private val _uiState = MutableStateFlow<RegisterUiState>(RegisterUiState.Empty)
-  val uiState: StateFlow<RegisterUiState> = _uiState
+  private val _uiState = MutableStateFlow<UiState>(UiState.Empty)
+  val uiState: StateFlow<UiState> = _uiState
 
   fun register(user: User, userType: String) {
-    Timber.d("Registering user: $user")
+    Timber.d("User %s clicked the registration button! Moving on...", user)
     viewModelScope.launch {
-      _uiState.value = RegisterUiState.Loading
+      _uiState.value = UiState.Loading
       val result = userRepository.register(user, userType)
       _uiState.value =
         when (result) {
-          is ApiResult.Success -> RegisterUiState.Success(result.data)
+          is ApiResult.Success -> UiState.Success(result.data)
           is ApiResult.Error ->
-            RegisterUiState.Error(result.exception.message ?: "An unknown error occurred")
+            UiState.Error(result.exception.message ?: "An unknown error occurred")
         }
     }
-  }
-
-  sealed class RegisterUiState {
-    object Empty : RegisterUiState()
-
-    object Loading : RegisterUiState()
-    // Changed Success state to potentially hold data (like a success message or user object)
-    data class Success(val message: String) :
-      RegisterUiState() // Adjust according to what your API returns
-
-    data class Error(val message: String) : RegisterUiState()
   }
 }

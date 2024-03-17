@@ -12,12 +12,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -34,10 +32,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.app_iliyan.view.components.dialog_box.SnackbarManager
 import com.tuvarna.geo.R
 import com.tuvarna.geo.entity.User
-import com.tuvarna.geo.helpers.Utils
+import com.tuvarna.geo.view.component.accessibility.LoadingIndicator
 import com.tuvarna.geo.viewmodel.RegisterViewModel
 
 @Composable
@@ -47,6 +44,9 @@ fun SignUpView(navController: NavController) {
 
   val user by remember { mutableStateOf(User(0, "", "", "", false)) }
   val confirmPassword = remember { mutableStateOf("") }
+  val state = registerViewModel.uiState.collectAsState()
+
+  LoadingIndicator(uiState = state, navController = navController, route = "login")
 
   Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
     Column(
@@ -89,11 +89,9 @@ fun SignUpForm(
   registerViewModel: RegisterViewModel,
 ) {
 
-  val state = registerViewModel.uiState.collectAsState().value
   val isUsernameValid = user.username.isEmpty()
-  val isEmailValid = user.email.isEmpty() || Utils.isValidEmail(user.email)
-  val isPasswordValid = user.password.isEmpty() || Utils.isValidPassword(user.password)
-
+  val isEmailValid = false // user.email.isEmpty() || Utils.isValidEmail(user.email)
+  val isPasswordValid = false // user.password.isEmpty() || Utils.isValidPassword(user.password)
   val isConfirmPasswordValid = confirmPassword.value != user.password
 
   val isSubmitBtnDisabled =
@@ -191,17 +189,5 @@ fun SignUpForm(
     ) {
       Text("Sign up")
     }
-  }
-  when (state) {
-    is RegisterViewModel.RegisterUiState.Loading -> CircularProgressIndicator()
-    is RegisterViewModel.RegisterUiState.Success -> {
-      // Show success snackbar
-      LaunchedEffect(state.message) { SnackbarManager.showSnackbar(state.message) }
-    }
-    is RegisterViewModel.RegisterUiState.Error -> {
-      // Show error snackbar
-      LaunchedEffect(state.message) { SnackbarManager.showSnackbar(state.message) }
-    }
-    else -> {}
   }
 }

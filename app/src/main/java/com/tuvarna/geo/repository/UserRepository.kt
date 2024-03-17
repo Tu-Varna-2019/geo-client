@@ -3,10 +3,10 @@ package com.tuvarna.geo.repository
 import com.tuvarna.geo.apis.RegisterControllerApi
 import com.tuvarna.geo.controller.ApiResult
 import com.tuvarna.geo.entity.User
-import com.tuvarna.geo.infrastructure.ClientException
-import com.tuvarna.geo.infrastructure.ServerException
 import com.tuvarna.geo.model.UserDTO
-import okio.IOException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,6 +14,8 @@ import javax.inject.Singleton
 class UserRepository @Inject constructor(private val registerApi: RegisterControllerApi) {
 
   suspend fun login(username: String, password: String) {
+    // TODO: Finish me!
+
     //    return try {
     //      val response = apiService.login(LoginCredentials(username, password))
     //      if (response.isSuccessful && response.body() != null) {
@@ -28,33 +30,27 @@ class UserRepository @Inject constructor(private val registerApi: RegisterContro
     //    }
   }
 
-  fun register(user: User, userType: String): ApiResult<String> {
-    return try {
+  suspend fun register(user: User, userType: String): ApiResult<String> {
+    return withContext(Dispatchers.IO) {
+      try {
+        Timber.d("Registering user: %s", user)
 
-      val userDTO =
-        UserDTO(
-          username = user.username,
-          email = user.email,
-          password = user.password,
-          usertype = userType,
-          isblocked = user.isblocked,
-        )
+        val userDTO =
+          UserDTO(
+            username = user.username,
+            email = user.email,
+            password = user.password,
+            usertype = userType,
+            isblocked = user.isblocked,
+          )
 
-      val response = registerApi.create(userDTO)
-
-      ApiResult.Success(response)
-    } catch (e: IOException) {
-
-      ApiResult.Error(e)
-    } catch (e: ClientException) {
-      // Handle client-side errors (e.g., bad request, unauthorized)
-      ApiResult.Error(e)
-    } catch (e: ServerException) {
-      // Handle server-side errors (e.g., internal server error)
-      ApiResult.Error(e)
-    } catch (e: Exception) {
-      // Handle other exceptions
-      ApiResult.Error(e)
+        val response = registerApi.create(userDTO)
+        Timber.d("API response for register: %s", response)
+        ApiResult.Success(response)
+      } catch (e: Exception) {
+        Timber.d("Error registering user: $e")
+        ApiResult.Error(e)
+      }
     }
   }
 }
