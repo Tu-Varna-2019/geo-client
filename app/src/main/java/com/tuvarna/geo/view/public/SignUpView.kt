@@ -183,7 +183,12 @@ fun SignUpForm(
       Text("Back")
     }
     Button(
-      onClick = { registerViewModel.register(user, "consumer") },
+      onClick = {
+        registerViewModel.register(
+          user,
+          "customer",
+        ) // UserType hardcoded due to project requirements
+      },
       enabled = !isSubmitBtnDisabled,
       modifier = Modifier.weight(1f).padding(end = 10.dp),
     ) {

@@ -1,7 +1,7 @@
 package com.tuvarna.geo.controller
 
-sealed class ApiResult<out R> {
-  data class Success<out T>(val data: T) : ApiResult<T>()
+sealed class ApiResult {
+  data class Success(val message: String) : ApiResult()
 
-  data class Error(val exception: Exception) : ApiResult<Nothing>()
+  data class Error(val exception: Exception) : ApiResult()
 }

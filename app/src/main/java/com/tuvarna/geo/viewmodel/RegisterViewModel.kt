@@ -27,7 +27,7 @@ class RegisterViewModel @Inject constructor(private val userRepository: UserRepo
       val result = userRepository.register(user, userType)
       _uiState.value =
         when (result) {
-          is ApiResult.Success -> UiState.Success(result.data)
+          is ApiResult.Success -> UiState.Success(result.message)
           is ApiResult.Error ->
             UiState.Error(result.exception.message ?: "An unknown error occurred")
         }
