@@ -1,4 +1,4 @@
-package com.tuvarna.geo.model
+package com.tuvarna.geo.entity
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -28,5 +28,10 @@ class User {
     this.password = password
     this.isblocked = isblocked
     this.usertype = usertype
+  }
+
+  @Override
+  override fun toString(): String {
+    return "User(id=$id, username='$username', email='$email', isblocked=$isblocked, password='$password', usertype=$usertype)"
   }
 }

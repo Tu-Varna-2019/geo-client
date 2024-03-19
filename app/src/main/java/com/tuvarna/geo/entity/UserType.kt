@@ -1,4 +1,4 @@
-package com.tuvarna.geo.model
+package com.tuvarna.geo.entity
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -13,5 +13,10 @@ class UserType {
   constructor(id: Int, type: String) {
     this.id = id
     this.type = type
+  }
+
+  @Override
+  override fun toString(): String {
+    return "UserType(id=$id, type='$type')"
   }
 }

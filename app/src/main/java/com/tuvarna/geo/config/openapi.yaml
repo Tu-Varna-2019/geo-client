@@ -1,0 +1,64 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+paths:
+  /register:
+    post:
+      tags:
+      - register-controller
+      summary: Register a new user
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDTO'
+        required: true
+      responses:
+        "400":
+          description: Bad request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "201":
+          description: User registered successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+components:
+  schemas:
+    UserDTO:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        usertype:
+          type: string
+        isblocked:
+          type: boolean
+    RestApiResponseVoid:
+      type: object
+      properties:
+        data:
+          type: object
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32

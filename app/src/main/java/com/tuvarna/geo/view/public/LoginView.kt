@@ -1,8 +1,5 @@
-package com.tuvarna.geo.view
+package com.tuvarna.geo.view.public
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,33 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.tuvarna.geo.model.User
-import com.tuvarna.geo.navigation.NavigationViewFunction
-import com.tuvarna.geo.ui.theme.FeatherAndroidTasksTheme
-
-class LoginActivity : ComponentActivity() {
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-
-    setContent {
-      FeatherAndroidTasksTheme {
-        NavigationViewFunction(
-          composableStartDest = "login",
-          startComposable = { navController -> LoginActivity(navController) },
-          composableEndDest = "signUp",
-          endComposable = { SignUpView() },
-        )
-      }
-    }
-  }
-}
+import com.tuvarna.geo.entity.User
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun LoginActivity(navController: NavController) {
+fun LoginView(navController: NavController) {
   val user by remember { mutableStateOf(User(0, "", "", "", false)) }
 
   val keyboardController = LocalSoftwareKeyboardController.current
@@ -95,10 +72,4 @@ fun LoginActivity(navController: NavController) {
       }
     }
   }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-  FeatherAndroidTasksTheme { LoginActivity() }
 }
