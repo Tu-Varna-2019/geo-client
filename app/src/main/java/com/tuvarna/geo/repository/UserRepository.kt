@@ -18,9 +18,30 @@ import javax.inject.Singleton
 @Singleton
 class UserRepository @Inject constructor(private val registerApi: RegisterControllerApi) {
 
-  suspend fun login(username: String, password: String) {
-    // TODO: Finish me!
+  suspend fun login(user: User): ApiResult {
+    return withContext(Dispatchers.IO) {
+      try {
+        Timber.d("Logging in user: %s", user)
 
+        val userDTO = UserMapper.UserMapper.toDto(user, "")
+        // TODO: Implement login API
+        val response = registerApi.create(userDTO)
+
+        ApiResult.Success(response.message ?: "Success")
+      } catch (e: ClientException) {
+        val clientError = e.response as? ClientError<*>
+        val errorMessage =
+          when (val body = clientError?.body) {
+            is String -> parseErrorMessage(body)
+            else -> clientError?.message ?: "Unknown client error"
+          }
+        Timber.d("Client error during user login: $errorMessage")
+        ApiResult.Error(IOException(errorMessage))
+      } catch (e: Exception) {
+        Timber.e(e, "Unexpected error during user login")
+        ApiResult.Error(IOException("Unexpected error: ${e.localizedMessage}"))
+      }
+    }
   }
 
   suspend fun register(user: User, userType: String): ApiResult {
