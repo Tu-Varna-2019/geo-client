@@ -21,8 +21,7 @@ fun LoadingIndicator(uiState: State<UiState>, navController: NavController, rout
   when (state) {
     is UiState.Loading -> {
       Box(
-        modifier =
-          Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.4f)), // Darken the screen
+        modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.4f)),
         contentAlignment = Alignment.Center,
       ) {
         CircularProgressIndicator()

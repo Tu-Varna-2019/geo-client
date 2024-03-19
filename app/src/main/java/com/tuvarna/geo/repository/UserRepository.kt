@@ -5,7 +5,7 @@ import com.tuvarna.geo.controller.ApiResult
 import com.tuvarna.geo.entity.User
 import com.tuvarna.geo.infrastructure.ClientError
 import com.tuvarna.geo.infrastructure.ClientException
-import com.tuvarna.geo.model.UserDTO
+import com.tuvarna.geo.mapper.UserMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONException
@@ -28,19 +28,11 @@ class UserRepository @Inject constructor(private val registerApi: RegisterContro
       try {
         Timber.d("Registering user: %s", user)
 
-        val userDTO =
-          UserDTO(
-            username = user.username,
-            email = user.email,
-            password = user.password,
-            usertype = userType,
-            isblocked = user.isblocked,
-          )
-
+        val userDTO = UserMapper.UserMapper.toDto(user, userType)
         val response = registerApi.create(userDTO)
+
         ApiResult.Success(response.message ?: "Success")
       } catch (e: ClientException) {
-
         val clientError = e.response as? ClientError<*>
         val errorMessage =
           when (val body = clientError?.body) {

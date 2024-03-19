@@ -44,6 +44,7 @@ fun SignUpView(navController: NavController) {
 
   val user by remember { mutableStateOf(User(0, "", "", "", false)) }
   val confirmPassword = remember { mutableStateOf("") }
+
   val state = registerViewModel.uiState.collectAsState()
 
   LoadingIndicator(uiState = state, navController = navController, route = "login")

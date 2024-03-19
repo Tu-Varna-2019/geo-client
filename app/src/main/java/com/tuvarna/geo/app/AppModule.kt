@@ -1,4 +1,4 @@
-package com.tuvarna.geo.di
+package com.tuvarna.geo.app
 
 import com.tuvarna.geo.apis.RegisterControllerApi
 import dagger.Module
