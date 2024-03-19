@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a id="create"></a>
 # **create**
-> kotlin.String create(userDTO)
+> RestApiResponseVoid create(userDTO)
 
 Register a new user
 
@@ -22,7 +22,7 @@ Register a new user
 val apiInstance = RegisterControllerApi()
 val userDTO : UserDTO =  // UserDTO | 
 try {
-    val result : kotlin.String = apiInstance.create(userDTO)
+    val result : RestApiResponseVoid = apiInstance.create(userDTO)
     println(result)
 } catch (e: ClientException) {
     println("4xx response calling RegisterControllerApi#create")
@@ -41,7 +41,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**kotlin.String**
+[**RestApiResponseVoid**](RestApiResponseVoid.md)
 
 ### Authorization
 

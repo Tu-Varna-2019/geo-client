@@ -1,7 +1,7 @@
-.openapi-generator-ignore
 README.md
 build.gradle
 docs/RegisterControllerApi.md
+docs/RestApiResponseVoid.md
 docs/UserDTO.md
 gradle/wrapper/gradle-wrapper.jar
 gradle/wrapper/gradle-wrapper.properties
@@ -26,6 +26,8 @@ src/main/kotlin/com/tuvarna/geo/infrastructure/ResponseExtensions.kt
 src/main/kotlin/com/tuvarna/geo/infrastructure/Serializer.kt
 src/main/kotlin/com/tuvarna/geo/infrastructure/URIAdapter.kt
 src/main/kotlin/com/tuvarna/geo/infrastructure/UUIDAdapter.kt
+src/main/kotlin/com/tuvarna/geo/models/RestApiResponseVoid.kt
 src/main/kotlin/com/tuvarna/geo/models/UserDTO.kt
 src/test/kotlin/com/tuvarna/geo/apis/RegisterControllerApiTest.kt
+src/test/kotlin/com/tuvarna/geo/models/RestApiResponseVoidTest.kt
 src/test/kotlin/com/tuvarna/geo/models/UserDTOTest.kt

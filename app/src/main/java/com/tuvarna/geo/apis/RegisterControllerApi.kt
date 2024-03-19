@@ -18,6 +18,7 @@ import com.tuvarna.geo.infrastructure.ServerError
 import com.tuvarna.geo.infrastructure.ServerException
 import com.tuvarna.geo.infrastructure.Success
 import com.tuvarna.geo.model.UserDTO
+import com.tuvarna.geo.models.RestApiResponseVoid
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import java.io.IOException
@@ -37,7 +38,7 @@ class RegisterControllerApi(
    * Register a new user
    *
    * @param userDTO
-   * @return kotlin.String
+   * @return RestApiResponseVoid
    * @throws IllegalStateException If the request is not correctly configured
    * @throws IOException Rethrows the OkHttp execute method exception
    * @throws UnsupportedOperationException If the API returns an informational or redirection
@@ -53,11 +54,11 @@ class RegisterControllerApi(
     ClientException::class,
     ServerException::class,
   )
-  fun create(userDTO: UserDTO): kotlin.String {
+  fun create(userDTO: com.tuvarna.geo.model.UserDTO): RestApiResponseVoid {
     val localVarResponse = createWithHttpInfo(userDTO = userDTO)
 
     return when (localVarResponse.responseType) {
-      ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.String
+      ResponseType.Success -> (localVarResponse as Success<*>).data as RestApiResponseVoid
       ResponseType.Informational ->
         throw UnsupportedOperationException("Client does not support Informational responses.")
       ResponseType.Redirection ->
@@ -85,16 +86,16 @@ class RegisterControllerApi(
    * Register a new user
    *
    * @param userDTO
-   * @return ApiResponse<kotlin.String?>
+   * @return ApiResponse<RestApiResponseVoid?>
    * @throws IllegalStateException If the request is not correctly configured
    * @throws IOException Rethrows the OkHttp execute method exception
    */
   @Suppress("UNCHECKED_CAST")
   @Throws(IllegalStateException::class, IOException::class)
-  fun createWithHttpInfo(userDTO: UserDTO): ApiResponse<kotlin.String?> {
+  fun createWithHttpInfo(userDTO: UserDTO): ApiResponse<RestApiResponseVoid?> {
     val localVariableConfig = createRequestConfig(userDTO = userDTO)
 
-    return request<UserDTO, kotlin.String>(localVariableConfig)
+    return request<UserDTO, RestApiResponseVoid>(localVariableConfig)
   }
 
   /**
