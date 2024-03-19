@@ -19,24 +19,24 @@ paths:
               $ref: '#/components/schemas/UserDTO'
         required: true
       responses:
-        "500":
-          description: Internal server error
-          content:
-            '*/*':
-              schema:
-                type: string
-        "201":
-          description: User registered successfully
-          content:
-            '*/*':
-              schema:
-                type: string
         "400":
           description: Bad request
           content:
             '*/*':
               schema:
-                type: string
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "201":
+          description: User registered successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
 components:
   schemas:
     UserDTO:
@@ -52,3 +52,13 @@ components:
           type: string
         isblocked:
           type: boolean
+    RestApiResponseVoid:
+      type: object
+      properties:
+        data:
+          type: object
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32
