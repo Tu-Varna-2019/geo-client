@@ -1,6 +1,6 @@
 package com.tuvarna.geo.app
 
-import com.tuvarna.geo.apis.RegisterControllerApi
+import com.tuvarna.geo.rest_api.apis.RegisterControllerApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

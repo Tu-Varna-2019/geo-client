@@ -13,7 +13,7 @@
     "UnusedImport"
 )
 
-package com.tuvarna.geo.models
+package com.tuvarna.geo.rest_api.models
 
 
 import com.squareup.moshi.Json

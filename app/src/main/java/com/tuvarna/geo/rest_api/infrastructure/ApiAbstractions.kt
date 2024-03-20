@@ -1,4 +1,4 @@
-package com.tuvarna.geo.infrastructure
+package com.tuvarna.geo.rest_api.infrastructure
 
 typealias MultiValueMap = MutableMap<String,List<String>>
 

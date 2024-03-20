@@ -13,32 +13,32 @@
     "UnusedImport"
 )
 
-package com.tuvarna.geo.apis
+package com.tuvarna.geo.rest_api.apis
 
 import java.io.IOException
 import okhttp3.OkHttpClient
 import okhttp3.HttpUrl
 
-import com.tuvarna.geo.models.RestApiResponseVoid
-import com.tuvarna.geo.models.UserDTO
+import com.tuvarna.geo.rest_api.models.LoginUserDTO
+import com.tuvarna.geo.rest_api.models.RestApiResponseVoid
 
 import com.squareup.moshi.Json
 
-import com.tuvarna.geo.infrastructure.ApiClient
-import com.tuvarna.geo.infrastructure.ApiResponse
-import com.tuvarna.geo.infrastructure.ClientException
-import com.tuvarna.geo.infrastructure.ClientError
-import com.tuvarna.geo.infrastructure.ServerException
-import com.tuvarna.geo.infrastructure.ServerError
-import com.tuvarna.geo.infrastructure.MultiValueMap
-import com.tuvarna.geo.infrastructure.PartConfig
-import com.tuvarna.geo.infrastructure.RequestConfig
-import com.tuvarna.geo.infrastructure.RequestMethod
-import com.tuvarna.geo.infrastructure.ResponseType
-import com.tuvarna.geo.infrastructure.Success
-import com.tuvarna.geo.infrastructure.toMultiValue
+import com.tuvarna.geo.rest_api.infrastructure.ApiClient
+import com.tuvarna.geo.rest_api.infrastructure.ApiResponse
+import com.tuvarna.geo.rest_api.infrastructure.ClientException
+import com.tuvarna.geo.rest_api.infrastructure.ClientError
+import com.tuvarna.geo.rest_api.infrastructure.ServerException
+import com.tuvarna.geo.rest_api.infrastructure.ServerError
+import com.tuvarna.geo.rest_api.infrastructure.MultiValueMap
+import com.tuvarna.geo.rest_api.infrastructure.PartConfig
+import com.tuvarna.geo.rest_api.infrastructure.RequestConfig
+import com.tuvarna.geo.rest_api.infrastructure.RequestMethod
+import com.tuvarna.geo.rest_api.infrastructure.ResponseType
+import com.tuvarna.geo.rest_api.infrastructure.Success
+import com.tuvarna.geo.rest_api.infrastructure.toMultiValue
 
-class RegisterControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHttpClient = ApiClient.defaultClient) : ApiClient(basePath, client) {
+class LoginControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHttpClient = ApiClient.defaultClient) : ApiClient(basePath, client) {
     companion object {
         @JvmStatic
         val defaultBasePath: String by lazy {
@@ -47,9 +47,9 @@ class RegisterControllerApi(basePath: kotlin.String = defaultBasePath, client: O
     }
 
     /**
-     * Register a new user
+     * Logging on a new user
      * 
-     * @param userDTO 
+     * @param loginUserDTO 
      * @return RestApiResponseVoid
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
@@ -59,8 +59,8 @@ class RegisterControllerApi(basePath: kotlin.String = defaultBasePath, client: O
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun create(userDTO: UserDTO) : RestApiResponseVoid {
-        val localVarResponse = createWithHttpInfo(userDTO = userDTO)
+    fun authenticateUser(loginUserDTO: LoginUserDTO) : RestApiResponseVoid {
+        val localVarResponse = authenticateUserWithHttpInfo(loginUserDTO = loginUserDTO)
 
         return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as RestApiResponseVoid
@@ -78,38 +78,38 @@ class RegisterControllerApi(basePath: kotlin.String = defaultBasePath, client: O
     }
 
     /**
-     * Register a new user
+     * Logging on a new user
      * 
-     * @param userDTO 
+     * @param loginUserDTO 
      * @return ApiResponse<RestApiResponseVoid?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun createWithHttpInfo(userDTO: UserDTO) : ApiResponse<RestApiResponseVoid?> {
-        val localVariableConfig = createRequestConfig(userDTO = userDTO)
+    fun authenticateUserWithHttpInfo(loginUserDTO: LoginUserDTO) : ApiResponse<RestApiResponseVoid?> {
+        val localVariableConfig = authenticateUserRequestConfig(loginUserDTO = loginUserDTO)
 
-        return request<UserDTO, RestApiResponseVoid>(
+        return request<LoginUserDTO, RestApiResponseVoid>(
             localVariableConfig
         )
     }
 
     /**
-     * To obtain the request config of the operation create
+     * To obtain the request config of the operation authenticateUser
      *
-     * @param userDTO 
+     * @param loginUserDTO 
      * @return RequestConfig
      */
-    fun createRequestConfig(userDTO: UserDTO) : RequestConfig<UserDTO> {
-        val localVariableBody = userDTO
+    fun authenticateUserRequestConfig(loginUserDTO: LoginUserDTO) : RequestConfig<LoginUserDTO> {
+        val localVariableBody = loginUserDTO
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
         localVariableHeaders["Content-Type"] = "application/json"
         
         return RequestConfig(
             method = RequestMethod.POST,
-            path = "/register",
+            path = "/login",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = false,

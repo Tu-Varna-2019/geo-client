@@ -1,4 +1,4 @@
-package com.tuvarna.geo.infrastructure
+package com.tuvarna.geo.rest_api.infrastructure
 
 /**
  * Defines a config object for a given part of a multi-part request.

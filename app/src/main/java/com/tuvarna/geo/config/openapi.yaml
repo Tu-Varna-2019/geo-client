@@ -16,7 +16,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserDTO'
+              $ref: '#/components/schemas/RegisterUserDTO'
         required: true
       responses:
         "400":
@@ -37,9 +37,40 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/RestApiResponseVoid'
+  /login:
+    post:
+      tags:
+      - login-controller
+      summary: Logging on a new user
+      operationId: authenticateUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserDTO'
+        required: true
+      responses:
+        "400":
+          description: Bad request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "201":
+          description: User logged in successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
 components:
   schemas:
-    UserDTO:
+    RegisterUserDTO:
       type: object
       properties:
         username:
@@ -48,10 +79,10 @@ components:
           type: string
         password:
           type: string
-        usertype:
-          type: string
         isblocked:
           type: boolean
+        usertype:
+          type: string
     RestApiResponseVoid:
       type: object
       properties:
@@ -62,3 +93,10 @@ components:
         status:
           type: integer
           format: int32
+    LoginUserDTO:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string

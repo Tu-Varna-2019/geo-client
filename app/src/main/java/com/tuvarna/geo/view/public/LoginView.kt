@@ -125,17 +125,17 @@ fun LoginForm(navig: NavController, user: User, loginViewModel: LoginViewModel) 
     horizontalArrangement = Arrangement.SpaceBetween,
   ) {
     Button(
-      onClick = { navig.navigate("signup") },
-      modifier = Modifier.weight(1f).padding(end = 10.dp),
-    ) {
-      Text("Sign up")
-    }
-    Button(
       onClick = { loginViewModel.login(user) },
       enabled = !isSubmitBtnDisabled,
       modifier = Modifier.weight(1f).padding(end = 10.dp),
     ) {
       Text("Login")
+    }
+    Button(
+      onClick = { navig.navigate("signup") },
+      modifier = Modifier.weight(1f).padding(end = 10.dp),
+    ) {
+      Text("Sign up")
     }
   }
 }

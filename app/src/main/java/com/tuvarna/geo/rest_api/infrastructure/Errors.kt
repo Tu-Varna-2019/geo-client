@@ -1,5 +1,5 @@
 @file:Suppress("unused")
-package com.tuvarna.geo.infrastructure
+package com.tuvarna.geo.rest_api.infrastructure
 
 import java.lang.RuntimeException
 

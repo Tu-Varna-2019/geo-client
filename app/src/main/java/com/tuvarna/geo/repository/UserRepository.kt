@@ -1,11 +1,11 @@
 package com.tuvarna.geo.repository
 
-import com.tuvarna.geo.apis.RegisterControllerApi
 import com.tuvarna.geo.controller.ApiResult
 import com.tuvarna.geo.entity.User
-import com.tuvarna.geo.infrastructure.ClientError
-import com.tuvarna.geo.infrastructure.ClientException
 import com.tuvarna.geo.mapper.UserMapper
+import com.tuvarna.geo.rest_api.apis.RegisterControllerApi
+import com.tuvarna.geo.rest_api.infrastructure.ClientError
+import com.tuvarna.geo.rest_api.infrastructure.ClientException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONException

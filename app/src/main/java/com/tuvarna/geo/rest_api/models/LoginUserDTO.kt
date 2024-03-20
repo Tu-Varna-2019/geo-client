@@ -13,7 +13,7 @@
     "UnusedImport"
 )
 
-package com.tuvarna.geo.models
+package com.tuvarna.geo.rest_api.models
 
 
 import com.squareup.moshi.Json
@@ -22,30 +22,18 @@ import com.squareup.moshi.JsonClass
 /**
  * 
  *
- * @param username 
  * @param email 
  * @param password 
- * @param usertype 
- * @param isblocked 
  */
 
 
-data class UserDTO (
-
-    @Json(name = "username")
-    val username: kotlin.String? = null,
+data class LoginUserDTO (
 
     @Json(name = "email")
     val email: kotlin.String? = null,
 
     @Json(name = "password")
-    val password: kotlin.String? = null,
-
-    @Json(name = "usertype")
-    val usertype: kotlin.String? = null,
-
-    @Json(name = "isblocked")
-    val isblocked: kotlin.Boolean? = null
+    val password: kotlin.String? = null
 
 )
 

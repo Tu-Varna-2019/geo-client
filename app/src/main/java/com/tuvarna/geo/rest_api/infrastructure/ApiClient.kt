@@ -1,4 +1,4 @@
-package com.tuvarna.geo.infrastructure
+package com.tuvarna.geo.rest_api.infrastructure
 
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
@@ -46,7 +46,7 @@ open class ApiClient(val baseUrl: String, val client: OkHttpClient = defaultClie
         var username: String? = null
         var password: String? = null
         var accessToken: String? = null
-        const val baseUrlKey = "com.tuvarna.geo.baseUrl"
+        const val baseUrlKey = "com.tuvarna.geo.rest_api.baseUrl"
 
         @JvmStatic
         val defaultClient: OkHttpClient by lazy {
@@ -127,7 +127,7 @@ open class ApiClient(val baseUrl: String, val client: OkHttpClient = defaultClie
         if (T::class.java == File::class.java) {
             // return tempFile
             // Attention: if you are developing an android app that supports API Level 25 and bellow, please check flag supportAndroidApiLevel25AndBelow in https://openapi-generator.tech/docs/generators/kotlin#config-options
-            val tempFile = java.nio.file.Files.createTempFile("tmp.com.tuvarna.geo", null).toFile()
+            val tempFile = java.nio.file.Files.createTempFile("tmp.com.tuvarna.geo.rest_api", null).toFile()
             tempFile.deleteOnExit()
             body.byteStream().use { inputStream ->
                 tempFile.outputStream().use { tempFileOutputStream ->

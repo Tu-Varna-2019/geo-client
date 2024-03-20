@@ -1,17 +1,17 @@
-# RegisterControllerApi
+# LoginControllerApi
 
 All URIs are relative to *http://localhost:8080*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create**](RegisterControllerApi.md#create) | **POST** /register | Register a new user
+[**authenticateUser**](LoginControllerApi.md#authenticateUser) | **POST** /login | Logging on a new user
 
 
-<a id="create"></a>
-# **create**
-> RestApiResponseVoid create(registerUserDTO)
+<a id="authenticateUser"></a>
+# **authenticateUser**
+> RestApiResponseVoid authenticateUser(loginUserDTO)
 
-Register a new user
+Logging on a new user
 
 ### Example
 ```kotlin
@@ -19,16 +19,16 @@ Register a new user
 //import com.tuvarna.geo.rest_api.infrastructure.*
 //import com.tuvarna.geo.rest_api.models.*
 
-val apiInstance = RegisterControllerApi()
-val registerUserDTO : RegisterUserDTO =  // RegisterUserDTO | 
+val apiInstance = LoginControllerApi()
+val loginUserDTO : LoginUserDTO =  // LoginUserDTO | 
 try {
-    val result : RestApiResponseVoid = apiInstance.create(registerUserDTO)
+    val result : RestApiResponseVoid = apiInstance.authenticateUser(loginUserDTO)
     println(result)
 } catch (e: ClientException) {
-    println("4xx response calling RegisterControllerApi#create")
+    println("4xx response calling LoginControllerApi#authenticateUser")
     e.printStackTrace()
 } catch (e: ServerException) {
-    println("5xx response calling RegisterControllerApi#create")
+    println("5xx response calling LoginControllerApi#authenticateUser")
     e.printStackTrace()
 }
 ```
@@ -37,7 +37,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **registerUserDTO** | [**RegisterUserDTO**](RegisterUserDTO.md)|  |
+ **loginUserDTO** | [**LoginUserDTO**](LoginUserDTO.md)|  |
 
 ### Return type
 
