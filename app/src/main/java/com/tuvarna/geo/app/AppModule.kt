@@ -1,5 +1,6 @@
 package com.tuvarna.geo.app
 
+import com.tuvarna.geo.rest_api.apis.LoginControllerApi
 import com.tuvarna.geo.rest_api.apis.RegisterControllerApi
 import dagger.Module
 import dagger.Provides
@@ -12,6 +13,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+  private const val BASE_URL = "http://10.0.2.2:8080"
+
   @Singleton
   @Provides
   fun provideOkHttpClient(): OkHttpClient {
@@ -22,7 +25,14 @@ object AppModule {
   @Singleton
   @Provides
   fun provideRegisterControllerApi(client: OkHttpClient): RegisterControllerApi {
-    val basePath = "http://10.0.2.2:8080"
-    return RegisterControllerApi(basePath, client)
+
+    return RegisterControllerApi(BASE_URL, client)
+  }
+
+  @Singleton
+  @Provides
+  fun provideLoginControllerApi(client: OkHttpClient): LoginControllerApi {
+
+    return LoginControllerApi(BASE_URL, client)
   }
 }
