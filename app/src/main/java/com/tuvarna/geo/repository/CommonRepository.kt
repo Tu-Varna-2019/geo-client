@@ -6,10 +6,9 @@ import com.tuvarna.geo.rest_api.infrastructure.ClientException
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber
-import java.io.IOException
 
 interface CommonRepository {
-  fun handleApiException(e: Exception): ApiResult {
+  fun <T> handleApiException(e: Exception): ApiResult<T> {
     return when (e) {
       is ClientException -> {
         val clientError = e.response as? ClientError<*>
@@ -19,11 +18,11 @@ interface CommonRepository {
             else -> clientError?.message ?: "Unknown client error"
           }
         Timber.d("Client error: $errorMessage")
-        ApiResult.Error(IOException(errorMessage))
+        ApiResult.Error(errorMessage)
       }
       else -> {
         Timber.e(e, "Unexpected error")
-        ApiResult.Error(IOException("Unexpected error: ${e.localizedMessage}"))
+        ApiResult.Error("Unexpected error: ${e.localizedMessage}")
       }
     }
   }

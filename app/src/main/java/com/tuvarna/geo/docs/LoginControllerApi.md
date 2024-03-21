@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a id="authenticateUser"></a>
 # **authenticateUser**
-> RestApiResponseVoid authenticateUser(loginUserDTO)
+> RestApiResponseLoggedInUserDTO authenticateUser(loginUserDTO)
 
 Logging on a new user
 
@@ -22,7 +22,7 @@ Logging on a new user
 val apiInstance = LoginControllerApi()
 val loginUserDTO : LoginUserDTO =  // LoginUserDTO | 
 try {
-    val result : RestApiResponseVoid = apiInstance.authenticateUser(loginUserDTO)
+    val result : RestApiResponseLoggedInUserDTO = apiInstance.authenticateUser(loginUserDTO)
     println(result)
 } catch (e: ClientException) {
     println("4xx response calling LoginControllerApi#authenticateUser")
@@ -41,7 +41,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**RestApiResponseVoid**](RestApiResponseVoid.md)
+[**RestApiResponseLoggedInUserDTO**](RestApiResponseLoggedInUserDTO.md)
 
 ### Authorization
 

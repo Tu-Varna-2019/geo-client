@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
-class UserType {
+class EntityUserType {
 
   var id by mutableIntStateOf(0)
   var type by mutableStateOf("")

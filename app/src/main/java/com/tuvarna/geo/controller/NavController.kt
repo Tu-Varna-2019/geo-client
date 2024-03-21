@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.tuvarna.geo.entity.EntityUser
 import com.tuvarna.geo.view.public.HomeView
 import com.tuvarna.geo.view.public.LoginView
 import com.tuvarna.geo.view.public.SignUpView
@@ -22,6 +23,9 @@ fun NavController() {
   NavHost(navController = navController, startDestination = Screen.Login.route) {
     composable(Screen.Login.route) { LoginView(navController) }
     composable(Screen.SignUp.route) { SignUpView(navController) }
-    composable(Screen.Home.route) { HomeView(navController) }
+    composable(Screen.Home.route + "/{user}") { backStackEntry ->
+      val user = backStackEntry.arguments?.getParcelable<EntityUser>("user")
+      HomeView(navController, user!!)
+    }
   }
 }

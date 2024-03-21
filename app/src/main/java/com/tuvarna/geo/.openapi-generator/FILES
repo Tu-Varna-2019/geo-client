@@ -1,9 +1,11 @@
 README.md
 build.gradle
+docs/LoggedInUserDTO.md
 docs/LoginControllerApi.md
 docs/LoginUserDTO.md
 docs/RegisterControllerApi.md
 docs/RegisterUserDTO.md
+docs/RestApiResponseLoggedInUserDTO.md
 docs/RestApiResponseVoid.md
 gradle/wrapper/gradle-wrapper.jar
 gradle/wrapper/gradle-wrapper.properties
@@ -29,11 +31,15 @@ src/main/kotlin/com/tuvarna/geo/rest_api/infrastructure/ResponseExtensions.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/infrastructure/Serializer.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/infrastructure/URIAdapter.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/infrastructure/UUIDAdapter.kt
+src/main/kotlin/com/tuvarna/geo/rest_api/models/LoggedInUserDTO.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/models/LoginUserDTO.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/models/RegisterUserDTO.kt
+src/main/kotlin/com/tuvarna/geo/rest_api/models/RestApiResponseLoggedInUserDTO.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/models/RestApiResponseVoid.kt
 src/test/kotlin/com/tuvarna/geo/rest_api/apis/LoginControllerApiTest.kt
 src/test/kotlin/com/tuvarna/geo/rest_api/apis/RegisterControllerApiTest.kt
+src/test/kotlin/com/tuvarna/geo/rest_api/models/LoggedInUserDTOTest.kt
 src/test/kotlin/com/tuvarna/geo/rest_api/models/LoginUserDTOTest.kt
 src/test/kotlin/com/tuvarna/geo/rest_api/models/RegisterUserDTOTest.kt
+src/test/kotlin/com/tuvarna/geo/rest_api/models/RestApiResponseLoggedInUserDTOTest.kt
 src/test/kotlin/com/tuvarna/geo/rest_api/models/RestApiResponseVoidTest.kt

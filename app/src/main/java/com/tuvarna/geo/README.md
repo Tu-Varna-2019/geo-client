@@ -52,8 +52,10 @@ Class | Method | HTTP request | Description
 <a id="documentation-for-models"></a>
 ## Documentation for Models
 
+ - [com.tuvarna.geo.rest_api.models.LoggedInUserDTO](docs/LoggedInUserDTO.md)
  - [com.tuvarna.geo.rest_api.models.LoginUserDTO](docs/LoginUserDTO.md)
  - [com.tuvarna.geo.rest_api.models.RegisterUserDTO](docs/RegisterUserDTO.md)
+ - [com.tuvarna.geo.rest_api.models.RestApiResponseLoggedInUserDTO](docs/RestApiResponseLoggedInUserDTO.md)
  - [com.tuvarna.geo.rest_api.models.RestApiResponseVoid](docs/RestApiResponseVoid.md)
 
 

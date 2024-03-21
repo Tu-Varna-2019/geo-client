@@ -20,7 +20,7 @@ import okhttp3.OkHttpClient
 import okhttp3.HttpUrl
 
 import com.tuvarna.geo.rest_api.models.LoginUserDTO
-import com.tuvarna.geo.rest_api.models.RestApiResponseVoid
+import com.tuvarna.geo.rest_api.models.RestApiResponseLoggedInUserDTO
 
 import com.squareup.moshi.Json
 
@@ -50,7 +50,7 @@ class LoginControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHt
      * Logging on a new user
      * 
      * @param loginUserDTO 
-     * @return RestApiResponseVoid
+     * @return RestApiResponseLoggedInUserDTO
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      * @throws UnsupportedOperationException If the API returns an informational or redirection response
@@ -59,11 +59,11 @@ class LoginControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHt
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun authenticateUser(loginUserDTO: LoginUserDTO) : RestApiResponseVoid {
+    fun authenticateUser(loginUserDTO: LoginUserDTO) : RestApiResponseLoggedInUserDTO {
         val localVarResponse = authenticateUserWithHttpInfo(loginUserDTO = loginUserDTO)
 
         return when (localVarResponse.responseType) {
-            ResponseType.Success -> (localVarResponse as Success<*>).data as RestApiResponseVoid
+            ResponseType.Success -> (localVarResponse as Success<*>).data as RestApiResponseLoggedInUserDTO
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
@@ -81,16 +81,16 @@ class LoginControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHt
      * Logging on a new user
      * 
      * @param loginUserDTO 
-     * @return ApiResponse<RestApiResponseVoid?>
+     * @return ApiResponse<RestApiResponseLoggedInUserDTO?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun authenticateUserWithHttpInfo(loginUserDTO: LoginUserDTO) : ApiResponse<RestApiResponseVoid?> {
+    fun authenticateUserWithHttpInfo(loginUserDTO: LoginUserDTO) : ApiResponse<RestApiResponseLoggedInUserDTO?> {
         val localVariableConfig = authenticateUserRequestConfig(loginUserDTO = loginUserDTO)
 
-        return request<LoginUserDTO, RestApiResponseVoid>(
+        return request<LoginUserDTO, RestApiResponseLoggedInUserDTO>(
             localVariableConfig
         )
     }
