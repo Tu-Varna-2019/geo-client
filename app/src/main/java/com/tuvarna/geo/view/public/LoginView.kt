@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.tuvarna.geo.R
-import com.tuvarna.geo.controller.ApiResult
 import com.tuvarna.geo.entity.EntityUser
 import com.tuvarna.geo.view.component.accessibility.LoadingIndicator
 import com.tuvarna.geo.viewmodel.LoginViewModel
@@ -43,9 +42,8 @@ fun LoginView(navController: NavController) {
   val loginViewModel = hiltViewModel<LoginViewModel>()
   val user by remember { mutableStateOf(EntityUser(0, "", "", "", false)) }
   val state = loginViewModel.uiState.collectAsState()
-  val stateValue = state.value
-  val parsedUser = (stateValue is ApiResult.Success && stateValue.data is EntityUser)
-  LoadingIndicator(uiState = state, navController = navController, route = "home/${parsedUser}")
+
+  LoadingIndicator(uiState = state, navController = navController, route = "home")
 
   Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
     Column(

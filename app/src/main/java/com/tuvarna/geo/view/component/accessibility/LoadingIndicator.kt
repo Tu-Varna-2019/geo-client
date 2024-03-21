@@ -30,6 +30,7 @@ fun LoadingIndicator(uiState: State<ApiResult<*>>, navController: NavController,
     is ApiResult.Success<*> -> {
       LaunchedEffect(state.message) {
         SnackbarManager.showSnackbar(state.message)
+
         navController.navigate(route)
       }
     }

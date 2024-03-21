@@ -16,10 +16,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.tuvarna.geo.entity.EntityUser
 
 @Composable
-fun HomeView(navController: NavController, user: EntityUser) {
+fun HomeView(navController: NavController) {
 
   Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
     Column(
@@ -27,7 +26,7 @@ fun HomeView(navController: NavController, user: EntityUser) {
       verticalArrangement = Arrangement.Center,
     ) {
       Text(
-        text = "Home for user ${user.email}",
+        text = "Home for user ",
         style = MaterialTheme.typography.bodyMedium,
         modifier = Modifier.padding(16.dp).align(Alignment.CenterHorizontally),
         fontWeight = FontWeight.Bold,
