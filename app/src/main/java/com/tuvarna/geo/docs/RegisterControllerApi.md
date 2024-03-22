@@ -9,20 +9,20 @@ Method | HTTP request | Description
 
 <a id="create"></a>
 # **create**
-> RestApiResponseVoid create(userDTO)
+> RestApiResponseVoid create(registerUserDTO)
 
 Register a new user
 
 ### Example
 ```kotlin
 // Import classes:
-//import com.tuvarna.geo.infrastructure.*
-//import com.tuvarna.geo.models.*
+//import com.tuvarna.geo.rest_api.infrastructure.*
+//import com.tuvarna.geo.rest_api.models.*
 
 val apiInstance = RegisterControllerApi()
-val userDTO : UserDTO =  // UserDTO | 
+val registerUserDTO : RegisterUserDTO =  // RegisterUserDTO | 
 try {
-    val result : RestApiResponseVoid = apiInstance.create(userDTO)
+    val result : RestApiResponseVoid = apiInstance.create(registerUserDTO)
     println(result)
 } catch (e: ClientException) {
     println("4xx response calling RegisterControllerApi#create")
@@ -37,7 +37,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **userDTO** | [**UserDTO**](UserDTO.md)|  |
+ **registerUserDTO** | [**RegisterUserDTO**](RegisterUserDTO.md)|  |
 
 ### Return type
 

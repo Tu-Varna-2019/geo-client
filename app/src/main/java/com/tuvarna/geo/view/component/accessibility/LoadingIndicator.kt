@@ -12,14 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import com.example.app_iliyan.view.components.dialog_box.SnackbarManager
-import com.tuvarna.geo.viewmodel.ui.UiState
+import com.tuvarna.geo.controller.ApiResult
 
 @Composable
-fun LoadingIndicator(uiState: State<UiState>, navController: NavController, route: String) {
+fun LoadingIndicator(uiState: State<ApiResult<*>>, navController: NavController, route: String) {
   val state = uiState.value
 
   when (state) {
-    is UiState.Loading -> {
+    is ApiResult.Loading -> {
       Box(
         modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.4f)),
         contentAlignment = Alignment.Center,
@@ -27,16 +27,15 @@ fun LoadingIndicator(uiState: State<UiState>, navController: NavController, rout
         CircularProgressIndicator()
       }
     }
-    is UiState.Success -> {
-
+    is ApiResult.Success<*> -> {
       LaunchedEffect(state.message) {
         SnackbarManager.showSnackbar(state.message)
+
         navController.navigate(route)
       }
     }
-    is UiState.Error -> {
-
-      LaunchedEffect(state.message) { SnackbarManager.showSnackbar(state.message) }
+    is ApiResult.Error -> {
+      LaunchedEffect(state.message) { SnackbarManager.showSnackbar(state.message.toString()) }
     }
     else -> Unit
   }

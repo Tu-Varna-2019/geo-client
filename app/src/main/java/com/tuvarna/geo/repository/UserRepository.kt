@@ -1,58 +1,47 @@
 package com.tuvarna.geo.repository
 
-import com.tuvarna.geo.apis.RegisterControllerApi
 import com.tuvarna.geo.controller.ApiResult
-import com.tuvarna.geo.entity.User
-import com.tuvarna.geo.infrastructure.ClientError
-import com.tuvarna.geo.infrastructure.ClientException
+import com.tuvarna.geo.entity.EntityUser
 import com.tuvarna.geo.mapper.UserMapper
+import com.tuvarna.geo.rest_api.apis.LoginControllerApi
+import com.tuvarna.geo.rest_api.apis.RegisterControllerApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.json.JSONException
-import org.json.JSONObject
 import timber.log.Timber
-import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class UserRepository @Inject constructor(private val registerApi: RegisterControllerApi) {
+class UserRepository
+@Inject
+constructor(
+  private val registerApi: RegisterControllerApi,
+  private val loginApi: LoginControllerApi,
+) : CommonRepository {
 
-  suspend fun login(username: String, password: String) {
-    // TODO: Finish me!
-
-  }
-
-  suspend fun register(user: User, userType: String): ApiResult {
+  suspend fun login(user: EntityUser): ApiResult<EntityUser> {
     return withContext(Dispatchers.IO) {
       try {
-        Timber.d("Registering user: %s", user)
-
-        val userDTO = UserMapper.UserMapper.toDto(user, userType)
-        val response = registerApi.create(userDTO)
-
-        ApiResult.Success(response.message ?: "Success")
-      } catch (e: ClientException) {
-        val clientError = e.response as? ClientError<*>
-        val errorMessage =
-          when (val body = clientError?.body) {
-            is String -> parseErrorMessage(body)
-            else -> clientError?.message ?: "Unknown client error"
-          }
-        Timber.d("Client error during user registration: $errorMessage")
-        ApiResult.Error(IOException(errorMessage))
+        Timber.d("Logging in user: %s", user)
+        val userDTO = UserMapper.UserMapper.toLoginUserDTO(user)
+        val response = loginApi.authenticateUser(userDTO)
+        ApiResult.Success(response.message ?: "Success", EntityUser(response.data!!))
       } catch (e: Exception) {
-        Timber.e(e, "Unexpected error during user registration")
-        ApiResult.Error(IOException("Unexpected error: ${e.localizedMessage}"))
+        handleApiException(e)
       }
     }
   }
 
-  fun parseErrorMessage(jsonResponse: String): String {
-    return try {
-      JSONObject(jsonResponse).getString("message")
-    } catch (e: JSONException) {
-      "Error parsing error message"
+  suspend fun register(user: EntityUser, userType: String): ApiResult<Nothing> {
+    return withContext(Dispatchers.IO) {
+      try {
+        Timber.d("Registering user: %s", user)
+        val userDTO = UserMapper.UserMapper.toRegisterUserDTO(user, userType)
+        val response = registerApi.create(userDTO)
+        ApiResult.Success(response.message ?: "Success", null)
+      } catch (e: Exception) {
+        handleApiException(e)
+      }
     }
   }
 }

@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.tuvarna.geo.R
-import com.tuvarna.geo.entity.User
+import com.tuvarna.geo.entity.EntityUser
 import com.tuvarna.geo.view.component.accessibility.LoadingIndicator
 import com.tuvarna.geo.viewmodel.RegisterViewModel
 
@@ -42,7 +42,7 @@ fun SignUpView(navController: NavController) {
 
   val registerViewModel = hiltViewModel<RegisterViewModel>()
 
-  val user by remember { mutableStateOf(User(0, "", "", "", false)) }
+  val user by remember { mutableStateOf(EntityUser(0, "", "", "", false)) }
   val confirmPassword = remember { mutableStateOf("") }
 
   val state = registerViewModel.uiState.collectAsState()
@@ -85,7 +85,7 @@ fun SignUpView(navController: NavController) {
 @Composable
 fun SignUpForm(
   navig: NavController,
-  user: User,
+  user: EntityUser,
   confirmPassword: MutableState<String>,
   registerViewModel: RegisterViewModel,
 ) {
