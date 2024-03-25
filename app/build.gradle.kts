@@ -71,7 +71,7 @@ dependencies {
   kapt("com.google.dagger:hilt-android-compiler:2.51")
   implementation(libs.androidx.appcompat)
 
-  testImplementation("io.kotest:kotest-framework-api-jvm:4.6.0")
+  testImplementation("io.kotest:kotest-framework-api-jvm:5.8.1")
   testImplementation("io.kotest:kotest-property:4.6.0")
   testImplementation("io.kotest:kotest-runner-junit5:4.6.0")
   testImplementation("io.kotest:kotest-assertions-core:4.6.0")
