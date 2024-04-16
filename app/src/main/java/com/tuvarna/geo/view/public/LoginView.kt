@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.tuvarna.geo.R
-import com.tuvarna.geo.entity.EntityUser
+import com.tuvarna.geo.entity.UserEntity
 import com.tuvarna.geo.view.component.accessibility.LoadingIndicator
 import com.tuvarna.geo.viewmodel.LoginViewModel
 
@@ -40,7 +40,7 @@ import com.tuvarna.geo.viewmodel.LoginViewModel
 fun LoginView(navController: NavController) {
 
   val loginViewModel = hiltViewModel<LoginViewModel>()
-  val user by remember { mutableStateOf(EntityUser(0, "", "", "", false)) }
+  val user by remember { mutableStateOf(UserEntity(0, "", "", "", false)) }
   val state = loginViewModel.uiState.collectAsState()
 
   LoadingIndicator(uiState = state, navController = navController, route = "home")
@@ -68,16 +68,16 @@ fun LoginView(navController: NavController) {
 
       Spacer(modifier = Modifier.height(20.dp))
 
-      LoginForm(user = user, loginViewModel = loginViewModel, navig = navController)
+      LoginForm(user = user, loginViewModel = loginViewModel, navController = navController)
     }
   }
 }
 
 @Composable
-fun LoginForm(navig: NavController, user: EntityUser, loginViewModel: LoginViewModel) {
+fun LoginForm(navController: NavController, user: UserEntity, loginViewModel: LoginViewModel) {
 
-  val isEmailValid = false // user.email.isEmpty() || Utils.isValidEmail(user.email)
-  val isPasswordValid = false // user.password.isEmpty() || Utils.isValidPassword(user.password)
+  val isEmailValid = user.email.isEmpty() // || Utils.isValidEmail(user.email)
+  val isPasswordValid = user.password.isEmpty() // || Utils.isValidPassword(user.password)
   val isSubmitBtnDisabled = isEmailValid || isPasswordValid
 
   val textFieldModifier: Modifier = Modifier.fillMaxWidth().padding(8.dp).height(60.dp)
@@ -132,7 +132,7 @@ fun LoginForm(navig: NavController, user: EntityUser, loginViewModel: LoginViewM
       Text("Login")
     }
     Button(
-      onClick = { navig.navigate("signup") },
+      onClick = { navController.navigate("signup") },
       modifier = Modifier.weight(1f).padding(end = 10.dp),
     ) {
       Text("Sign up")
