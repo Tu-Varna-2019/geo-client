@@ -38,13 +38,14 @@ import com.tuvarna.geo.viewmodel.LoginViewModel
 
 @Composable
 fun LoginView(navController: NavController) {
-
   val loginViewModel = hiltViewModel<LoginViewModel>()
   val user by remember { mutableStateOf(UserEntity(0, "", "", "", false)) }
-  val state = loginViewModel.uiState.collectAsState()
 
-  LoadingIndicator(uiState = state, navController = navController, route = "home")
-
+  LoadingIndicator(
+    uiState = loginViewModel.uiState.collectAsState().value,
+    navController = navController,
+    route = "home",
+  )
   Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
     Column(
       modifier = Modifier.padding(5.dp).fillMaxWidth(0.8f),

@@ -41,14 +41,14 @@ import com.tuvarna.geo.viewmodel.RegisterViewModel
 fun SignUpView(navController: NavController) {
 
   val registerViewModel = hiltViewModel<RegisterViewModel>()
-
   val user by remember { mutableStateOf(UserEntity(0, "", "", "", false)) }
   val confirmPassword = remember { mutableStateOf("") }
 
-  val state = registerViewModel.uiState.collectAsState()
-
-  LoadingIndicator(uiState = state, navController = navController, route = "login")
-
+  LoadingIndicator(
+    uiState = registerViewModel.uiState.collectAsState().value,
+    navController = navController,
+    route = "login",
+  )
   Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
     Column(
       modifier = Modifier.padding(5.dp).fillMaxWidth(0.8f),
