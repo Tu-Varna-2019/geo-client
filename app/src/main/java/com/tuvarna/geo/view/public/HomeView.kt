@@ -1,5 +1,9 @@
 package com.tuvarna.geo.view.public
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,12 +14,28 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 
 @Composable
 fun HomeView(navController: NavController) {
@@ -34,6 +54,77 @@ fun HomeView(navController: NavController) {
       )
 
       Spacer(modifier = Modifier.height(20.dp))
+
+    }
+      GoogleMapView()
+  }
+}
+
+@Composable
+fun GoogleMapView() {
+  val context = LocalContext.current
+  val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
+  var hasPermission by remember { mutableStateOf(false) }
+  var lastKnownLocation by remember { mutableStateOf<LatLng?>(null) }
+
+  DisposableEffect(Unit) {
+    if (
+      ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) ==
+        PackageManager.PERMISSION_GRANTED
+    ) {
+      hasPermission = true
+    } else {
+      ActivityCompat.requestPermissions(
+        context as ComponentActivity,
+        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+        1,
+      )
+    }
+
+    onDispose {
+      // Clean up code here if needed
     }
   }
+
+  val mapView = remember { MapView(context) }
+
+  if (hasPermission) {
+    fusedLocationClient.lastLocation
+      .addOnSuccessListener { location ->
+        location?.let { lastKnownLocation = LatLng(location.latitude, location.longitude) }
+      }
+      .addOnFailureListener { e -> Log.e("GoogleMapView", "Failed to get last known location", e) }
+
+    lastKnownLocation?.let { currentLocation ->
+      LaunchedEffect(currentLocation) {
+        mapView.getMapAsync { googleMap ->
+          googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
+          googleMap.addMarker(MarkerOptions().position(currentLocation).title("Your Location"))
+        }
+      }
+    }
+  } else {
+    // Show some UI indicating that permission is not granted
+    Text(text = "Location permission is required to view the map")
+  }
+
+  AndroidView(
+    factory = { ctx ->
+      mapView.apply {
+        onCreate(null)
+        onResume()
+      }
+    }
+  )
+}
+
+@Composable
+fun MyMapScreen() {
+  GoogleMapView()
+}
+
+@Preview
+@Composable
+fun PreviewMapScreen() {
+  MyMapScreen()
 }

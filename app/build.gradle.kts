@@ -60,6 +60,32 @@ dependencies {
   implementation(libs.androidx.material3)
   implementation(libs.androidx.navigation.compose)
 
+    // for maps
+    // Jetpack Compose
+    implementation ("androidx.compose.ui:ui:1.0.5")
+    implementation ("androidx.compose.material:material:1.0.5")
+    implementation ("androidx.compose.ui:ui-tooling:1.0.5")
+    implementation ("androidx.compose.runtime:runtime-livedata:1.0.5")
+    implementation ("androidx.compose.runtime:runtime-rxjava2:1.0.5")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
+    implementation ("androidx.activity:activity-compose:1.3.1")
+
+    // Google Maps
+    implementation ("com.google.android.gms:play-services-maps:17.0.1")
+
+    // Location services
+    implementation ("com.google.android.gms:play-services-location:18.0.0")
+
+    // AndroidX Core
+    implementation ("androidx.core:core-ktx:1.7.0")
+
+    // AndroidX AppCompat
+    implementation ("androidx.appcompat:appcompat:1.4.0")
+
+    // AndroidX Activity Compose
+    implementation ("androidx.activity:activity-compose:1.4.0")
+    //
+
   implementation("com.squareup.okhttp3:okhttp:4.12.0")
   implementation("com.squareup.okhttp3:okhttp:4.12.0")
   implementation("com.squareup.moshi:moshi:1.14.0")
