@@ -39,7 +39,6 @@ import com.tuvarna.geo.viewmodel.RegisterViewModel
 
 @Composable
 fun SignUpView(navController: NavController) {
-
   val registerViewModel = hiltViewModel<RegisterViewModel>()
   val user by remember { mutableStateOf(UserEntity(0, "", "", "", false)) }
   val confirmPassword = remember { mutableStateOf("") }

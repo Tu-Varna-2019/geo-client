@@ -70,6 +70,8 @@ dependencies {
   implementation("com.jakewharton.timber:timber:5.0.1")
   kapt("com.google.dagger:hilt-android-compiler:2.51")
   implementation(libs.androidx.appcompat)
+  implementation("androidx.datastore:datastore-preferences-core:1.1.0")
+  implementation("androidx.datastore:datastore-preferences:1.1.0")
 
   testImplementation("io.kotest:kotest-framework-api-jvm:4.6.0")
   testImplementation("io.kotest:kotest-property:4.6.0")

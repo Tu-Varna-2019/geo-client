@@ -1,10 +1,13 @@
 package com.tuvarna.geo.app
 
+import android.content.Context
 import com.tuvarna.geo.rest_api.apis.LoginControllerApi
 import com.tuvarna.geo.rest_api.apis.RegisterControllerApi
+import com.tuvarna.geo.storage.UserSessionStorage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import javax.inject.Singleton
@@ -34,5 +37,11 @@ object AppModule {
   fun provideLoginControllerApi(client: OkHttpClient): LoginControllerApi {
 
     return LoginControllerApi(BASE_URL, client)
+  }
+
+  @Provides
+  @Singleton
+  fun provideUserSessionStorage(@ApplicationContext context: Context): UserSessionStorage {
+    return UserSessionStorage(context)
   }
 }

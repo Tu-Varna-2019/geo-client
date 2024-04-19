@@ -5,7 +5,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 sealed class ApiResponse<T> : Parcelable {
-
   @Parcelize data object DoNothing : ApiResponse<Nothing>()
 
   @Parcelize data object Waiting : ApiResponse<Nothing>()
