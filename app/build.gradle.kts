@@ -64,7 +64,7 @@ dependencies {
   implementation("com.squareup.okhttp3:okhttp:4.12.0")
   implementation("com.squareup.moshi:moshi:1.14.0")
   implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
-  implementation("io.kotest:kotest-framework-engine:4.6.0")
+  implementation("io.kotest:kotest-framework-engine:5.8.1")
   implementation("com.google.dagger:hilt-android:2.51")
   implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
   implementation("com.jakewharton.timber:timber:5.0.1")
@@ -75,7 +75,7 @@ dependencies {
   testImplementation("io.kotest:kotest-property:4.6.0")
   testImplementation("io.kotest:kotest-runner-junit5:4.6.0")
   testImplementation("io.kotest:kotest-assertions-core:4.6.0")
-  testImplementation("io.kotest:kotest-framework-engine:4.6.0")
+  testImplementation("io.kotest:kotest-framework-engine:5.8.1")
 
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)
