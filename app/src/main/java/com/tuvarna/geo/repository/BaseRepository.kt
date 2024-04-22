@@ -1,28 +1,30 @@
 package com.tuvarna.geo.repository
 
-import android.os.Parcelable
-import com.tuvarna.geo.controller.ApiResponse
 import com.tuvarna.geo.rest_api.infrastructure.ClientError
+import com.tuvarna.geo.rest_api.infrastructure.ClientException
 import com.tuvarna.geo.rest_api.infrastructure.ServerError
+import com.tuvarna.geo.rest_api.infrastructure.ServerException
 import org.json.JSONObject
 import timber.log.Timber
 
 interface BaseRepository {
-  fun <T : Parcelable> handleApiError(err: Exception): ApiResponse<T> {
-    val errorMessage: String
+  fun handleApiError(err: Exception): ApiPayload<Nothing> {
 
-    when (err) {
-      is ClientError<*> -> {
-        errorMessage = JSONObject(err.body.toString()).getString("message")
+    val errorMessage: String =
+      when (err) {
+        is ClientException -> {
+          val clientError = err.response as ClientError<*>
+          JSONObject(clientError.body.toString()).getString("message")
+        }
+        is ServerException -> {
+          val serverError = err.response as ServerError<*>
+          JSONObject(serverError.body.toString()).getString("message")
+        }
+        else -> {
+          Timber.e("Unknown API error %s", err)
+          "Failed to connect to server. Try again!"
+        }
       }
-      is ServerError<*> -> {
-        errorMessage = JSONObject(err.body.toString()).getString("message")
-      }
-      else -> {
-        Timber.e("Unknown API error")
-        errorMessage = "Unknown error!"
-      }
-    }
-    return ApiResponse.Parse<T>(errorMessage)
+    return ApiPayload.Failure(errorMessage)
   }
 }

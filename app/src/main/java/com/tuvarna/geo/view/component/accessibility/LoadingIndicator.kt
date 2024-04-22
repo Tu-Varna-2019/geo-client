@@ -11,12 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import com.example.app_iliyan.view.components.dialog_box.SnackbarManager
-import com.tuvarna.geo.controller.ApiResponse
+import com.tuvarna.geo.controller.UIFeedback
 
 @Composable
-fun LoadingIndicator(uiState: ApiResponse<*>, navController: NavController, route: String) {
-  when (uiState) {
-    is ApiResponse.Waiting -> {
+fun LoadingIndicator(stateFlow: UIFeedback, navController: NavController, route: String = "") {
+
+  when (stateFlow.state) {
+    UIFeedback.States.Waiting -> {
       Box(
         modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.4f)),
         contentAlignment = Alignment.Center,
@@ -24,15 +25,13 @@ fun LoadingIndicator(uiState: ApiResponse<*>, navController: NavController, rout
         CircularProgressIndicator()
       }
     }
-    is ApiResponse.Parse<*> -> {
-      LaunchedEffect(uiState.message) {
-        SnackbarManager.showSnackbar(uiState.message)
-        navController.navigate(route)
-      }
-    }
-    is ApiResponse.Parse -> {
-      LaunchedEffect(uiState.message) { SnackbarManager.showSnackbar(uiState.message.toString()) }
-    }
     else -> Unit
+  }
+  if (stateFlow.message.isNotEmpty()) {
+    LaunchedEffect(stateFlow.message) {
+      SnackbarManager.showSnackbar(stateFlow.message)
+      if (route.isNotEmpty() && stateFlow.state != UIFeedback.States.Failed)
+        navController.navigate(route)
+    }
   }
 }

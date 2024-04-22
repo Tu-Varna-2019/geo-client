@@ -1,6 +1,5 @@
 package com.tuvarna.geo.repository
 
-import com.tuvarna.geo.controller.ApiResponse
 import com.tuvarna.geo.entity.UserEntity
 import com.tuvarna.geo.mapper.UserMapper
 import com.tuvarna.geo.rest_api.apis.LoginControllerApi
@@ -18,26 +17,28 @@ constructor(
   private val registerApi: RegisterControllerApi,
   private val loginApi: LoginControllerApi,
 ) : BaseRepository {
-  suspend fun login(user: UserEntity): ApiResponse<UserEntity> {
+  suspend fun login(user: UserEntity): ApiPayload<UserEntity> {
     return withContext(Dispatchers.IO) {
       try {
         Timber.d("Logging in user: %s", user)
         val userDTO = UserMapper.UserMapper.toLoginUserDTO(user)
         val response = loginApi.authenticateUser(userDTO)
-        ApiResponse.Parse(response.message ?: "Success", UserEntity(response.data!!))
+
+        ApiPayload.Success(response.message, UserEntity(response.data!!))
       } catch (e: Exception) {
         handleApiError(e)
       }
     }
   }
 
-  suspend fun register(user: UserEntity, userType: String): ApiResponse<Nothing> {
+  suspend fun register(user: UserEntity, userType: String): ApiPayload<Nothing> {
     return withContext(Dispatchers.IO) {
       try {
         Timber.d("Registering user: %s", user)
         val userDTO = UserMapper.UserMapper.toRegisterUserDTO(user, userType)
         val response = registerApi.create(userDTO)
-        ApiResponse.Parse(response.message ?: "Success", null)
+
+        ApiPayload.Success(response.message, null)
       } catch (e: Exception) {
         handleApiError(e)
       }

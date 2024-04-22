@@ -1,7 +1,7 @@
 package com.tuvarna.geo.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import com.tuvarna.geo.controller.ApiResponse
+import com.tuvarna.geo.controller.UIFeedback
 import com.tuvarna.geo.entity.UserEntity
 import com.tuvarna.geo.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ class HomeViewModel @Inject constructor(private val userRepository: UserReposito
   fun clickOnMap(user: UserEntity) {
     Timber.d("User %s clicked the map!", user)
     viewModelScope.launch {
-      _uiState.value = ApiResponse.Waiting
+      mutableStateFlow.value.state = UIFeedback.States.Waiting
       // TODO: Add something
     }
   }

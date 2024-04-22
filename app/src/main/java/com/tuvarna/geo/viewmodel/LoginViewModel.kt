@@ -1,8 +1,9 @@
 package com.tuvarna.geo.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import com.tuvarna.geo.controller.ApiResponse
+import com.tuvarna.geo.controller.UIFeedback
 import com.tuvarna.geo.entity.UserEntity
+import com.tuvarna.geo.repository.ApiPayload
 import com.tuvarna.geo.repository.UserRepository
 import com.tuvarna.geo.storage.UserSessionStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,13 +22,12 @@ constructor(
   fun login(user: UserEntity) {
     Timber.d("User %s clicked the login button! Moving on...", user)
     viewModelScope.launch {
-      _uiState.value = ApiResponse.Waiting
-      val result = userRepository.login(user)
-      _uiState.value =
-        when (result) {
-          is ApiResponse.Parse<*> -> {
-            val parsedUser = (result as ApiResponse.Parse<UserEntity>).data
-            Timber.d("User logged in! Payload received from server %s", parsedUser)
+      mutableStateFlow.value = UIFeedback(state = UIFeedback.States.Waiting)
+
+      val message =
+        when (val result: ApiPayload<UserEntity> = userRepository.login(user)) {
+          is ApiPayload.Success -> {
+            val parsedUser = result.data
 
             userSessionStorage.putUserProps(
               newId = parsedUser!!.id,
@@ -35,12 +35,16 @@ constructor(
               newEmail = parsedUser.email,
               newUserType = parsedUser.usertype.type,
             )
-
-            ApiResponse.Parse(result.message, parsedUser)
+            Timber.d("User logged in! Payload received from server %s", parsedUser)
+            returnStatus = UIFeedback.States.Success
+            result.message!!
           }
-          is ApiResponse.Parse -> ApiResponse.Parse<Nothing>(result.message)
-          else -> throw IllegalStateException("Unexpected ApiResponse type: $result")
+          is ApiPayload.Failure -> {
+            returnStatus = UIFeedback.States.Failed
+            result.message
+          }
         }
+      mutableStateFlow.value = UIFeedback(state = returnStatus, message = message)
     }
   }
 }

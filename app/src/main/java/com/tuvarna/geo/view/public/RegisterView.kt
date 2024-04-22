@@ -38,13 +38,13 @@ import com.tuvarna.geo.view.component.accessibility.LoadingIndicator
 import com.tuvarna.geo.viewmodel.RegisterViewModel
 
 @Composable
-fun SignUpView(navController: NavController) {
+fun RegisterView(navController: NavController) {
   val registerViewModel = hiltViewModel<RegisterViewModel>()
   val user by remember { mutableStateOf(UserEntity(0, "", "", "", false)) }
   val confirmPassword = remember { mutableStateOf("") }
 
   LoadingIndicator(
-    uiState = registerViewModel.uiState.collectAsState().value,
+    stateFlow = registerViewModel.stateFlow.collectAsState().value,
     navController = navController,
     route = "login",
   )

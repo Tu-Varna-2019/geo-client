@@ -41,7 +41,7 @@ fun HomeView(navController: NavController, userSessionStorage: UserSessionStorag
   user.usertype.type = userProps.userType
 
   LoadingIndicator(
-    uiState = homeViewModel.uiState.collectAsState().value,
+    stateFlow = homeViewModel.stateFlow.collectAsState().value,
     navController = navController,
     route = "",
   )

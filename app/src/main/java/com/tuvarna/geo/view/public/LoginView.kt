@@ -42,7 +42,7 @@ fun LoginView(navController: NavController) {
   val user by remember { mutableStateOf(UserEntity(0, "", "", "", false)) }
 
   LoadingIndicator(
-    uiState = loginViewModel.uiState.collectAsState().value,
+    stateFlow = loginViewModel.stateFlow.collectAsState().value,
     navController = navController,
     route = "home",
   )
@@ -63,7 +63,7 @@ fun LoginView(navController: NavController) {
 
       Image(
         painter = painterResource(id = R.drawable.earth),
-        contentDescription = "Eearth Icon",
+        contentDescription = "Earth Icon",
         modifier = Modifier.size(110.dp).fillMaxWidth().align(Alignment.CenterHorizontally),
       )
 

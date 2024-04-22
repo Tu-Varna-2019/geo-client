@@ -7,7 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.tuvarna.geo.storage.UserSessionStorage
 import com.tuvarna.geo.view.public.HomeView
 import com.tuvarna.geo.view.public.LoginView
-import com.tuvarna.geo.view.public.SignUpView
+import com.tuvarna.geo.view.public.RegisterView
 
 sealed class Screen(val route: String) {
   object Login : Screen("login")
@@ -23,7 +23,7 @@ fun NavController(userSessionStorage: UserSessionStorage) {
 
   NavHost(navController = navController, startDestination = Screen.Login.route) {
     composable(Screen.Login.route) { LoginView(navController) }
-    composable(Screen.SignUp.route) { SignUpView(navController) }
+    composable(Screen.SignUp.route) { RegisterView(navController) }
     composable(Screen.Home.route) { HomeView(navController, userSessionStorage) }
   }
 }
