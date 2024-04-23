@@ -8,11 +8,17 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.runtime.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -22,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,6 +43,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeView(navController: NavController) {
@@ -54,9 +62,8 @@ fun HomeView(navController: NavController) {
       )
 
       Spacer(modifier = Modifier.height(20.dp))
-
     }
-      GoogleMapView()
+    MyMapScreen()
   }
 }
 
@@ -118,10 +125,53 @@ fun GoogleMapView() {
   )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MyMapScreen() {
-  GoogleMapView()
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
+    )
+    val coroutineScope = rememberCoroutineScope()
+
+    BottomSheetScaffold(
+        scaffoldState = bottomSheetScaffoldState,
+        sheetContent = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(450.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Slide up for more info", style = MaterialTheme.typography.bodyMedium)
+            }
+        },
+        sheetPeekHeight = 50.dp
+    ) {
+        Column(Modifier.fillMaxSize()) {
+            Spacer(Modifier.weight(1f))
+            GoogleMapView()
+
+            BottomAppBar {
+                IconButton(
+                    onClick = {
+                        coroutineScope.launch {
+                            if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) {
+                                bottomSheetScaffoldState.bottomSheetState.expand()
+                            } else {
+                                bottomSheetScaffoldState.bottomSheetState.collapse()
+                            }
+                        }
+                    }
+                ) {
+                    Icon(Icons.Filled.Menu, contentDescription = "Menu")
+                }
+                Spacer(Modifier.weight(1f, true))
+                Text("Map with Bottom Sheet", style = MaterialTheme.typography.bodyLarge)
+            }
+        }
+    }
 }
+
 
 @Preview
 @Composable
