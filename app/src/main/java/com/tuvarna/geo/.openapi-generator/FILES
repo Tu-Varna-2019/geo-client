@@ -5,8 +5,8 @@ docs/LoginControllerApi.md
 docs/LoginUserDTO.md
 docs/RegisterControllerApi.md
 docs/RegisterUserDTO.md
-docs/RestApiResponseLoggedInUserDTO.md
-docs/RestApiResponseVoid.md
+docs/RestUIFeedbackLoggedInUserDTO.md
+docs/RestUIFeedbackVoid.md
 gradle/wrapper/gradle-wrapper.jar
 gradle/wrapper/gradle-wrapper.properties
 gradlew
@@ -16,7 +16,7 @@ src/main/kotlin/com/tuvarna/geo/rest_api/apis/LoginControllerApi.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/apis/RegisterControllerApi.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/infrastructure/ApiAbstractions.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/infrastructure/ApiClient.kt
-src/main/kotlin/com/tuvarna/geo/rest_api/infrastructure/ApiResponse.kt
+src/main/kotlin/com/tuvarna/geo/rest_api/infrastructure/UIFeedback.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/infrastructure/BigDecimalAdapter.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/infrastructure/BigIntegerAdapter.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/infrastructure/ByteArrayAdapter.kt
@@ -34,12 +34,12 @@ src/main/kotlin/com/tuvarna/geo/rest_api/infrastructure/UUIDAdapter.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/models/LoggedInUserDTO.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/models/LoginUserDTO.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/models/RegisterUserDTO.kt
-src/main/kotlin/com/tuvarna/geo/rest_api/models/RestApiResponseLoggedInUserDTO.kt
-src/main/kotlin/com/tuvarna/geo/rest_api/models/RestApiResponseVoid.kt
+src/main/kotlin/com/tuvarna/geo/rest_api/models/RestUIFeedbackLoggedInUserDTO.kt
+src/main/kotlin/com/tuvarna/geo/rest_api/models/RestUIFeedbackVoid.kt
 src/test/kotlin/com/tuvarna/geo/rest_api/apis/LoginControllerApiTest.kt
 src/test/kotlin/com/tuvarna/geo/rest_api/apis/RegisterControllerApiTest.kt
 src/test/kotlin/com/tuvarna/geo/rest_api/models/LoggedInUserDTOTest.kt
 src/test/kotlin/com/tuvarna/geo/rest_api/models/LoginUserDTOTest.kt
 src/test/kotlin/com/tuvarna/geo/rest_api/models/RegisterUserDTOTest.kt
-src/test/kotlin/com/tuvarna/geo/rest_api/models/RestApiResponseLoggedInUserDTOTest.kt
-src/test/kotlin/com/tuvarna/geo/rest_api/models/RestApiResponseVoidTest.kt
+src/test/kotlin/com/tuvarna/geo/rest_api/models/RestUIFeedbackLoggedInUserDTOTest.kt
+src/test/kotlin/com/tuvarna/geo/rest_api/models/RestUIFeedbackVoidTest.kt
