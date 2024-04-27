@@ -10,8 +10,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
-import com.example.app_iliyan.view.components.dialog_box.SnackbarManager
 import com.tuvarna.geo.controller.UIFeedback
+import com.tuvarna.geo.view.component.dialog_box.SnackbarManager
 
 @Composable
 fun LoadingIndicator(stateFlow: UIFeedback, navController: NavController, route: String = "") {
