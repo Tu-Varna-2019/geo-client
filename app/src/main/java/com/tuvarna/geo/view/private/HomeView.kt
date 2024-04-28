@@ -1,4 +1,4 @@
-package com.tuvarna.geo.view.public
+package com.tuvarna.geo.view.private
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -11,7 +11,7 @@ import com.tuvarna.geo.entity.UserEntity
 import com.tuvarna.geo.storage.UserSessionStorage
 import com.tuvarna.geo.storage.UserStorage
 import com.tuvarna.geo.view.component.accessibility.LoadingIndicator
-import com.tuvarna.geo.view.private.GeoMap
+import com.tuvarna.geo.view.component.home.GeoMap
 import com.tuvarna.geo.viewmodel.HomeViewModel
 
 @Composable

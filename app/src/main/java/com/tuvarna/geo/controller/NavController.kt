@@ -5,8 +5,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.tuvarna.geo.storage.UserSessionStorage
+import com.tuvarna.geo.view.private.HomeView
 import com.tuvarna.geo.view.private.ProfileView
-import com.tuvarna.geo.view.public.HomeView
 import com.tuvarna.geo.view.public.LoginView
 import com.tuvarna.geo.view.public.RegisterView
 
