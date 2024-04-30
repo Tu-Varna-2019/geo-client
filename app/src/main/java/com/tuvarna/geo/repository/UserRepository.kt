@@ -17,11 +17,8 @@ class UserRepository @Inject constructor(private val authApi: AuthControllerApi)
       try {
         Timber.d("Logging in user: %s", user)
         val userDTO: LoginUserDTO = UserMapper.toLoginUserDTO(user)
-
-        Timber.e("User DTO iss: %s", userDTO)
         val response = authApi.login(userDTO)
 
-        Timber.e("Type of login returned class: {}", response::class)
         ApiPayload.Success(response.message, UserEntity(response.data!!))
       } catch (e: Exception) {
         handleApiError(e)

@@ -24,6 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,6 +49,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 import com.tuvarna.geo.entity.DataTypeOptions
 import com.tuvarna.geo.entity.UserEntity
+import com.tuvarna.geo.rest_api.models.DangerDTO
 import com.tuvarna.geo.view.component.accessibility.LoadingIndicator
 import com.tuvarna.geo.view.theme.MapsTheme
 import com.tuvarna.geo.viewmodel.HomeViewModel
@@ -135,7 +137,7 @@ private fun GeoBottomSheet(clickedMarker: LatLng, navController: NavController) 
 fun GeoMapDetails(clickedMarker: LatLng) {
   var dataTypeChoice by remember { mutableStateOf(DataTypeOptions.None) }
   val homeViewModel = hiltViewModel<HomeViewModel>()
-  val soil = homeViewModel.soil.collectAsState()
+  val earthquake = homeViewModel.earthquake.collectAsState()
 
   when (dataTypeChoice) {
     DataTypeOptions.None -> {
@@ -183,12 +185,18 @@ fun GeoMapDetails(clickedMarker: LatLng) {
       }
     }
     DataTypeOptions.Soil -> {
-      // homeViewModel.retrieveSoil(DangerDTO(clickedMarker.latitude, clickedMarker.longitude))
+      LaunchedEffect(key1 = Unit) {
+        homeViewModel.retrieveSoil(DangerDTO(clickedMarker.latitude, clickedMarker.longitude))
+      }
+      val soil = homeViewModel.soil.collectAsState()
       Text(text = soil.value.country ?: "")
     }
     DataTypeOptions.Earthquake -> {
-      //   homeViewModel.retrieveEarthquake(DangerDTO(clickedMarker.latitude,
-      // clickedMarker.longitude))
+      LaunchedEffect(key1 = Unit) {
+        homeViewModel.retrieveEarthquake(DangerDTO(clickedMarker.latitude, clickedMarker.longitude))
+      }
+      val earthquake = homeViewModel.earthquake.collectAsState()
+      Text(text = earthquake.value.id.toString())
     }
   }
 }

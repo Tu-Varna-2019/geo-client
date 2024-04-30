@@ -19,12 +19,16 @@ class HomeViewModel @Inject constructor(private val dangerRepository: DangerRepo
   UIStateViewModel() {
 
   private val _soil = MutableStateFlow<Soil>(Soil())
+  private val _earthquake = MutableStateFlow<Earthquake>(Earthquake())
+
   val soil: StateFlow<Soil> = _soil
+  val earthquake: StateFlow<Earthquake> = _earthquake
 
   fun retrieveSoil(point: DangerDTO) {
     Timber.d(
-      "User %s clicked the map with coordinates %s and chose a soil type! Moving on...",
-      point,
+      "User clicked the map with coordinates %.6f, %.6f  and chose a soil type! Moving on...",
+      point.latitude,
+      point.longitude,
     )
     viewModelScope.launch {
       mutableStateFlow.value = UIFeedback(state = UIFeedback.States.Waiting)
@@ -34,7 +38,6 @@ class HomeViewModel @Inject constructor(private val dangerRepository: DangerRepo
           is ApiPayload.Success -> {
             val soilData: Soil = result.data!!
             Timber.d("Soil type received! Payload received from server %s", soilData)
-
             _soil.value = soilData
             returnStatus = UIFeedback.States.Success
             result.message!!
@@ -50,8 +53,9 @@ class HomeViewModel @Inject constructor(private val dangerRepository: DangerRepo
 
   fun retrieveEarthquake(point: DangerDTO) {
     Timber.d(
-      "User %s clicked the map with coordinates %s and chose a earthquake! Moving on...",
-      point,
+      "User clicked the map with coordinates %.6f , %.6f and chose a earthquake! Moving on...",
+      point.latitude,
+      point.longitude,
     )
     viewModelScope.launch {
       mutableStateFlow.value = UIFeedback(state = UIFeedback.States.Waiting)
@@ -59,8 +63,9 @@ class HomeViewModel @Inject constructor(private val dangerRepository: DangerRepo
       val message =
         when (val result: ApiPayload<Earthquake> = dangerRepository.getEarthquake(point)) {
           is ApiPayload.Success -> {
-            val earthquake = result.data
             Timber.d("Earthquake received! Payload received from server %s", earthquake)
+            _earthquake.value = result.data!!
+
             returnStatus = UIFeedback.States.Success
             result.message!!
           }

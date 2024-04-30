@@ -9,7 +9,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Response
 import javax.inject.Singleton
 
 @Module
@@ -20,15 +24,19 @@ object AppModule {
 
   @Singleton
   @Provides
-  fun provideOkHttpClient(): OkHttpClient {
+  fun provideOkHttpClient(userSessionStorage: UserSessionStorage): OkHttpClient {
 
-    return OkHttpClient.Builder().build()
+    return OkHttpClient.Builder().addInterceptor(providerAuthOkHttp(userSessionStorage)).build()
+  }
+
+  @Provides
+  fun providerAuthOkHttp(userSessionStorage: UserSessionStorage): AuthInterceptor {
+    return AuthInterceptor(userSessionStorage)
   }
 
   @Singleton
   @Provides
   fun provideAuthControllerApi(client: OkHttpClient): AuthControllerApi {
-
     return AuthControllerApi(BASE_URL, client)
   }
 
@@ -43,5 +51,16 @@ object AppModule {
   @Singleton
   fun provideUserSessionStorage(@ApplicationContext context: Context): UserSessionStorage {
     return UserSessionStorage(context)
+  }
+}
+
+class AuthInterceptor(private val userSessionStorage: UserSessionStorage) : Interceptor {
+
+  override fun intercept(chain: Interceptor.Chain): Response {
+    val originalRequest = chain.request()
+    val accessToken = runBlocking { userSessionStorage.readAccessToken().first() }
+    val requestWithAuthHeader =
+      originalRequest.newBuilder().header("Authorization", "Bearer $accessToken").build()
+    return chain.proceed(requestWithAuthHeader)
   }
 }

@@ -30,6 +30,11 @@ class UserSessionStorage(private val context: Context) {
     }
   }
 
+  fun readAccessToken(): Flow<String> {
+
+    return context.dataStore.data.map { preferences -> preferences[accessToken]!! }
+  }
+
   suspend fun putUserProps(
     newId: Int = 0,
     newUsername: String = "",

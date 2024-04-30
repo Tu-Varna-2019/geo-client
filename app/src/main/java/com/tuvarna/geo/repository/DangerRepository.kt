@@ -17,6 +17,7 @@ class DangerRepository @Inject constructor(private val dangerApi: DangerControll
     return withContext(Dispatchers.IO) {
       try {
         Timber.d("Sending point latitude/longitude: %s", point)
+
         val response = dangerApi.getSoil(point)
 
         ApiPayload.Success(response.message, response.data!!)
