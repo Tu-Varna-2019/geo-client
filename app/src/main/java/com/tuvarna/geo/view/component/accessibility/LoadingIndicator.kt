@@ -14,7 +14,7 @@ import com.tuvarna.geo.controller.UIFeedback
 import com.tuvarna.geo.view.component.dialog_box.SnackbarManager
 
 @Composable
-fun LoadingIndicator(stateFlow: UIFeedback, navController: NavController, route: String = "") {
+fun LoadingIndicator(stateFlow: UIFeedback, navController: NavController?, route: String = "") {
 
   when (stateFlow.state) {
     UIFeedback.States.Waiting -> {
@@ -31,7 +31,7 @@ fun LoadingIndicator(stateFlow: UIFeedback, navController: NavController, route:
     LaunchedEffect(stateFlow.message) {
       SnackbarManager.showSnackbar(stateFlow.message)
       if (route.isNotEmpty() && stateFlow.state != UIFeedback.States.Failed)
-        navController.navigate(route)
+        navController!!.navigate(route)
     }
   }
 }

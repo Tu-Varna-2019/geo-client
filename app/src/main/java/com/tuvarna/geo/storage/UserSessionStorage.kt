@@ -17,6 +17,7 @@ class UserSessionStorage(private val context: Context) {
   private var username = stringPreferencesKey("username")
   private var email = stringPreferencesKey("email")
   private var userType = stringPreferencesKey("userType")
+  private var accessToken = stringPreferencesKey("accessToken")
 
   fun readUserProps(): Flow<UserStorage> {
     return context.dataStore.data.map { preferences ->
@@ -34,12 +35,14 @@ class UserSessionStorage(private val context: Context) {
     newUsername: String = "",
     newEmail: String = "",
     newUserType: String = "",
+    newAccessToken: String = "",
   ) {
     context.dataStore.edit { settings ->
       settings[id] = newId
       settings[username] = newUsername
       settings[email] = newEmail
       settings[userType] = newUserType
+      settings[accessToken] = newAccessToken
     }
   }
 }

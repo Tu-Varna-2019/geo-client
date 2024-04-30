@@ -16,6 +16,7 @@ class UserEntity() : Parcelable {
   var email by mutableStateOf("")
   var isblocked by mutableStateOf(false)
   var password by mutableStateOf("")
+  var accessToken by mutableStateOf("")
   var usertype by mutableStateOf(UserTypeEntity(0, ""))
 
   constructor(
@@ -39,6 +40,7 @@ class UserEntity() : Parcelable {
     this.email = restApiUser.email!!
     this.password = ""
     this.isblocked = false
+    this.accessToken = restApiUser.accessToken!!
     this.usertype = UserTypeEntity(0, restApiUser.userType!!)
   }
 

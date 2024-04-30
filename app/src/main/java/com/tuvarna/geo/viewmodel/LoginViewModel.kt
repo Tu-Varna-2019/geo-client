@@ -34,6 +34,7 @@ constructor(
               newUsername = parsedUser.username,
               newEmail = parsedUser.email,
               newUserType = parsedUser.usertype.type,
+              newAccessToken = parsedUser.accessToken,
             )
             Timber.d("User logged in! Payload received from server %s", parsedUser)
             returnStatus = UIFeedback.States.Success

@@ -2,8 +2,8 @@ package com.tuvarna.geo.repository
 
 import com.tuvarna.geo.entity.UserEntity
 import com.tuvarna.geo.mapper.UserMapper
-import com.tuvarna.geo.rest_api.apis.LoginControllerApi
-import com.tuvarna.geo.rest_api.apis.RegisterControllerApi
+import com.tuvarna.geo.rest_api.apis.AuthControllerApi
+import com.tuvarna.geo.rest_api.models.LoginUserDTO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -11,19 +11,17 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class UserRepository
-@Inject
-constructor(
-  private val registerApi: RegisterControllerApi,
-  private val loginApi: LoginControllerApi,
-) : BaseRepository {
+class UserRepository @Inject constructor(private val authApi: AuthControllerApi) : BaseRepository {
   suspend fun login(user: UserEntity): ApiPayload<UserEntity> {
     return withContext(Dispatchers.IO) {
       try {
         Timber.d("Logging in user: %s", user)
-        val userDTO = UserMapper.UserMapper.toLoginUserDTO(user)
-        val response = loginApi.authenticateUser(userDTO)
+        val userDTO: LoginUserDTO = UserMapper.toLoginUserDTO(user)
 
+        Timber.e("User DTO iss: %s", userDTO)
+        val response = authApi.login(userDTO)
+
+        Timber.e("Type of login returned class: {}", response::class)
         ApiPayload.Success(response.message, UserEntity(response.data!!))
       } catch (e: Exception) {
         handleApiError(e)
@@ -35,8 +33,8 @@ constructor(
     return withContext(Dispatchers.IO) {
       try {
         Timber.d("Registering user: %s", user)
-        val userDTO = UserMapper.UserMapper.toRegisterUserDTO(user, userType)
-        val response = registerApi.create(userDTO)
+        val userDTO = UserMapper.toRegisterUserDTO(user, userType)
+        val response = authApi.create(userDTO)
 
         ApiPayload.Success(response.message, null)
       } catch (e: Exception) {

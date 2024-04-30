@@ -15,6 +15,7 @@
 
 package com.tuvarna.geo.rest_api.models
 
+import com.tuvarna.geo.rest_api.models.MultiPolygon
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -23,29 +24,21 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param id 
- * @param username 
- * @param userType 
- * @param email 
- * @param accessToken 
+ * @param geom 
+ * @param dn 
  */
 
 
-data class LoggedInUserDTO (
+data class Earthquake (
 
     @Json(name = "id")
     val id: kotlin.Int? = null,
 
-    @Json(name = "username")
-    val username: kotlin.String? = null,
+    @Json(name = "geom")
+    val geom: MultiPolygon? = null,
 
-    @Json(name = "userType")
-    val userType: kotlin.String? = null,
-
-    @Json(name = "email")
-    val email: kotlin.String? = null,
-
-    @Json(name = "accessToken")
-    val accessToken: kotlin.String? = null
+    @Json(name = "dn")
+    val dn: kotlin.Int? = null
 
 )
 

@@ -1,8 +1,8 @@
 package com.tuvarna.geo.app
 
 import android.content.Context
-import com.tuvarna.geo.rest_api.apis.LoginControllerApi
-import com.tuvarna.geo.rest_api.apis.RegisterControllerApi
+import com.tuvarna.geo.rest_api.apis.AuthControllerApi
+import com.tuvarna.geo.rest_api.apis.DangerControllerApi
 import com.tuvarna.geo.storage.UserSessionStorage
 import dagger.Module
 import dagger.Provides
@@ -16,7 +16,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-  private const val BASE_URL = "http://10.0.2.2:8080"
+  private const val BASE_URL = "http://10.0.2.2:8080/api.tuvarna.geo.com/v1"
 
   @Singleton
   @Provides
@@ -27,16 +27,16 @@ object AppModule {
 
   @Singleton
   @Provides
-  fun provideRegisterControllerApi(client: OkHttpClient): RegisterControllerApi {
+  fun provideAuthControllerApi(client: OkHttpClient): AuthControllerApi {
 
-    return RegisterControllerApi(BASE_URL, client)
+    return AuthControllerApi(BASE_URL, client)
   }
 
   @Singleton
   @Provides
-  fun provideLoginControllerApi(client: OkHttpClient): LoginControllerApi {
+  fun provideDangerControllerApi(client: OkHttpClient): DangerControllerApi {
 
-    return LoginControllerApi(BASE_URL, client)
+    return DangerControllerApi(BASE_URL, client)
   }
 
   @Provides

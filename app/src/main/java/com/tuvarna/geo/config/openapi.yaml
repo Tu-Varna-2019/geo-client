@@ -3,13 +3,87 @@ info:
   title: OpenAPI definition
   version: v0
 servers:
-- url: http://localhost:8080
+- url: http://localhost:8080/api.tuvarna.geo.com/v1
   description: Generated server url
 paths:
-  /register:
+  /danger/soil:
     post:
       tags:
-      - register-controller
+      - danger-controller
+      summary: Retrieve soil type
+      operationId: getSoil
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DangerDTO'
+        required: true
+      responses:
+        "400":
+          description: Bad request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseSoil'
+        "201":
+          description: Soil type retrieved!
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseSoil'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseSoil'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseSoil'
+  /danger/earthquake:
+    post:
+      tags:
+      - danger-controller
+      summary: Retrieve earthquake
+      operationId: getEarthquake
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DangerDTO'
+        required: true
+      responses:
+        "400":
+          description: Bad request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseEarthquake'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseEarthquake'
+        "201":
+          description: Earthquake retrieved!
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseEarthquake'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseEarthquake'
+  /auth/register:
+    post:
+      tags:
+      - auth-controller
       summary: Register a new user
       operationId: create
       requestBody:
@@ -37,12 +111,12 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/RestApiResponseVoid'
-  /login:
+  /auth/login:
     post:
       tags:
-      - login-controller
+      - auth-controller
       summary: Logging on a new user
-      operationId: authenticateUser
+      operationId: login
       requestBody:
         content:
           application/json:
@@ -68,8 +142,355 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/RestApiResponseLoggedInUserDTO'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseLoggedInUserDTO'
 components:
   schemas:
+    DangerDTO:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+    Coordinate:
+      type: object
+      properties:
+        x:
+          type: number
+          format: double
+        "y":
+          type: number
+          format: double
+        z:
+          type: number
+          format: double
+        valid:
+          type: boolean
+        coordinate:
+          $ref: '#/components/schemas/Coordinate'
+        m:
+          type: number
+          format: double
+    CoordinateSequence:
+      type: object
+      properties:
+        measures:
+          type: integer
+          format: int32
+        dimension:
+          type: integer
+          format: int32
+    CoordinateSequenceFactory:
+      type: object
+    Envelope:
+      type: object
+      properties:
+        "null":
+          type: boolean
+        width:
+          type: number
+          format: double
+        height:
+          type: number
+          format: double
+        diameter:
+          type: number
+          format: double
+        minX:
+          type: number
+          format: double
+        maxX:
+          type: number
+          format: double
+        minY:
+          type: number
+          format: double
+        maxY:
+          type: number
+          format: double
+        area:
+          type: number
+          format: double
+    Geometry:
+      type: object
+      properties:
+        envelope:
+          $ref: '#/components/schemas/Geometry'
+        factory:
+          $ref: '#/components/schemas/GeometryFactory'
+        userData:
+          type: object
+        length:
+          type: number
+          format: double
+        empty:
+          type: boolean
+        valid:
+          type: boolean
+        simple:
+          type: boolean
+        envelopeInternal:
+          $ref: '#/components/schemas/Envelope'
+        srid:
+          type: integer
+          format: int32
+        precisionModel:
+          $ref: '#/components/schemas/PrecisionModel'
+        rectangle:
+          type: boolean
+        numGeometries:
+          type: integer
+          format: int32
+        coordinate:
+          $ref: '#/components/schemas/Coordinate'
+        coordinates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Coordinate'
+        numPoints:
+          type: integer
+          format: int32
+        area:
+          type: number
+          format: double
+        geometryType:
+          type: string
+        boundary:
+          $ref: '#/components/schemas/Geometry'
+        centroid:
+          $ref: '#/components/schemas/Point'
+        interiorPoint:
+          $ref: '#/components/schemas/Point'
+        boundaryDimension:
+          type: integer
+          format: int32
+        dimension:
+          type: integer
+          format: int32
+    GeometryFactory:
+      type: object
+      properties:
+        precisionModel:
+          $ref: '#/components/schemas/PrecisionModel'
+        coordinateSequenceFactory:
+          $ref: '#/components/schemas/CoordinateSequenceFactory'
+        srid:
+          type: integer
+          format: int32
+    MultiPolygon:
+      type: object
+      properties:
+        envelope:
+          $ref: '#/components/schemas/Geometry'
+        factory:
+          $ref: '#/components/schemas/GeometryFactory'
+        userData:
+          type: object
+        geometryType:
+          type: string
+        boundary:
+          $ref: '#/components/schemas/Geometry'
+        boundaryDimension:
+          type: integer
+          format: int32
+        dimension:
+          type: integer
+          format: int32
+        length:
+          type: number
+          format: double
+        empty:
+          type: boolean
+        numGeometries:
+          type: integer
+          format: int32
+        coordinate:
+          $ref: '#/components/schemas/Coordinate'
+        coordinates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Coordinate'
+        numPoints:
+          type: integer
+          format: int32
+        area:
+          type: number
+          format: double
+        valid:
+          type: boolean
+        simple:
+          type: boolean
+        envelopeInternal:
+          $ref: '#/components/schemas/Envelope'
+        srid:
+          type: integer
+          format: int32
+        precisionModel:
+          $ref: '#/components/schemas/PrecisionModel'
+        rectangle:
+          type: boolean
+        centroid:
+          $ref: '#/components/schemas/Point'
+        interiorPoint:
+          $ref: '#/components/schemas/Point'
+    Point:
+      type: object
+      properties:
+        envelope:
+          $ref: '#/components/schemas/Geometry'
+        factory:
+          $ref: '#/components/schemas/GeometryFactory'
+        userData:
+          type: object
+        coordinates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Coordinate'
+        empty:
+          type: boolean
+        simple:
+          type: boolean
+        coordinate:
+          $ref: '#/components/schemas/Coordinate'
+        coordinateSequence:
+          $ref: '#/components/schemas/CoordinateSequence'
+        numPoints:
+          type: integer
+          format: int32
+        geometryType:
+          type: string
+        boundary:
+          $ref: '#/components/schemas/Geometry'
+        x:
+          type: number
+          format: double
+        "y":
+          type: number
+          format: double
+        boundaryDimension:
+          type: integer
+          format: int32
+        dimension:
+          type: integer
+          format: int32
+        length:
+          type: number
+          format: double
+        valid:
+          type: boolean
+        envelopeInternal:
+          $ref: '#/components/schemas/Envelope'
+        srid:
+          type: integer
+          format: int32
+        precisionModel:
+          $ref: '#/components/schemas/PrecisionModel'
+        rectangle:
+          type: boolean
+        numGeometries:
+          type: integer
+          format: int32
+        area:
+          type: number
+          format: double
+        centroid:
+          $ref: '#/components/schemas/Point'
+        interiorPoint:
+          $ref: '#/components/schemas/Point'
+    PrecisionModel:
+      type: object
+      properties:
+        scale:
+          type: number
+          format: double
+        type:
+          $ref: '#/components/schemas/Type'
+        floating:
+          type: boolean
+        maximumSignificantDigits:
+          type: integer
+          format: int32
+        offsetX:
+          type: number
+          format: double
+        offsetY:
+          type: number
+          format: double
+    RestApiResponseSoil:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Soil'
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32
+    Soil:
+      type: object
+      properties:
+        gid:
+          type: integer
+          format: int32
+        snum:
+          type: number
+          format: float
+        faosoil:
+          type: string
+        domsoi:
+          type: string
+        phase1:
+          type: string
+        phase2:
+          type: string
+        misclu1:
+          type: string
+        misclu2:
+          type: string
+        permafrost:
+          type: string
+        cntcode:
+          type: number
+          format: double
+        cntname:
+          type: string
+        sqkm:
+          type: number
+          format: double
+        country:
+          type: string
+        geom:
+          $ref: '#/components/schemas/MultiPolygon'
+    Type:
+      type: object
+    Earthquake:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        geom:
+          $ref: '#/components/schemas/MultiPolygon'
+        dn:
+          type: integer
+          format: int32
+    RestApiResponseEarthquake:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Earthquake'
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32
     RegisterUserDTO:
       type: object
       properties:
@@ -111,6 +532,8 @@ components:
         userType:
           type: string
         email:
+          type: string
+        accessToken:
           type: string
     RestApiResponseLoggedInUserDTO:
       type: object

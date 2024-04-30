@@ -24,6 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
@@ -46,7 +48,9 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 import com.tuvarna.geo.entity.DataTypeOptions
 import com.tuvarna.geo.entity.UserEntity
+import com.tuvarna.geo.view.component.accessibility.LoadingIndicator
 import com.tuvarna.geo.view.theme.MapsTheme
+import com.tuvarna.geo.viewmodel.HomeViewModel
 import timber.log.Timber
 
 @SuppressLint("RestrictedApi")
@@ -130,10 +134,17 @@ private fun GeoBottomSheet(clickedMarker: LatLng, navController: NavController) 
 @Composable
 fun GeoMapDetails(clickedMarker: LatLng) {
   var dataTypeChoice by remember { mutableStateOf(DataTypeOptions.None) }
+  val homeViewModel = hiltViewModel<HomeViewModel>()
+  val soil = homeViewModel.soil.collectAsState()
 
   when (dataTypeChoice) {
     DataTypeOptions.None -> {
       Box(modifier = Modifier.fillMaxWidth()) {
+        LoadingIndicator(
+          stateFlow = homeViewModel.stateFlow.collectAsState().value,
+          navController = null,
+        )
+
         Text(
           text = "Choose a type",
           textAlign = TextAlign.Center,
@@ -172,10 +183,12 @@ fun GeoMapDetails(clickedMarker: LatLng) {
       }
     }
     DataTypeOptions.Soil -> {
-      Text(text = "Soil")
+      // homeViewModel.retrieveSoil(DangerDTO(clickedMarker.latitude, clickedMarker.longitude))
+      Text(text = soil.value.country ?: "")
     }
     DataTypeOptions.Earthquake -> {
-      Text(text = "Earthquake")
+      //   homeViewModel.retrieveEarthquake(DangerDTO(clickedMarker.latitude,
+      // clickedMarker.longitude))
     }
   }
 }
