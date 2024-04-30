@@ -1,8 +1,6 @@
 package com.tuvarna.geo.view.component.home
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -32,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -49,18 +46,21 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 import com.tuvarna.geo.entity.DataTypeOptions
 import com.tuvarna.geo.entity.UserEntity
+import com.tuvarna.geo.rest_api.infrastructure.defaultMultiValueConverter
 import com.tuvarna.geo.rest_api.models.DangerDTO
 import com.tuvarna.geo.view.component.accessibility.LoadingIndicator
 import com.tuvarna.geo.view.theme.MapsTheme
 import com.tuvarna.geo.viewmodel.HomeViewModel
 import timber.log.Timber
 
+val defaultLatLng: LatLng = LatLng(0.0, 0.0)
+
 @SuppressLint("RestrictedApi")
 @Composable
 fun GeoMap(navController: NavController, user: UserEntity) {
   val cameraPositionState = rememberCameraPositionState { null }
   var markerPositions by remember { mutableStateOf(listOf<LatLng>()) }
-  var clickedMarker by remember { mutableStateOf(LatLng(0.0, 0.0)) }
+  var clickedMarker by remember { mutableStateOf(defaultLatLng) }
 
   val uiSettings by remember { mutableStateOf(MapUiSettings(compassEnabled = false)) }
   val mapProperties by remember { mutableStateOf(MapProperties(mapType = MapType.TERRAIN)) }
@@ -137,7 +137,6 @@ private fun GeoBottomSheet(clickedMarker: LatLng, navController: NavController) 
 fun GeoMapDetails(clickedMarker: LatLng) {
   var dataTypeChoice by remember { mutableStateOf(DataTypeOptions.None) }
   val homeViewModel = hiltViewModel<HomeViewModel>()
-  val earthquake = homeViewModel.earthquake.collectAsState()
 
   when (dataTypeChoice) {
     DataTypeOptions.None -> {
@@ -158,29 +157,23 @@ fun GeoMapDetails(clickedMarker: LatLng) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth().padding(16.dp),
       ) {
-        Box(
-          modifier =
-            Modifier.weight(1f)
-              .height(40.dp)
-              .clickable { dataTypeChoice = DataTypeOptions.Soil }
-              .clip(RoundedCornerShape(10.dp))
-              .background(Color(0, 69, 12))
+        Button(
+          colors = ButtonDefaults.buttonColors(containerColor = Color(0, 69, 12)),
+          onClick = { dataTypeChoice = DataTypeOptions.Soil },
+          modifier = Modifier.weight(1f).height(40.dp),
+          shape = RoundedCornerShape(10.dp),
+          enabled = clickedMarker.equals(defaultMultiValueConverter),
         ) {
-          Text(text = "Soil", color = Color.White, modifier = Modifier.align(Alignment.Center))
+          Text(text = "Soil", color = Color.White)
         }
-        Box(
-          modifier =
-            Modifier.weight(1f)
-              .height(40.dp)
-              .clickable { dataTypeChoice = DataTypeOptions.Earthquake }
-              .clip(RoundedCornerShape(10.dp))
-              .background(Color(0, 69, 12))
+        Button(
+          colors = ButtonDefaults.buttonColors(containerColor = Color(0, 69, 12)),
+          onClick = { dataTypeChoice = DataTypeOptions.Earthquake },
+          modifier = Modifier.weight(1f).height(40.dp),
+          shape = RoundedCornerShape(10.dp),
+          enabled = clickedMarker.equals(defaultMultiValueConverter),
         ) {
-          Text(
-            text = "Earthquake",
-            color = Color.White,
-            modifier = Modifier.align(Alignment.Center),
-          )
+          Text(text = "Earthquake", color = Color.White)
         }
       }
     }
