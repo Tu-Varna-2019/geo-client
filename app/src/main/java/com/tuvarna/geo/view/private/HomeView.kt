@@ -33,5 +33,5 @@ fun HomeView(navController: NavController, userSessionStorage: UserSessionStorag
     route = "",
   )
 
-  GeoMap(navController, user)
+  GeoMap(navController)
 }

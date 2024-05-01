@@ -1,26 +1,23 @@
 package com.tuvarna.geo.entity
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
-import androidx.compose.runtime.setValue
-import com.tuvarna.geo.rest_api.models.DangerDTO
+import androidx.compose.runtime.mutableStateOf
+import com.google.android.gms.maps.model.LatLng
 
-class PointEntity {
+class UserMarkerState {
 
-  var latitude by mutableDoubleStateOf(0.00)
-  var longitude by mutableDoubleStateOf(0.00)
+  val initialPoisition: LatLng = LatLng(0.0, 0.0)
+  var markerPositions = mutableStateOf(listOf<LatLng>())
+  var clickedMarker = mutableStateOf(initialPoisition)
+  var topBarTitleText = mutableStateOf("Geo")
+  var dangerUserChoice = mutableStateOf(DangerOptions.None)
 
-  constructor(latitude: Double, longitude: Double) {
-    this.latitude = latitude
-    this.longitude = longitude
+  fun hasUserClickedMarker(): Boolean {
+    return !clickedMarker.value.equals(initialPoisition)
   }
+}
 
-  fun toDangerDto(dangerDTO: DangerDTO): DangerDTO {
-    return DangerDTO()
-  }
-
-  @Override
-  override fun toString(): String {
-    return "Point(latitude='$latitude', longitude='$longitude')"
-  }
+enum class DangerOptions {
+  None,
+  Soil,
+  Earthquake,
 }

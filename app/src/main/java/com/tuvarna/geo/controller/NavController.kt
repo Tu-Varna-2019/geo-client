@@ -24,7 +24,7 @@ sealed class Screen(val route: String) {
 fun NavController(userSessionStorage: UserSessionStorage) {
   val navController = rememberNavController()
   // TODO: Change startDest to Login
-  NavHost(navController = navController, startDestination = Screen.Login.route) {
+  NavHost(navController = navController, startDestination = Screen.Home.route) {
     composable(Screen.Login.route) { LoginView(navController) }
     composable(Screen.SignUp.route) { RegisterView(navController) }
     composable(Screen.Home.route) { HomeView(navController, userSessionStorage) }
