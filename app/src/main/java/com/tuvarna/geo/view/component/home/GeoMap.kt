@@ -49,19 +49,19 @@ import com.tuvarna.geo.R
 import com.tuvarna.geo.entity.DangerOptions
 import com.tuvarna.geo.entity.UserMarkerState
 import com.tuvarna.geo.rest_api.models.DangerDTO
+import com.tuvarna.geo.rest_api.models.Soil
 import com.tuvarna.geo.view.component.accessibility.LoadingIndicator
 import com.tuvarna.geo.view.theme.MapsTheme
 import com.tuvarna.geo.viewmodel.HomeViewModel
 import timber.log.Timber
 
 private val userMarkerState: UserMarkerState = UserMarkerState()
-private val uiColorStyle: Color = Color(0, 69, 12)
+private val uiColorStyle: Color = Color(151, 212, 168)
 
 @SuppressLint("RestrictedApi")
 @Composable
 fun GeoMap(navController: NavController) {
   val cameraPositionState = rememberCameraPositionState {}
-
   Box(Modifier.fillMaxSize()) {
     MapsTheme {
       GoogleMap(
@@ -148,16 +148,20 @@ fun DangerBottomBarContent(homeViewModel: HomeViewModel) {
       }
     }
     DangerOptions.Soil -> {
-      LaunchedEffect(key1 = Unit) {
-        homeViewModel.retrieveSoil(
-          DangerDTO(
-            userMarkerState.clickedMarker.value.latitude,
-            userMarkerState.clickedMarker.value.longitude,
+      var soil: Soil? = userMarkerState.isSoilAlreadyRetrieved()
+      if (soil == null) {
+        LaunchedEffect(key1 = Unit) {
+          homeViewModel.retrieveSoil(
+            DangerDTO(
+              userMarkerState.clickedMarker.value.latitude,
+              userMarkerState.clickedMarker.value.longitude,
+            )
           )
-        )
+        }
+        soil = homeViewModel.soil.collectAsState().value
       }
-      val soil = homeViewModel.soil.collectAsState()
-      Text(text = soil.value.country ?: "")
+      // userMarkerState.mapMarkersToDangers[userMarkerState.clickedMarker.value] = soil
+      SoilDataContent(soil = soil)
       userMarkerState.topBarTitleText.value = "Soil"
     }
     DangerOptions.Earthquake -> {
@@ -170,7 +174,7 @@ fun DangerBottomBarContent(homeViewModel: HomeViewModel) {
         )
       }
       val earthquake = homeViewModel.earthquake.collectAsState()
-      Text(text = earthquake.value.id.toString())
+      EarthquakeDataContent(earthquake = earthquake.value)
       userMarkerState.topBarTitleText.value = "Earthquake"
     }
   }
@@ -188,7 +192,18 @@ fun BottomBar(homeViewModel: HomeViewModel, bottomsheetState: BottomSheetScaffol
     modifier = Modifier.fillMaxWidth().padding(16.dp),
   ) {
     Spacer(modifier = Modifier.height(30.dp))
-
+    //    NavigationBarItem(
+    //      icon = {
+    //        Icon(
+    //          Icons.Filled.ArrowBack,
+    //          contentDescription = null,
+    //          modifier = Modifier.padding(8.dp).size(35.dp),
+    //        )
+    //      },
+    //      label = { Text("Back") },
+    //      selected = false,
+    //      onClick = { /*TODO: add something  */ },
+    //    )
     if (userMarkerState.hasUserClickedMarker()) {
       LaunchedEffect(key1 = Unit) { bottomsheetState.bottomSheetState.expand() }
       NavigationBar(containerColor = Color.Transparent) {
