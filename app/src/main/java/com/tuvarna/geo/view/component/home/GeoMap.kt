@@ -29,6 +29,7 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -47,6 +48,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 import com.tuvarna.geo.R
 import com.tuvarna.geo.entity.DangerOptions
+import com.tuvarna.geo.entity.PointEntity
 import com.tuvarna.geo.entity.UserMarkerState
 import com.tuvarna.geo.rest_api.models.DangerDTO
 import com.tuvarna.geo.rest_api.models.Soil
@@ -57,11 +59,14 @@ import timber.log.Timber
 
 private val userMarkerState: UserMarkerState = UserMarkerState()
 private val uiColorStyle: Color = Color(151, 212, 168)
+private var soil = mutableStateOf<Soil>(Soil())
 
 @SuppressLint("RestrictedApi")
 @Composable
 fun GeoMap(navController: NavController) {
   val cameraPositionState = rememberCameraPositionState {}
+  val homeViewModel = hiltViewModel<HomeViewModel>()
+
   Box(Modifier.fillMaxSize()) {
     MapsTheme {
       GoogleMap(
@@ -78,6 +83,24 @@ fun GeoMap(navController: NavController) {
         },
       ) {
         userMarkerState.markerPositions.value.forEach { position ->
+          val pointEntity: PointEntity = PointEntity(position)
+
+          when (userMarkerState.dangerUserChoice.value) {
+            DangerOptions.Soil -> {
+              val soil = homeViewModel.soil.collectAsState().value
+              if (soil.sqkm != null && soil.domsoi != null)
+                PolygonDrawing(
+                  PointEntity(position),
+                  soil.sqkm,
+                  pointEntity.getColorToSoilType(soil.domsoi),
+                )
+            }
+            DangerOptions.Earthquake -> {
+              val earthquake = homeViewModel.earthquake.collectAsState().value
+              if (earthquake.dn != null) PolygonDrawing(PointEntity(position), earthquake.dn * 10.0)
+            }
+            else -> {}
+          }
           Marker(
             state = rememberMarkerState(position = position),
             onClick = {
@@ -92,14 +115,13 @@ fun GeoMap(navController: NavController) {
       }
     }
   }
-  TopBottomBar(navController)
+  TopBottomBar(homeViewModel, navController)
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBottomBar(navController: NavController) {
-  val homeViewModel = hiltViewModel<HomeViewModel>()
+private fun TopBottomBar(homeViewModel: HomeViewModel, navController: NavController) {
   val bottomsheetState = rememberBottomSheetScaffoldState()
 
   BottomSheetScaffold(
@@ -148,20 +170,18 @@ fun DangerBottomBarContent(homeViewModel: HomeViewModel) {
       }
     }
     DangerOptions.Soil -> {
-      var soil: Soil? = userMarkerState.isSoilAlreadyRetrieved()
-      if (soil == null) {
-        LaunchedEffect(key1 = Unit) {
-          homeViewModel.retrieveSoil(
-            DangerDTO(
-              userMarkerState.clickedMarker.value.latitude,
-              userMarkerState.clickedMarker.value.longitude,
-            )
+
+      LaunchedEffect(key1 = Unit) {
+        homeViewModel.retrieveSoil(
+          DangerDTO(
+            userMarkerState.clickedMarker.value.latitude,
+            userMarkerState.clickedMarker.value.longitude,
           )
-        }
-        soil = homeViewModel.soil.collectAsState().value
+        )
       }
+      soil.value = homeViewModel.soil.collectAsState().value
       // userMarkerState.mapMarkersToDangers[userMarkerState.clickedMarker.value] = soil
-      SoilDataContent(soil = soil)
+      SoilDataContent(soil = soil.value)
       userMarkerState.topBarTitleText.value = "Soil"
     }
     DangerOptions.Earthquake -> {
@@ -217,7 +237,11 @@ fun BottomBar(homeViewModel: HomeViewModel, bottomsheetState: BottomSheetScaffol
           },
           label = { Text("Soil") },
           selected = userMarkerState.dangerUserChoice.value == DangerOptions.Soil,
-          onClick = { userMarkerState.dangerUserChoice.value = DangerOptions.Soil },
+          onClick = {
+            userMarkerState.dangerUserChoice.value =
+              if (userMarkerState.dangerUserChoice.value == DangerOptions.Soil) DangerOptions.None
+              else DangerOptions.Soil
+          },
         )
         NavigationBarItem(
           icon = {
@@ -229,7 +253,12 @@ fun BottomBar(homeViewModel: HomeViewModel, bottomsheetState: BottomSheetScaffol
           },
           label = { Text("Earthquake") },
           selected = userMarkerState.dangerUserChoice.value == DangerOptions.Earthquake,
-          onClick = { userMarkerState.dangerUserChoice.value = DangerOptions.Earthquake },
+          onClick = {
+            userMarkerState.dangerUserChoice.value =
+              if (userMarkerState.dangerUserChoice.value == DangerOptions.Earthquake)
+                DangerOptions.None
+              else DangerOptions.Earthquake
+          },
         )
         NavigationBarItem(
           icon = {
