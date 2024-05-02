@@ -33,22 +33,21 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.tuvarna.geo.R
-import com.tuvarna.geo.entity.EntityUser
+import com.tuvarna.geo.entity.UserEntity
 import com.tuvarna.geo.view.component.accessibility.LoadingIndicator
 import com.tuvarna.geo.viewmodel.RegisterViewModel
 
 @Composable
-fun SignUpView(navController: NavController) {
-
+fun RegisterView(navController: NavController) {
   val registerViewModel = hiltViewModel<RegisterViewModel>()
-
-  val user by remember { mutableStateOf(EntityUser(0, "", "", "", false)) }
+  val user by remember { mutableStateOf(UserEntity(0, "", "", "", false)) }
   val confirmPassword = remember { mutableStateOf("") }
 
-  val state = registerViewModel.uiState.collectAsState()
-
-  LoadingIndicator(uiState = state, navController = navController, route = "login")
-
+  LoadingIndicator(
+    stateFlow = registerViewModel.stateFlow.collectAsState().value,
+    navController = navController,
+    route = "login",
+  )
   Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
     Column(
       modifier = Modifier.padding(5.dp).fillMaxWidth(0.8f),
@@ -76,7 +75,7 @@ fun SignUpView(navController: NavController) {
         user = user,
         confirmPassword = confirmPassword,
         registerViewModel = registerViewModel,
-        navig = navController,
+        navController = navController,
       )
     }
   }
@@ -84,15 +83,15 @@ fun SignUpView(navController: NavController) {
 
 @Composable
 fun SignUpForm(
-  navig: NavController,
-  user: EntityUser,
+  navController: NavController,
+  user: UserEntity,
   confirmPassword: MutableState<String>,
   registerViewModel: RegisterViewModel,
 ) {
 
   val isUsernameValid = user.username.isEmpty()
-  val isEmailValid = false // user.email.isEmpty() || Utils.isValidEmail(user.email)
-  val isPasswordValid = false // user.password.isEmpty() || Utils.isValidPassword(user.password)
+  val isEmailValid = user.email.isEmpty() // || Utils.isValidEmail(user.email)
+  val isPasswordValid = user.password.isEmpty() // || Utils.isValidPassword(user.password)
   val isConfirmPasswordValid = confirmPassword.value != user.password
 
   val isSubmitBtnDisabled =
@@ -178,7 +177,7 @@ fun SignUpForm(
     horizontalArrangement = Arrangement.SpaceBetween,
   ) {
     Button(
-      onClick = { navig.navigate("login") },
+      onClick = { navController.navigate("login") },
       modifier = Modifier.weight(1f).padding(end = 10.dp),
     ) {
       Text("Back")

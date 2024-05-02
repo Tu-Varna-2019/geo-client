@@ -32,19 +32,20 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.tuvarna.geo.R
-import com.tuvarna.geo.entity.EntityUser
+import com.tuvarna.geo.entity.UserEntity
 import com.tuvarna.geo.view.component.accessibility.LoadingIndicator
 import com.tuvarna.geo.viewmodel.LoginViewModel
 
 @Composable
 fun LoginView(navController: NavController) {
-
   val loginViewModel = hiltViewModel<LoginViewModel>()
-  val user by remember { mutableStateOf(EntityUser(0, "", "", "", false)) }
-  val state = loginViewModel.uiState.collectAsState()
+  val user by remember { mutableStateOf(UserEntity(0, "", "", "", false)) }
 
-  LoadingIndicator(uiState = state, navController = navController, route = "home")
-
+  LoadingIndicator(
+    stateFlow = loginViewModel.stateFlow.collectAsState().value,
+    navController = navController,
+    route = "home",
+  )
   Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
     Column(
       modifier = Modifier.padding(5.dp).fillMaxWidth(0.8f),
@@ -62,22 +63,22 @@ fun LoginView(navController: NavController) {
 
       Image(
         painter = painterResource(id = R.drawable.earth),
-        contentDescription = "Eearth Icon",
+        contentDescription = "Earth Icon",
         modifier = Modifier.size(110.dp).fillMaxWidth().align(Alignment.CenterHorizontally),
       )
 
       Spacer(modifier = Modifier.height(20.dp))
 
-      LoginForm(user = user, loginViewModel = loginViewModel, navig = navController)
+      LoginForm(user = user, loginViewModel = loginViewModel, navController = navController)
     }
   }
 }
 
 @Composable
-fun LoginForm(navig: NavController, user: EntityUser, loginViewModel: LoginViewModel) {
+fun LoginForm(navController: NavController, user: UserEntity, loginViewModel: LoginViewModel) {
 
-  val isEmailValid = false // user.email.isEmpty() || Utils.isValidEmail(user.email)
-  val isPasswordValid = false // user.password.isEmpty() || Utils.isValidPassword(user.password)
+  val isEmailValid = user.email.isEmpty() // || Utils.isValidEmail(user.email)
+  val isPasswordValid = user.password.isEmpty() // || Utils.isValidPassword(user.password)
   val isSubmitBtnDisabled = isEmailValid || isPasswordValid
 
   val textFieldModifier: Modifier = Modifier.fillMaxWidth().padding(8.dp).height(60.dp)
@@ -132,7 +133,7 @@ fun LoginForm(navig: NavController, user: EntityUser, loginViewModel: LoginViewM
       Text("Login")
     }
     Button(
-      onClick = { navig.navigate("signup") },
+      onClick = { navController.navigate("signup") },
       modifier = Modifier.weight(1f).padding(end = 10.dp),
     ) {
       Text("Sign up")

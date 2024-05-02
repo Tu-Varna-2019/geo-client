@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **username** | **kotlin.String** |  |  [optional]
 **userType** | **kotlin.String** |  |  [optional]
 **email** | **kotlin.String** |  |  [optional]
+**accessToken** | **kotlin.String** |  |  [optional]
 
 
 

@@ -1,4 +1,4 @@
-package com.example.app_iliyan.view.components.dialog_box
+package com.tuvarna.geo.view.component.dialog_box
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.Scaffold

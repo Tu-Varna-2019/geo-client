@@ -9,14 +9,14 @@ import com.tuvarna.geo.rest_api.models.LoggedInUserDTO
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-class EntityUser() : Parcelable {
+class SoilEntity() : Parcelable {
 
   var id by mutableIntStateOf(0)
   var username by mutableStateOf("")
   var email by mutableStateOf("")
   var isblocked by mutableStateOf(false)
   var password by mutableStateOf("")
-  var usertype by mutableStateOf(EntityUserType(0, ""))
+  var usertype by mutableStateOf(UserTypeEntity(0, ""))
 
   constructor(
     id: Int,
@@ -24,7 +24,7 @@ class EntityUser() : Parcelable {
     email: String,
     password: String,
     isblocked: Boolean,
-    usertype: EntityUserType = EntityUserType(0, ""),
+    usertype: UserTypeEntity = UserTypeEntity(0, ""),
   ) : this() {
     this.id = id
     this.username = username
@@ -39,7 +39,7 @@ class EntityUser() : Parcelable {
     this.email = restApiUser.email!!
     this.password = ""
     this.isblocked = false
-    this.usertype = EntityUserType(0, restApiUser.userType!!)
+    this.usertype = UserTypeEntity(0, restApiUser.userType!!)
   }
 
   @Override

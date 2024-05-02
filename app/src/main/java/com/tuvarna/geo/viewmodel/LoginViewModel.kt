@@ -1,37 +1,51 @@
 package com.tuvarna.geo.viewmodel
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tuvarna.geo.controller.ApiResult
-import com.tuvarna.geo.entity.EntityUser
+import com.tuvarna.geo.controller.UIFeedback
+import com.tuvarna.geo.entity.UserEntity
+import com.tuvarna.geo.repository.ApiPayload
 import com.tuvarna.geo.repository.UserRepository
+import com.tuvarna.geo.storage.UserSessionStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val userRepository: UserRepository) : ViewModel() {
+class LoginViewModel
+@Inject
+constructor(
+  private val userRepository: UserRepository,
+  private val userSessionStorage: UserSessionStorage,
+) : UIStateViewModel() {
 
-  private val _uiState = MutableStateFlow<ApiResult<*>>(ApiResult.Empty)
-  val uiState: StateFlow<ApiResult<*>> = _uiState
-
-  fun login(user: EntityUser) {
+  fun login(user: UserEntity) {
     Timber.d("User %s clicked the login button! Moving on...", user)
     viewModelScope.launch {
-      _uiState.value = ApiResult.Loading
-      val result = userRepository.login(user)
-      _uiState.value =
-        when (result) {
-          is ApiResult.Success<*> -> {
-            val parsedUser = (result as ApiResult.Success<EntityUser>).data
-            ApiResult.Success(result.message, parsedUser)
+      mutableStateFlow.value = UIFeedback(state = UIFeedback.States.Waiting)
+
+      val message =
+        when (val result: ApiPayload<UserEntity> = userRepository.login(user)) {
+          is ApiPayload.Success -> {
+            val parsedUser = result.data
+
+            userSessionStorage.putUserProps(
+              newId = parsedUser!!.id,
+              newUsername = parsedUser.username,
+              newEmail = parsedUser.email,
+              newUserType = parsedUser.usertype.type,
+              newAccessToken = parsedUser.accessToken,
+            )
+            Timber.d("User logged in! Payload received from server %s", parsedUser)
+            returnStatus = UIFeedback.States.Success
+            result.message!!
           }
-          is ApiResult.Error -> ApiResult.Error<Nothing>(result.message)
-          else -> throw IllegalStateException("Unexpected ApiResult type: $result")
+          is ApiPayload.Failure -> {
+            returnStatus = UIFeedback.States.Failed
+            result.message
+          }
         }
+      mutableStateFlow.value = UIFeedback(state = returnStatus, message = message)
     }
   }
 }

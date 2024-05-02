@@ -26,6 +26,7 @@ import com.squareup.moshi.JsonClass
  * @param username 
  * @param userType 
  * @param email 
+ * @param accessToken 
  */
 
 
@@ -41,7 +42,10 @@ data class LoggedInUserDTO (
     val userType: kotlin.String? = null,
 
     @Json(name = "email")
-    val email: kotlin.String? = null
+    val email: kotlin.String? = null,
+
+    @Json(name = "accessToken")
+    val accessToken: kotlin.String? = null
 
 )
 

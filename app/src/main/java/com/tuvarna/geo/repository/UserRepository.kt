@@ -1,10 +1,9 @@
 package com.tuvarna.geo.repository
 
-import com.tuvarna.geo.controller.ApiResult
-import com.tuvarna.geo.entity.EntityUser
+import com.tuvarna.geo.entity.UserEntity
 import com.tuvarna.geo.mapper.UserMapper
-import com.tuvarna.geo.rest_api.apis.LoginControllerApi
-import com.tuvarna.geo.rest_api.apis.RegisterControllerApi
+import com.tuvarna.geo.rest_api.apis.AuthControllerApi
+import com.tuvarna.geo.rest_api.models.LoginUserDTO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -12,35 +11,31 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class UserRepository
-@Inject
-constructor(
-  private val registerApi: RegisterControllerApi,
-  private val loginApi: LoginControllerApi,
-) : CommonRepository {
-
-  suspend fun login(user: EntityUser): ApiResult<EntityUser> {
+class UserRepository @Inject constructor(private val authApi: AuthControllerApi) : BaseRepository {
+  suspend fun login(user: UserEntity): ApiPayload<UserEntity> {
     return withContext(Dispatchers.IO) {
       try {
         Timber.d("Logging in user: %s", user)
-        val userDTO = UserMapper.UserMapper.toLoginUserDTO(user)
-        val response = loginApi.authenticateUser(userDTO)
-        ApiResult.Success(response.message ?: "Success", EntityUser(response.data!!))
+        val userDTO: LoginUserDTO = UserMapper.toLoginUserDTO(user)
+        val response = authApi.login(userDTO)
+
+        ApiPayload.Success(response.message, UserEntity(response.data!!))
       } catch (e: Exception) {
-        handleApiException(e)
+        handleApiError(e)
       }
     }
   }
 
-  suspend fun register(user: EntityUser, userType: String): ApiResult<Nothing> {
+  suspend fun register(user: UserEntity, userType: String): ApiPayload<Nothing> {
     return withContext(Dispatchers.IO) {
       try {
         Timber.d("Registering user: %s", user)
-        val userDTO = UserMapper.UserMapper.toRegisterUserDTO(user, userType)
-        val response = registerApi.create(userDTO)
-        ApiResult.Success(response.message ?: "Success", null)
+        val userDTO = UserMapper.toRegisterUserDTO(user, userType)
+        val response = authApi.create(userDTO)
+
+        ApiPayload.Success(response.message, null)
       } catch (e: Exception) {
-        handleApiException(e)
+        handleApiError(e)
       }
     }
   }
