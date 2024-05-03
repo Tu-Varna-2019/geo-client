@@ -23,7 +23,7 @@ import com.tuvarna.geo.rest_api.models.Earthquake
 import com.tuvarna.geo.rest_api.models.Soil
 
 @Composable
-fun SoilDataContent(soil: Soil) {
+fun SoilTableContent(soil: Soil) {
   if (soil.gid != null) {
     Box(
       modifier =
@@ -49,7 +49,7 @@ fun SoilDataContent(soil: Soil) {
 }
 
 @Composable
- fun TableRow(name: String, value: String) {
+fun TableRow(name: String, value: String) {
   Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
     Text(
       text = name,
@@ -69,7 +69,7 @@ fun SoilDataContent(soil: Soil) {
 }
 
 @Composable
-fun EarthquakeDataContent(earthquake: Earthquake) {
+fun EarthquakeTableContent(earthquake: Earthquake) {
   if (earthquake.id != null) {
     Box(
       modifier =

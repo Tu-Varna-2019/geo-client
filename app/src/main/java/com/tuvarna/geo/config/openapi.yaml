@@ -9,7 +9,7 @@ paths:
   /danger/soil:
     post:
       tags:
-      - danger-controller
+      - risk-controller
       summary: Retrieve soil type
       operationId: getSoil
       requestBody:
@@ -46,7 +46,7 @@ paths:
   /danger/earthquake:
     post:
       tags:
-      - danger-controller
+      - risk-controller
       summary: Retrieve earthquake
       operationId: getEarthquake
       requestBody:

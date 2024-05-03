@@ -49,8 +49,8 @@ class DangerControllerApi(basePath: kotlin.String = defaultBasePath, client: OkH
 
     /**
      * Retrieve earthquake
-     * 
-     * @param dangerDTO 
+     *
+     * @param dangerDTO
      * @return RestApiResponseEarthquake
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
@@ -80,8 +80,8 @@ class DangerControllerApi(basePath: kotlin.String = defaultBasePath, client: OkH
 
     /**
      * Retrieve earthquake
-     * 
-     * @param dangerDTO 
+     *
+     * @param dangerDTO
      * @return ApiResponse<RestApiResponseEarthquake?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
@@ -99,7 +99,7 @@ class DangerControllerApi(basePath: kotlin.String = defaultBasePath, client: OkH
     /**
      * To obtain the request config of the operation getEarthquake
      *
-     * @param dangerDTO 
+     * @param dangerDTO
      * @return RequestConfig
      */
     fun getEarthquakeRequestConfig(dangerDTO: DangerDTO) : RequestConfig<DangerDTO> {
@@ -107,7 +107,7 @@ class DangerControllerApi(basePath: kotlin.String = defaultBasePath, client: OkH
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
         localVariableHeaders["Content-Type"] = "application/json"
-        
+
         return RequestConfig(
             method = RequestMethod.POST,
             path = "/danger/earthquake",
@@ -120,8 +120,8 @@ class DangerControllerApi(basePath: kotlin.String = defaultBasePath, client: OkH
 
     /**
      * Retrieve soil type
-     * 
-     * @param dangerDTO 
+     *
+     * @param dangerDTO
      * @return RestApiResponseSoil
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
@@ -151,8 +151,8 @@ class DangerControllerApi(basePath: kotlin.String = defaultBasePath, client: OkH
 
     /**
      * Retrieve soil type
-     * 
-     * @param dangerDTO 
+     *
+     * @param dangerDTO
      * @return ApiResponse<RestApiResponseSoil?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
@@ -170,7 +170,7 @@ class DangerControllerApi(basePath: kotlin.String = defaultBasePath, client: OkH
     /**
      * To obtain the request config of the operation getSoil
      *
-     * @param dangerDTO 
+     * @param dangerDTO
      * @return RequestConfig
      */
     fun getSoilRequestConfig(dangerDTO: DangerDTO) : RequestConfig<DangerDTO> {
@@ -178,7 +178,7 @@ class DangerControllerApi(basePath: kotlin.String = defaultBasePath, client: OkH
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
         localVariableHeaders["Content-Type"] = "application/json"
-        
+
         return RequestConfig(
             method = RequestMethod.POST,
             path = "/danger/soil",

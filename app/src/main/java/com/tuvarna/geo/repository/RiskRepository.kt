@@ -11,7 +11,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DangerRepository @Inject constructor(private val dangerApi: DangerControllerApi) :
+class RiskRepository @Inject constructor(private val dangerApi: DangerControllerApi) :
   BaseRepository {
   suspend fun getSoil(point: DangerDTO): ApiPayload<Soil> {
     return withContext(Dispatchers.IO) {

@@ -3,9 +3,9 @@ package com.tuvarna.geo.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.tuvarna.geo.controller.UIFeedback
-import com.tuvarna.geo.entity.DangerData
+import com.tuvarna.geo.entity.RiskHierarchy
 import com.tuvarna.geo.repository.ApiPayload
-import com.tuvarna.geo.repository.DangerRepository
+import com.tuvarna.geo.repository.RiskRepository
 import com.tuvarna.geo.rest_api.models.DangerDTO
 import com.tuvarna.geo.rest_api.models.Earthquake
 import com.tuvarna.geo.rest_api.models.Soil
@@ -19,25 +19,25 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val dangerRepository: DangerRepository) :
+class HomeViewModel @Inject constructor(private val dangerRepository: RiskRepository) :
   UIStateViewModel() {
-  private val _dangerData = MutableStateFlow(mapOf<LatLng, DangerData>())
-  val dangerData: StateFlow<Map<LatLng, DangerData>> = _dangerData.asStateFlow()
+  private val _riskLocations = MutableStateFlow(mapOf<LatLng, RiskHierarchy>())
+  val riskLocations: StateFlow<Map<LatLng, RiskHierarchy>> = _riskLocations.asStateFlow()
 
-  private fun updateDangerData(latLng: LatLng, danger: DangerData) {
-    _dangerData.update { map -> map + (latLng to danger) }
+  private fun updateRiskByLocation(latLng: LatLng, risk: RiskHierarchy) {
+    _riskLocations.update { map -> map + (latLng to risk) }
   }
 
-  fun getDangerByLatLang(latLng: LatLng): DangerData? {
-    return _dangerData.value[latLng]
+  fun getRiskByLocation(latLng: LatLng): RiskHierarchy? {
+    return _riskLocations.value[latLng]
   }
 
-  fun removeDangerByLatLng(latLng: LatLng) {
-    _dangerData.update { map -> map - latLng }
+  fun removeRiskByLocation(latLng: LatLng) {
+    _riskLocations.update { map -> map - latLng }
   }
 
-  fun addDangerData(latLng: LatLng, danger: DangerData = DangerData.NoDataYet) {
-    _dangerData.value += (latLng to danger)
+  fun addRiskByLocation(latLng: LatLng, risk: RiskHierarchy = RiskHierarchy.NoDataYet) {
+    _riskLocations.value += (latLng to risk)
   }
 
   fun retrieveSoil(point: DangerDTO) {
@@ -52,11 +52,11 @@ class HomeViewModel @Inject constructor(private val dangerRepository: DangerRepo
       val message =
         when (val result: ApiPayload<Soil> = dangerRepository.getSoil(point)) {
           is ApiPayload.Success -> {
-            val dangerData: Soil = result.data!!
-            Timber.d("Soil type received! Payload received from server %s", dangerData)
-            updateDangerData(
+            val riskLocations: Soil = result.data!!
+            Timber.d("Soil type received! Payload received from server %s", riskLocations)
+            updateRiskByLocation(
               LatLng(point.latitude!!, point.longitude!!),
-              DangerData.SoilData(dangerData),
+              RiskHierarchy.SoilSubHierarchy(riskLocations),
             )
             returnStatus = UIFeedback.States.Success
             result.message!!
@@ -81,11 +81,11 @@ class HomeViewModel @Inject constructor(private val dangerRepository: DangerRepo
       val message =
         when (val result: ApiPayload<Earthquake> = dangerRepository.getEarthquake(point)) {
           is ApiPayload.Success -> {
-            val dangerData: Earthquake = result.data!!
-            Timber.d("Earthquake received! Payload received from server %s", dangerData)
-            updateDangerData(
+            val riskLocations: Earthquake = result.data!!
+            Timber.d("Earthquake received! Payload received from server %s", riskLocations)
+            updateRiskByLocation(
               LatLng(point.latitude!!, point.longitude!!),
-              DangerData.EarthquakeData(dangerData),
+              RiskHierarchy.EarthquakeSubHierarchy(riskLocations),
             )
             returnStatus = UIFeedback.States.Success
             result.message!!
