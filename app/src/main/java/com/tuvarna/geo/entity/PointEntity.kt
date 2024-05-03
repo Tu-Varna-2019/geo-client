@@ -12,7 +12,7 @@ class PointEntity(var position: LatLng) {
   private val soilColor: SoilColor = SoilColor()
 
   fun getColorToSoilType(soilType: String): Color {
-    return soilColor.mapDOMSOIToColorMapping()[soilType]!!
+    return soilColor.mapDOMSOIToColorMapping()[soilType] ?: Color.Cyan
   }
 
   fun convertPositionToLocations(sqkm: Double): List<LatLng> {

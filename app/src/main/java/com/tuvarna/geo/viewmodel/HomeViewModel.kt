@@ -11,34 +11,44 @@ import com.tuvarna.geo.rest_api.models.Earthquake
 import com.tuvarna.geo.rest_api.models.Soil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.math.abs
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val dangerRepository: RiskRepository) :
   UIStateViewModel() {
   private val _riskLocations = MutableStateFlow(mapOf<LatLng, RiskHierarchy>())
-  val riskLocations: StateFlow<Map<LatLng, RiskHierarchy>> = _riskLocations.asStateFlow()
+  val riskLocations = _riskLocations.asStateFlow()
 
   private fun updateRiskByLocation(latLng: LatLng, risk: RiskHierarchy) {
     _riskLocations.update { map -> map + (latLng to risk) }
   }
 
-  fun getRiskByLocation(latLng: LatLng): RiskHierarchy? {
+
+  fun getRiskByLocation(latLng: LatLng, ): RiskHierarchy? {
     return _riskLocations.value[latLng]
   }
 
   fun removeRiskByLocation(latLng: LatLng) {
     _riskLocations.update { map -> map - latLng }
   }
+    fun purgeAllRisks() {
+        _riskLocations.value = emptyMap()
+    }
 
   fun addRiskByLocation(latLng: LatLng, risk: RiskHierarchy = RiskHierarchy.NoDataYet) {
     _riskLocations.value += (latLng to risk)
   }
+
+    fun getNearestLocation(latLng: LatLng): LatLng? {
+        return _riskLocations.value.keys.find {
+            abs(it.latitude - latLng.latitude) <  0.5 && abs(it.longitude -  latLng.longitude) < 0.5
+        }
+    }
 
   fun retrieveSoil(point: DangerDTO) {
     Timber.d(

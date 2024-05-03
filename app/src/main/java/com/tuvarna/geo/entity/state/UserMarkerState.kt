@@ -20,9 +20,14 @@ class UserMarkerState {
 
   fun resetMarkerState() {
     clickedMarker.value = INITIAL_POSITION
+    resetUserChoice()
   }
 
   fun changeTitle(title: String) {
     topBarTitleText.value = title
+  }
+
+  fun resetUserChoice() {
+    userChoiceForDataType.value = RiskChoices.None
   }
 }
