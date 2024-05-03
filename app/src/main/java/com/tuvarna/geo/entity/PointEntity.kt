@@ -1,13 +1,11 @@
 package com.tuvarna.geo.entity
 
 import android.annotation.SuppressLint
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import com.google.android.gms.maps.model.LatLng
 import com.tuvarna.geo.rest_api.models.Earthquake
 import com.tuvarna.geo.rest_api.models.Soil
-import java.io.InvalidClassException
 import kotlin.math.sqrt
 
 private const val EARTHRADIUS = 6371000
@@ -23,7 +21,11 @@ class PointEntity(var position: LatLng) {
       "RK" to Color.Gray,
       "WR" to Color.Cyan,
       "GL" to Color.Magenta,
-      "ND" to Color.LightGray,
+      "Nd" to Color.LightGray,
+      "I" to Color.DarkGray,
+      "We" to Color.Red,
+      "Be" to Color.Blue,
+      "Re" to Color.Red,
     )
 
   fun getColorToSoilType(soilType: String): Color {
@@ -52,7 +54,6 @@ class PointEntity(var position: LatLng) {
 
 @SuppressLint("MutableCollectionMutableState")
 class UserMarkerState {
-  var mapMarkersToDangers = mutableStateMapOf<LatLng, DangerType<*>>()
   val initialPoisition: LatLng = LatLng(0.0, 0.0)
   var clickedMarker = mutableStateOf(initialPoisition)
   var topBarTitleText = mutableStateOf("Geo")
@@ -60,10 +61,6 @@ class UserMarkerState {
 
   fun hasUserClickedMarker(): Boolean {
     return !clickedMarker.value.equals(initialPoisition)
-  }
-
-  inline fun <reified T> isDangerAlreadyRetrieved(): T? {
-    return mapMarkersToDangers[clickedMarker.value]?.getDanger() as? T
   }
 }
 
@@ -73,20 +70,10 @@ enum class DangerOptions {
   Earthquake,
 }
 
-inline fun <reified T> dangerType(danger: T): DangerType<T> {
-  when (danger) {
-    is Soil,
-    is Earthquake -> return DangerType(danger)
-    else -> throw InvalidClassException("Error, data type is invalid!")
-  }
+sealed class DangerData {
+  object NoDataYet : DangerData()
+
+  data class SoilData(val soil: Soil) : DangerData()
+
+  data class EarthquakeData(val earthquake: Earthquake) : DangerData()
 }
-
-class DangerType<T>(private val danger: T) {
-  fun getDanger(): T {
-    return danger
-  }
-}
-
-data class SoilData(val latLng: LatLng, val soil: Soil)
-
-data class EarthquakeData(val latLng: LatLng, val earthquake: Earthquake)

@@ -47,11 +47,10 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 import com.tuvarna.geo.R
+import com.tuvarna.geo.entity.DangerData
 import com.tuvarna.geo.entity.DangerOptions
-import com.tuvarna.geo.entity.DangerType
 import com.tuvarna.geo.entity.PointEntity
 import com.tuvarna.geo.entity.UserMarkerState
-import com.tuvarna.geo.entity.dangerType
 import com.tuvarna.geo.rest_api.models.DangerDTO
 import com.tuvarna.geo.rest_api.models.Earthquake
 import com.tuvarna.geo.rest_api.models.Soil
@@ -77,32 +76,31 @@ fun GeoMap(navController: NavController) {
         properties = MapProperties(mapType = MapType.TERRAIN),
         uiSettings = MapUiSettings(compassEnabled = false),
         onMapLongClick = { latLng ->
-          userMarkerState.mapMarkersToDangers[latLng] = DangerType(null)
+          homeViewModel.addDangerData(latLng)
           userMarkerState.clickedMarker.value = latLng
           cameraPositionState.move(CameraUpdateFactory.newLatLng(latLng))
           userMarkerState.topBarTitleText.value = "Choose a type"
           Timber.d("LatLng was invoked ${latLng}")
         },
       ) {
-        userMarkerState.mapMarkersToDangers.forEach { (position, datatype) ->
+        val danger = homeViewModel.dangerData.collectAsState()
+        danger.value.forEach { (position, datatype) ->
           val pointEntity: PointEntity = PointEntity(position)
 
-          when (userMarkerState.dangerUserChoice.value) {
-            DangerOptions.Soil -> {
-              val soil = datatype.getDanger() as? Soil
-              if (soil?.sqkm != null && soil.domsoi != null) {
-                Timber.d("Soil type of polygon")
+          when (datatype) {
+            is DangerData.SoilData -> {
+              val soil: Soil = datatype.soil
+              if (soil.sqkm != null && soil.domsoi != null) {
                 PolygonDrawing(pointEntity, soil.sqkm, pointEntity.getColorToSoilType(soil.domsoi))
               }
             }
-            DangerOptions.Earthquake -> {
-              val earthquake = datatype.getDanger() as? Earthquake
-              if (earthquake?.dn != null) PolygonDrawing(pointEntity, earthquake.dn * 10.0)
+            is DangerData.EarthquakeData -> {
+              val earthquake = datatype.earthquake
+              if (earthquake.dn != null) PolygonDrawing(pointEntity, earthquake.dn * 10.0)
             }
             else -> {}
           }
 
-          Timber.d("Marker was invoked: ${position.latitude},${position.longitude}")
           Marker(
             state = rememberMarkerState(position = position),
             onClick = {
@@ -165,48 +163,56 @@ private fun TopBottomBar(homeViewModel: HomeViewModel, navController: NavControl
 
 @Composable
 fun DangerBottomBarContent(homeViewModel: HomeViewModel) {
+  var dangerData: DangerData? = null
+  var soil: Soil? = null
+  var earthquake: Earthquake? = null
+
   when (userMarkerState.dangerUserChoice.value) {
     DangerOptions.None -> {
       Box(modifier = Modifier.fillMaxWidth()) {
         userMarkerState.topBarTitleText.value = "Choose a type"
       }
     }
-    DangerOptions.Soil -> {
-      var soil: Soil? = userMarkerState.isDangerAlreadyRetrieved<Soil>()
-      // If soil isn't present in our collection for the location, that the user clicked
-      if (soil == null) {
-        LaunchedEffect(key1 = Unit) {
-          homeViewModel.retrieveSoil(
-            DangerDTO(
-              userMarkerState.clickedMarker.value.latitude,
-              userMarkerState.clickedMarker.value.longitude,
-            )
-          )
-        }
-        soil = homeViewModel.soil.collectAsState().value
-      }
-      userMarkerState.mapMarkersToDangers[userMarkerState.clickedMarker.value] = DangerType(soil)
-      SoilDataContent(soil = soil)
-      userMarkerState.topBarTitleText.value = "Soil"
-    }
+    DangerOptions.Soil,
     DangerOptions.Earthquake -> {
-      var earthquake: Earthquake? = userMarkerState.isDangerAlreadyRetrieved<Earthquake>()
-      // If earthquake isn't present in our collection for the location, that the user clicked
-      if (earthquake == null) {
-        LaunchedEffect(key1 = Unit) {
-          homeViewModel.retrieveEarthquake(
-            DangerDTO(
-              userMarkerState.clickedMarker.value.latitude,
-              userMarkerState.clickedMarker.value.longitude,
-            )
-          )
+      dangerData = homeViewModel.getDangerByLatLang(userMarkerState.clickedMarker.value)
+
+      when (dangerData) {
+        is DangerData.SoilData -> {
+          soil = dangerData.soil
         }
-        earthquake = homeViewModel.earthquake.collectAsState().value
+        is DangerData.EarthquakeData -> {
+          earthquake = dangerData.earthquake
+        }
+        is DangerData.NoDataYet,
+        null -> {
+          LaunchedEffect(key1 = Unit) {
+            if (userMarkerState.dangerUserChoice.value == DangerOptions.Soil) {
+              homeViewModel.retrieveSoil(
+                DangerDTO(
+                  userMarkerState.clickedMarker.value.latitude,
+                  userMarkerState.clickedMarker.value.longitude,
+                )
+              )
+            } else if (userMarkerState.dangerUserChoice.value == DangerOptions.Earthquake) {
+              homeViewModel.retrieveEarthquake(
+                DangerDTO(
+                  userMarkerState.clickedMarker.value.latitude,
+                  userMarkerState.clickedMarker.value.longitude,
+                )
+              )
+            }
+          }
+        }
       }
-      userMarkerState.mapMarkersToDangers[userMarkerState.clickedMarker.value] =
-        dangerType(earthquake)
-      EarthquakeDataContent(earthquake = earthquake)
-      userMarkerState.topBarTitleText.value = "Earthquake"
+      soil?.let {
+        SoilDataContent(soil = it)
+        userMarkerState.topBarTitleText.value = "Soil"
+      }
+      earthquake?.let {
+        EarthquakeDataContent(earthquake = it)
+        userMarkerState.topBarTitleText.value = "Earthquake"
+      }
     }
   }
 }
@@ -283,9 +289,7 @@ fun BottomBar(homeViewModel: HomeViewModel, bottomsheetState: BottomSheetScaffol
           selected = false,
           onClick = {
             // Remove marker from the collection of markers
-            userMarkerState.mapMarkersToDangers.keys.removeIf {
-              it == userMarkerState.clickedMarker.value
-            }
+            homeViewModel.removeDangerByLatLng(userMarkerState.clickedMarker.value)
             userMarkerState.clickedMarker.value = userMarkerState.initialPoisition
           },
         )
