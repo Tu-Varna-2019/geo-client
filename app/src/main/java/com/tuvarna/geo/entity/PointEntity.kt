@@ -1,9 +1,13 @@
 package com.tuvarna.geo.entity
 
+import android.annotation.SuppressLint
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import com.google.android.gms.maps.model.LatLng
+import com.tuvarna.geo.rest_api.models.Earthquake
 import com.tuvarna.geo.rest_api.models.Soil
+import java.io.InvalidClassException
 import kotlin.math.sqrt
 
 private const val EARTHRADIUS = 6371000
@@ -46,10 +50,10 @@ class PointEntity(var position: LatLng) {
   }
 }
 
+@SuppressLint("MutableCollectionMutableState")
 class UserMarkerState {
-  // var mapMarkersToDangers = mutableMapOf<LatLng, Soil>()
+  var mapMarkersToDangers = mutableStateMapOf<LatLng, DangerType<*>>()
   val initialPoisition: LatLng = LatLng(0.0, 0.0)
-  var markerPositions = mutableStateOf(listOf<LatLng>())
   var clickedMarker = mutableStateOf(initialPoisition)
   var topBarTitleText = mutableStateOf("Geo")
   var dangerUserChoice = mutableStateOf(DangerOptions.None)
@@ -58,9 +62,8 @@ class UserMarkerState {
     return !clickedMarker.value.equals(initialPoisition)
   }
 
-  fun isSoilAlreadyRetrieved(): Soil? {
-    //  return mapMarkersToDangers[clickedMarker.value]
-    return null
+  inline fun <reified T> isDangerAlreadyRetrieved(): T? {
+    return mapMarkersToDangers[clickedMarker.value]?.getDanger() as? T
   }
 }
 
@@ -68,5 +71,22 @@ enum class DangerOptions {
   None,
   Soil,
   Earthquake,
-  // Details,
 }
+
+inline fun <reified T> dangerType(danger: T): DangerType<T> {
+  when (danger) {
+    is Soil,
+    is Earthquake -> return DangerType(danger)
+    else -> throw InvalidClassException("Error, data type is invalid!")
+  }
+}
+
+class DangerType<T>(private val danger: T) {
+  fun getDanger(): T {
+    return danger
+  }
+}
+
+data class SoilData(val latLng: LatLng, val soil: Soil)
+
+data class EarthquakeData(val latLng: LatLng, val earthquake: Earthquake)

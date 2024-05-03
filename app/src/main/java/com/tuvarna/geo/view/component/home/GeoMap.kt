@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.BottomSheetScaffoldState
@@ -29,7 +30,6 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -48,9 +48,12 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 import com.tuvarna.geo.R
 import com.tuvarna.geo.entity.DangerOptions
+import com.tuvarna.geo.entity.DangerType
 import com.tuvarna.geo.entity.PointEntity
 import com.tuvarna.geo.entity.UserMarkerState
+import com.tuvarna.geo.entity.dangerType
 import com.tuvarna.geo.rest_api.models.DangerDTO
+import com.tuvarna.geo.rest_api.models.Earthquake
 import com.tuvarna.geo.rest_api.models.Soil
 import com.tuvarna.geo.view.component.accessibility.LoadingIndicator
 import com.tuvarna.geo.view.theme.MapsTheme
@@ -59,7 +62,6 @@ import timber.log.Timber
 
 private val userMarkerState: UserMarkerState = UserMarkerState()
 private val uiColorStyle: Color = Color(151, 212, 168)
-private var soil = mutableStateOf<Soil>(Soil())
 
 @SuppressLint("RestrictedApi")
 @Composable
@@ -75,32 +77,32 @@ fun GeoMap(navController: NavController) {
         properties = MapProperties(mapType = MapType.TERRAIN),
         uiSettings = MapUiSettings(compassEnabled = false),
         onMapLongClick = { latLng ->
-          userMarkerState.markerPositions.value += latLng
+          userMarkerState.mapMarkersToDangers[latLng] = DangerType(null)
           userMarkerState.clickedMarker.value = latLng
           cameraPositionState.move(CameraUpdateFactory.newLatLng(latLng))
           userMarkerState.topBarTitleText.value = "Choose a type"
           Timber.d("LatLng was invoked ${latLng}")
         },
       ) {
-        userMarkerState.markerPositions.value.forEach { position ->
+        userMarkerState.mapMarkersToDangers.forEach { (position, datatype) ->
           val pointEntity: PointEntity = PointEntity(position)
 
           when (userMarkerState.dangerUserChoice.value) {
             DangerOptions.Soil -> {
-              val soil = homeViewModel.soil.collectAsState().value
-              if (soil.sqkm != null && soil.domsoi != null)
-                PolygonDrawing(
-                  PointEntity(position),
-                  soil.sqkm,
-                  pointEntity.getColorToSoilType(soil.domsoi),
-                )
+              val soil = datatype.getDanger() as? Soil
+              if (soil?.sqkm != null && soil.domsoi != null) {
+                Timber.d("Soil type of polygon")
+                PolygonDrawing(pointEntity, soil.sqkm, pointEntity.getColorToSoilType(soil.domsoi))
+              }
             }
             DangerOptions.Earthquake -> {
-              val earthquake = homeViewModel.earthquake.collectAsState().value
-              if (earthquake.dn != null) PolygonDrawing(PointEntity(position), earthquake.dn * 10.0)
+              val earthquake = datatype.getDanger() as? Earthquake
+              if (earthquake?.dn != null) PolygonDrawing(pointEntity, earthquake.dn * 10.0)
             }
             else -> {}
           }
+
+          Timber.d("Marker was invoked: ${position.latitude},${position.longitude}")
           Marker(
             state = rememberMarkerState(position = position),
             onClick = {
@@ -170,31 +172,40 @@ fun DangerBottomBarContent(homeViewModel: HomeViewModel) {
       }
     }
     DangerOptions.Soil -> {
-
-      LaunchedEffect(key1 = Unit) {
-        homeViewModel.retrieveSoil(
-          DangerDTO(
-            userMarkerState.clickedMarker.value.latitude,
-            userMarkerState.clickedMarker.value.longitude,
+      var soil: Soil? = userMarkerState.isDangerAlreadyRetrieved<Soil>()
+      // If soil isn't present in our collection for the location, that the user clicked
+      if (soil == null) {
+        LaunchedEffect(key1 = Unit) {
+          homeViewModel.retrieveSoil(
+            DangerDTO(
+              userMarkerState.clickedMarker.value.latitude,
+              userMarkerState.clickedMarker.value.longitude,
+            )
           )
-        )
+        }
+        soil = homeViewModel.soil.collectAsState().value
       }
-      soil.value = homeViewModel.soil.collectAsState().value
-      // userMarkerState.mapMarkersToDangers[userMarkerState.clickedMarker.value] = soil
-      SoilDataContent(soil = soil.value)
+      userMarkerState.mapMarkersToDangers[userMarkerState.clickedMarker.value] = DangerType(soil)
+      SoilDataContent(soil = soil)
       userMarkerState.topBarTitleText.value = "Soil"
     }
     DangerOptions.Earthquake -> {
-      LaunchedEffect(key1 = Unit) {
-        homeViewModel.retrieveEarthquake(
-          DangerDTO(
-            userMarkerState.clickedMarker.value.latitude,
-            userMarkerState.clickedMarker.value.longitude,
+      var earthquake: Earthquake? = userMarkerState.isDangerAlreadyRetrieved<Earthquake>()
+      // If earthquake isn't present in our collection for the location, that the user clicked
+      if (earthquake == null) {
+        LaunchedEffect(key1 = Unit) {
+          homeViewModel.retrieveEarthquake(
+            DangerDTO(
+              userMarkerState.clickedMarker.value.latitude,
+              userMarkerState.clickedMarker.value.longitude,
+            )
           )
-        )
+        }
+        earthquake = homeViewModel.earthquake.collectAsState().value
       }
-      val earthquake = homeViewModel.earthquake.collectAsState()
-      EarthquakeDataContent(earthquake = earthquake.value)
+      userMarkerState.mapMarkersToDangers[userMarkerState.clickedMarker.value] =
+        dangerType(earthquake)
+      EarthquakeDataContent(earthquake = earthquake)
       userMarkerState.topBarTitleText.value = "Earthquake"
     }
   }
@@ -212,18 +223,18 @@ fun BottomBar(homeViewModel: HomeViewModel, bottomsheetState: BottomSheetScaffol
     modifier = Modifier.fillMaxWidth().padding(16.dp),
   ) {
     Spacer(modifier = Modifier.height(30.dp))
-    //    NavigationBarItem(
-    //      icon = {
-    //        Icon(
-    //          Icons.Filled.ArrowBack,
-    //          contentDescription = null,
-    //          modifier = Modifier.padding(8.dp).size(35.dp),
-    //        )
-    //      },
-    //      label = { Text("Back") },
-    //      selected = false,
-    //      onClick = { /*TODO: add something  */ },
-    //    )
+    NavigationBarItem(
+      icon = {
+        Icon(
+          Icons.Filled.ArrowBack,
+          contentDescription = null,
+          modifier = Modifier.padding(8.dp).size(35.dp),
+        )
+      },
+      label = { Text("Back") },
+      selected = false,
+      onClick = { userMarkerState.dangerUserChoice.value = DangerOptions.None },
+    )
     if (userMarkerState.hasUserClickedMarker()) {
       LaunchedEffect(key1 = Unit) { bottomsheetState.bottomSheetState.expand() }
       NavigationBar(containerColor = Color.Transparent) {
@@ -272,10 +283,9 @@ fun BottomBar(homeViewModel: HomeViewModel, bottomsheetState: BottomSheetScaffol
           selected = false,
           onClick = {
             // Remove marker from the collection of markers
-            userMarkerState.markerPositions.value =
-              userMarkerState.markerPositions.value.filter {
-                it != userMarkerState.clickedMarker.value
-              }
+            userMarkerState.mapMarkersToDangers.keys.removeIf {
+              it == userMarkerState.clickedMarker.value
+            }
             userMarkerState.clickedMarker.value = userMarkerState.initialPoisition
           },
         )

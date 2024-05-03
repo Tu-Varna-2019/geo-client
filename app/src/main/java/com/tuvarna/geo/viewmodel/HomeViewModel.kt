@@ -1,7 +1,9 @@
 package com.tuvarna.geo.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.maps.model.LatLng
 import com.tuvarna.geo.controller.UIFeedback
+import com.tuvarna.geo.entity.SoilData
 import com.tuvarna.geo.repository.ApiPayload
 import com.tuvarna.geo.repository.DangerRepository
 import com.tuvarna.geo.rest_api.models.DangerDTO
@@ -18,7 +20,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(private val dangerRepository: DangerRepository) :
   UIStateViewModel() {
 
-  private val _soil = MutableStateFlow<Soil>(Soil())
+  private val _soil = MutableStateFlow<SoilData>(LatLng(0.00, 0.00), Soil())
   private val _earthquake = MutableStateFlow<Earthquake>(Earthquake())
 
   val soil: StateFlow<Soil> = _soil
