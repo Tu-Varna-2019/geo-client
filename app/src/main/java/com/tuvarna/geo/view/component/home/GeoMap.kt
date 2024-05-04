@@ -30,6 +30,7 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -57,6 +58,7 @@ import com.tuvarna.geo.rest_api.models.Soil
 import com.tuvarna.geo.view.component.accessibility.LoadingIndicator
 import com.tuvarna.geo.view.theme.MapsTheme
 import com.tuvarna.geo.viewmodel.HomeViewModel
+import timber.log.Timber
 
 private val userMarkerState: UserMarkerState = UserMarkerState()
 private val uiColorStyle: Color = Color(151, 212, 168)
@@ -66,6 +68,7 @@ private val uiColorStyle: Color = Color(151, 212, 168)
 fun GeoMap(navController: NavController) {
   val cameraPositionState = rememberCameraPositionState {}
   val homeViewModel = hiltViewModel<HomeViewModel>()
+  val risk by homeViewModel.riskLocations.collectAsState()
 
   Box(Modifier.fillMaxSize()) {
     MapsTheme {
@@ -75,30 +78,29 @@ fun GeoMap(navController: NavController) {
         properties = MapProperties(mapType = MapType.TERRAIN),
         uiSettings = MapUiSettings(compassEnabled = false),
         onMapLongClick = { latLng ->
-            // Check if user is trying to click to an existing marker
-            val nearLocation = homeViewModel.getNearestLocation(latLng)
-            userMarkerState.clickedMarker.value = if (nearLocation != null) {
-                nearLocation
+          // Check if user is trying to click to an existing marker
+          val nearLocation = homeViewModel.getNearestLocation(latLng)
+          userMarkerState.clickedMarker.value =
+            if (nearLocation != null) {
+              nearLocation
             } else {
               homeViewModel.addRiskByLocation(latLng)
-                latLng
+              latLng
             }
           cameraPositionState.move(CameraUpdateFactory.newLatLng(latLng))
           userMarkerState.changeTitle("Choose a type")
         },
       ) {
-        val risk = homeViewModel.riskLocations.collectAsState()
-        risk.value.forEach { (position, datatype) ->
+        risk.forEach { (position, datatype) ->
           val pointEntity = PointEntity(position)
-
-          when (datatype) {
-            is RiskHierarchy.SoilSubHierarchy -> {
+          when (datatype.riskState) {
+            RiskChoices.Soil -> {
               val soil: Soil = datatype.soil
               if (soil.sqkm != null && soil.domsoi != null) {
                 PolygonDrawing(pointEntity, soil.sqkm, pointEntity.getColorToSoilType(soil.domsoi))
               }
             }
-            is RiskHierarchy.EarthquakeSubHierarchy -> {
+            RiskChoices.Earthquake -> {
               val earthquake = datatype.earthquake
               if (earthquake.dn != null) PolygonDrawing(pointEntity, earthquake.dn * 10.0)
             }
@@ -141,9 +143,7 @@ private fun TopBottomBar(homeViewModel: HomeViewModel, navController: NavControl
         title = {
           Row(
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(11.dp),
+            modifier = Modifier.fillMaxWidth().padding(11.dp),
             verticalAlignment = Alignment.CenterVertically,
           ) {
             Text(userMarkerState.topBarTitleText.value, color = uiColorStyle)
@@ -177,9 +177,7 @@ fun BottomBar(homeViewModel: HomeViewModel, bottomSheetState: BottomSheetScaffol
   }
   Row(
     horizontalArrangement = Arrangement.SpaceBetween,
-    modifier = Modifier
-        .fillMaxWidth()
-        .padding(16.dp),
+    modifier = Modifier.fillMaxWidth().padding(16.dp),
   ) {
     Spacer(modifier = Modifier.height(30.dp))
     if (userMarkerState.hasUserClickedMarker()) {
@@ -190,9 +188,7 @@ fun BottomBar(homeViewModel: HomeViewModel, bottomSheetState: BottomSheetScaffol
             Image(
               painter = painterResource(R.drawable.soil),
               contentDescription = null,
-              modifier = Modifier
-                  .padding(8.dp)
-                  .size(35.dp),
+              modifier = Modifier.padding(8.dp).size(35.dp),
             )
           },
           label = { Text("Soil") },
@@ -208,9 +204,7 @@ fun BottomBar(homeViewModel: HomeViewModel, bottomSheetState: BottomSheetScaffol
             Image(
               painter = painterResource(R.drawable.earthquake),
               contentDescription = null,
-              modifier = Modifier
-                  .padding(8.dp)
-                  .size(35.dp),
+              modifier = Modifier.padding(8.dp).size(35.dp),
             )
           },
           label = { Text("Earthquake") },
@@ -227,9 +221,7 @@ fun BottomBar(homeViewModel: HomeViewModel, bottomSheetState: BottomSheetScaffol
             Icon(
               Icons.Filled.Clear,
               contentDescription = null,
-              modifier = Modifier
-                  .padding(8.dp)
-                  .size(35.dp),
+              modifier = Modifier.padding(8.dp).size(35.dp),
             )
           },
           label = { Text("Remove") },
@@ -239,25 +231,23 @@ fun BottomBar(homeViewModel: HomeViewModel, bottomSheetState: BottomSheetScaffol
             userMarkerState.resetMarkerState()
           },
         )
-          if (homeViewModel.riskLocations.value.size  > 1) {
-              NavigationBarItem(
-                  icon = {
-                      Icon(
-                          Icons.Filled.Delete,
-                          contentDescription = null,
-                          modifier = Modifier
-                              .padding(8.dp)
-                              .size(35.dp),
-                      )
-                  },
-                  label = { Text("Clear all") },
-                  selected = false,
-                  onClick = {
-                      homeViewModel.purgeAllRisks()
-                      userMarkerState.resetMarkerState()
-                  },
+        if (homeViewModel.riskLocations.value.size > 1) {
+          NavigationBarItem(
+            icon = {
+              Icon(
+                Icons.Filled.Delete,
+                contentDescription = null,
+                modifier = Modifier.padding(8.dp).size(35.dp),
               )
-          }
+            },
+            label = { Text("Clear all") },
+            selected = false,
+            onClick = {
+              homeViewModel.purgeAllRisks()
+              userMarkerState.resetMarkerState()
+            },
+          )
+        }
       }
     } else {
       Text(text = "Nothing to see here...")
@@ -267,9 +257,10 @@ fun BottomBar(homeViewModel: HomeViewModel, bottomSheetState: BottomSheetScaffol
   }
 }
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun BottomBarContent(homeViewModel: HomeViewModel) {
-  var riskLocations: RiskHierarchy? = null
+  val riskLocations: RiskHierarchy?
   var soil: Soil? = null
   var earthquake: Earthquake? = null
 
@@ -279,39 +270,28 @@ fun BottomBarContent(homeViewModel: HomeViewModel) {
       Box(modifier = Modifier.fillMaxWidth()) { userMarkerState.changeTitle("Choose a type") }
     }
     // If user has chosen a data type
-    RiskChoices.Soil,
-    RiskChoices.Earthquake -> {
-        // First check if the user clicked on a marker with already fetched risk, in order to avoid making a redundant api call
+    RiskChoices.Soil -> {
       riskLocations = homeViewModel.getRiskByLocation(userMarkerState.clickedMarker.value)
 
-
-      when (riskLocations) {
-        is RiskHierarchy.SoilSubHierarchy -> {
-          soil = riskLocations.soil
-        }
-        is RiskHierarchy.EarthquakeSubHierarchy -> {
-          earthquake = riskLocations.earthquake
-        }
-          // If no existing risk data is found, make an api call
-        is RiskHierarchy.NoDataYet,
-        null -> {
-          LaunchedEffect(key1 = Unit) {
-            if (userMarkerState.userChoiceForDataType.value == RiskChoices.Soil) {
-              homeViewModel.retrieveSoil(
-                DangerDTO(
-                  userMarkerState.clickedMarker.value.latitude,
-                  userMarkerState.clickedMarker.value.longitude,
-                )
-              )
-            } else if (userMarkerState.userChoiceForDataType.value == RiskChoices.Earthquake) {
-              homeViewModel.retrieveEarthquake(
-                DangerDTO(
-                  userMarkerState.clickedMarker.value.latitude,
-                  userMarkerState.clickedMarker.value.longitude,
-                )
-              )
-            }
-          }
+      // First check if the user clicked on a marker with already fetched risk, in order to avoid
+      // making a redundant api call
+      if (riskLocations != null && riskLocations.soil != Soil()) {
+        Timber.d("Updating something Soil")
+        homeViewModel.updateRiskStateByLocation(
+          userMarkerState.clickedMarker.value,
+          RiskChoices.Soil,
+        )
+        soil = riskLocations.soil
+      } else
+        // If no existing risk data is found, make an api call
+      {
+        LaunchedEffect(key1 = Unit) {
+          homeViewModel.retrieveSoil(
+            DangerDTO(
+              userMarkerState.clickedMarker.value.latitude,
+              userMarkerState.clickedMarker.value.longitude,
+            )
+          )
         }
       }
       // In here put all of the available data types to visualize the respective table
@@ -319,6 +299,31 @@ fun BottomBarContent(homeViewModel: HomeViewModel) {
         SoilTableContent(soil = it)
         userMarkerState.changeTitle("Soil")
       }
+    }
+    RiskChoices.Earthquake -> {
+      riskLocations = homeViewModel.getRiskByLocation(userMarkerState.clickedMarker.value)
+      // First check if the user clicked on a marker with already fetched risk, in order to avoid
+      // making a redundant api call
+      if (riskLocations != null && riskLocations.earthquake != Earthquake()) {
+        Timber.d("Updating something Earthquake")
+        homeViewModel.updateRiskStateByLocation(
+          userMarkerState.clickedMarker.value,
+          RiskChoices.Earthquake,
+        )
+        earthquake = riskLocations.earthquake
+      } else
+        // If no existing risk data is found, make an api call
+      {
+        LaunchedEffect(key1 = Unit) {
+          homeViewModel.retrieveEarthquake(
+            DangerDTO(
+              userMarkerState.clickedMarker.value.latitude,
+              userMarkerState.clickedMarker.value.longitude,
+            )
+          )
+        }
+      }
+      // In here put all of the available data types to visualize the respective table
       earthquake?.let {
         EarthquakeTableContent(earthquake = it)
         userMarkerState.changeTitle("Earthquake")

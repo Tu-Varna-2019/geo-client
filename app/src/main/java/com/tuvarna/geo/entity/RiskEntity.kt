@@ -9,10 +9,32 @@ enum class RiskChoices {
   Earthquake,
 }
 
-sealed class RiskHierarchy {
-  object NoDataYet : RiskHierarchy()
+class RiskHierarchy(
+  var riskState: RiskChoices = RiskChoices.None,
+  private var _soil: Soil = Soil(),
+  private var _earthquake: Earthquake = Earthquake(),
+) {
+  var soil: Soil
+    get() {
+      riskState = RiskChoices.Soil
+      return _soil
+    }
+    set(value) {
+      _soil = value
+      if (value != Soil()) {
+        riskState = RiskChoices.Soil
+      }
+    }
 
-  data class SoilSubHierarchy(val soil: Soil) : RiskHierarchy()
-
-  data class EarthquakeSubHierarchy(val earthquake: Earthquake) : RiskHierarchy()
+  var earthquake: Earthquake
+    get() {
+      riskState = RiskChoices.Earthquake
+      return _earthquake
+    }
+    set(value) {
+      _earthquake = value
+      if (value != Earthquake()) {
+        riskState = RiskChoices.Earthquake
+      }
+    }
 }
