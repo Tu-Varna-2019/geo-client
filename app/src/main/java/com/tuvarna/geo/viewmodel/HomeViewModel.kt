@@ -7,8 +7,8 @@ import com.tuvarna.geo.entity.RiskChoices
 import com.tuvarna.geo.entity.RiskHierarchy
 import com.tuvarna.geo.repository.ApiPayload
 import com.tuvarna.geo.repository.RiskRepository
-import com.tuvarna.geo.rest_api.models.DangerDTO
 import com.tuvarna.geo.rest_api.models.Earthquake
+import com.tuvarna.geo.rest_api.models.RiskDTO
 import com.tuvarna.geo.rest_api.models.Soil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -61,7 +61,7 @@ class HomeViewModel @Inject constructor(private val dangerRepository: RiskReposi
     }
   }
 
-  fun retrieveSoil(point: DangerDTO) {
+  fun retrieveSoil(point: RiskDTO) {
     Timber.d(
       "User clicked the map with coordinates %.6f, %.6f  and chose a soil type! Moving on...",
       point.latitude,
@@ -89,7 +89,7 @@ class HomeViewModel @Inject constructor(private val dangerRepository: RiskReposi
     }
   }
 
-  fun retrieveEarthquake(point: DangerDTO) {
+  fun retrieveEarthquake(point: RiskDTO) {
     Timber.d(
       "User clicked the map with coordinates %.6f , %.6f and chose a earthquake! Moving on...",
       point.latitude,

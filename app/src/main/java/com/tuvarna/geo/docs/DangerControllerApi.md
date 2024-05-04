@@ -1,11 +1,11 @@
-# DangerControllerApi
+# RiskControllerApi
 
 All URIs are relative to *http://localhost:8080/api.tuvarna.geo.com/v1*
 
- Method                                                    | HTTP request                | Description
------------------------------------------------------------|-----------------------------|---------------------
- [**getEarthquake**](DangerControllerApi.md#getEarthquake) | **POST** /danger/earthquake | Retrieve earthquake
- [**getSoil**](DangerControllerApi.md#getSoil)             | **POST** /risk/soil         | Retrieve soil type
+ Method                                                  | HTTP request                | Description
+---------------------------------------------------------|-----------------------------|---------------------
+ [**getEarthquake**](RiskControllerApi.md#getEarthquake) | **POST** /danger/earthquake | Retrieve earthquake
+ [**getSoil**](RiskControllerApi.md#getSoil)             | **POST** /risk/soil         | Retrieve soil type
 
 <a id="getEarthquake"></a>
 
@@ -22,25 +22,25 @@ Retrieve earthquake
 //import com.tuvarna.geo.rest_api.infrastructure.*
 //import com.tuvarna.geo.rest_api.models.*
 
-val apiInstance = DangerControllerApi()
-val dangerDTO : DangerDTO =  // DangerDTO |
-try {
-    val result : RestApiResponseEarthquake = apiInstance.getEarthquake(dangerDTO)
-    println(result)
-} catch (e: ClientException) {
-    println("4xx response calling DangerControllerApi#getEarthquake")
-    e.printStackTrace()
-} catch (e: ServerException) {
-    println("5xx response calling DangerControllerApi#getEarthquake")
-    e.printStackTrace()
-}
+val apiInstance = RiskControllerApi()
+val dangerDTO: RiskDTO =  // RiskDTO |
+    try {
+        val result: RestApiResponseEarthquake = apiInstance.getEarthquake(dangerDTO)
+        println(result)
+    } catch (e: ClientException) {
+        println("4xx response calling RiskControllerApi#getEarthquake")
+        e.printStackTrace()
+    } catch (e: ServerException) {
+        println("5xx response calling RiskControllerApi#getEarthquake")
+        e.printStackTrace()
+    }
 ```
 
 ### Parameters
 
- Name          | Type                          | Description | Notes
----------------|-------------------------------|-------------|-------
- **dangerDTO** | [**DangerDTO**](DangerDTO.md) |             |
+ Name          | Type                      | Description | Notes
+---------------|---------------------------|-------------|-------
+ **dangerDTO** | [**RiskDTO**](RiskDTO.md) |             |
 
 ### Return type
 
@@ -70,25 +70,25 @@ Retrieve soil type
 //import com.tuvarna.geo.rest_api.infrastructure.*
 //import com.tuvarna.geo.rest_api.models.*
 
-val apiInstance = DangerControllerApi()
-val dangerDTO : DangerDTO =  // DangerDTO |
-try {
-    val result : RestApiResponseSoil = apiInstance.getSoil(dangerDTO)
-    println(result)
-} catch (e: ClientException) {
-    println("4xx response calling DangerControllerApi#getSoil")
-    e.printStackTrace()
-} catch (e: ServerException) {
-    println("5xx response calling DangerControllerApi#getSoil")
-    e.printStackTrace()
-}
+val apiInstance = RiskControllerApi()
+val dangerDTO: RiskDTO =  // RiskDTO |
+    try {
+        val result: RestApiResponseSoil = apiInstance.getSoil(dangerDTO)
+        println(result)
+    } catch (e: ClientException) {
+        println("4xx response calling RiskControllerApi#getSoil")
+        e.printStackTrace()
+    } catch (e: ServerException) {
+        println("5xx response calling RiskControllerApi#getSoil")
+        e.printStackTrace()
+    }
 ```
 
 ### Parameters
 
- Name          | Type                          | Description | Notes
----------------|-------------------------------|-------------|-------
- **dangerDTO** | [**DangerDTO**](DangerDTO.md) |             |
+ Name          | Type                      | Description | Notes
+---------------|---------------------------|-------------|-------
+ **dangerDTO** | [**RiskDTO**](RiskDTO.md) |             |
 
 ### Return type
 

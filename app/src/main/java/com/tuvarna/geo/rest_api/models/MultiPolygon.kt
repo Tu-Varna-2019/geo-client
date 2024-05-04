@@ -31,9 +31,9 @@ import com.squareup.moshi.JsonClass
  * @param envelope 
  * @param factory 
  * @param userData 
+ * @param boundaryDimension 
  * @param geometryType 
  * @param boundary 
- * @param boundaryDimension 
  * @param dimension 
  * @param length 
  * @param empty 
@@ -64,14 +64,14 @@ data class MultiPolygon (
     @Json(name = "userData")
     val userData: kotlin.Any? = null,
 
+    @Json(name = "boundaryDimension")
+    val boundaryDimension: kotlin.Int? = null,
+
     @Json(name = "geometryType")
     val geometryType: kotlin.String? = null,
 
     @Json(name = "boundary")
     val boundary: Geometry? = null,
-
-    @Json(name = "boundaryDimension")
-    val boundaryDimension: kotlin.Int? = null,
 
     @Json(name = "dimension")
     val dimension: kotlin.Int? = null,

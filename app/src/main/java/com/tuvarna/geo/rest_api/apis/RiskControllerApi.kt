@@ -19,9 +19,9 @@ import java.io.IOException
 import okhttp3.OkHttpClient
 import okhttp3.HttpUrl
 
-import com.tuvarna.geo.rest_api.models.DangerDTO
 import com.tuvarna.geo.rest_api.models.RestApiResponseEarthquake
 import com.tuvarna.geo.rest_api.models.RestApiResponseSoil
+import com.tuvarna.geo.rest_api.models.RiskDTO
 
 import com.squareup.moshi.Json
 
@@ -39,7 +39,7 @@ import com.tuvarna.geo.rest_api.infrastructure.ResponseType
 import com.tuvarna.geo.rest_api.infrastructure.Success
 import com.tuvarna.geo.rest_api.infrastructure.toMultiValue
 
-class DangerControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHttpClient = ApiClient.defaultClient) : ApiClient(basePath, client) {
+class RiskControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHttpClient = ApiClient.defaultClient) : ApiClient(basePath, client) {
     companion object {
         @JvmStatic
         val defaultBasePath: String by lazy {
@@ -49,8 +49,8 @@ class DangerControllerApi(basePath: kotlin.String = defaultBasePath, client: OkH
 
     /**
      * Retrieve earthquake
-     *
-     * @param dangerDTO
+     * 
+     * @param riskDTO 
      * @return RestApiResponseEarthquake
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
@@ -60,8 +60,8 @@ class DangerControllerApi(basePath: kotlin.String = defaultBasePath, client: OkH
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun getEarthquake(dangerDTO: DangerDTO) : RestApiResponseEarthquake {
-        val localVarResponse = getEarthquakeWithHttpInfo(dangerDTO = dangerDTO)
+    fun getEarthquake(riskDTO: RiskDTO) : RestApiResponseEarthquake {
+        val localVarResponse = getEarthquakeWithHttpInfo(riskDTO = riskDTO)
 
         return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as RestApiResponseEarthquake
@@ -80,18 +80,18 @@ class DangerControllerApi(basePath: kotlin.String = defaultBasePath, client: OkH
 
     /**
      * Retrieve earthquake
-     *
-     * @param dangerDTO
+     * 
+     * @param riskDTO 
      * @return ApiResponse<RestApiResponseEarthquake?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun getEarthquakeWithHttpInfo(dangerDTO: DangerDTO) : ApiResponse<RestApiResponseEarthquake?> {
-        val localVariableConfig = getEarthquakeRequestConfig(dangerDTO = dangerDTO)
+    fun getEarthquakeWithHttpInfo(riskDTO: RiskDTO) : ApiResponse<RestApiResponseEarthquake?> {
+        val localVariableConfig = getEarthquakeRequestConfig(riskDTO = riskDTO)
 
-        return request<DangerDTO, RestApiResponseEarthquake>(
+        return request<RiskDTO, RestApiResponseEarthquake>(
             localVariableConfig
         )
     }
@@ -99,18 +99,18 @@ class DangerControllerApi(basePath: kotlin.String = defaultBasePath, client: OkH
     /**
      * To obtain the request config of the operation getEarthquake
      *
-     * @param dangerDTO
+     * @param riskDTO 
      * @return RequestConfig
      */
-    fun getEarthquakeRequestConfig(dangerDTO: DangerDTO) : RequestConfig<DangerDTO> {
-        val localVariableBody = dangerDTO
+    fun getEarthquakeRequestConfig(riskDTO: RiskDTO) : RequestConfig<RiskDTO> {
+        val localVariableBody = riskDTO
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
         localVariableHeaders["Content-Type"] = "application/json"
-
+        
         return RequestConfig(
             method = RequestMethod.POST,
-            path = "/danger/earthquake",
+            path = "/risk/earthquake",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = false,
@@ -120,8 +120,8 @@ class DangerControllerApi(basePath: kotlin.String = defaultBasePath, client: OkH
 
     /**
      * Retrieve soil type
-     *
-     * @param dangerDTO
+     * 
+     * @param riskDTO 
      * @return RestApiResponseSoil
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
@@ -131,8 +131,8 @@ class DangerControllerApi(basePath: kotlin.String = defaultBasePath, client: OkH
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun getSoil(dangerDTO: DangerDTO) : RestApiResponseSoil {
-        val localVarResponse = getSoilWithHttpInfo(dangerDTO = dangerDTO)
+    fun getSoil(riskDTO: RiskDTO) : RestApiResponseSoil {
+        val localVarResponse = getSoilWithHttpInfo(riskDTO = riskDTO)
 
         return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as RestApiResponseSoil
@@ -151,18 +151,18 @@ class DangerControllerApi(basePath: kotlin.String = defaultBasePath, client: OkH
 
     /**
      * Retrieve soil type
-     *
-     * @param dangerDTO
+     * 
+     * @param riskDTO 
      * @return ApiResponse<RestApiResponseSoil?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun getSoilWithHttpInfo(dangerDTO: DangerDTO) : ApiResponse<RestApiResponseSoil?> {
-        val localVariableConfig = getSoilRequestConfig(dangerDTO = dangerDTO)
+    fun getSoilWithHttpInfo(riskDTO: RiskDTO) : ApiResponse<RestApiResponseSoil?> {
+        val localVariableConfig = getSoilRequestConfig(riskDTO = riskDTO)
 
-        return request<DangerDTO, RestApiResponseSoil>(
+        return request<RiskDTO, RestApiResponseSoil>(
             localVariableConfig
         )
     }
@@ -170,18 +170,18 @@ class DangerControllerApi(basePath: kotlin.String = defaultBasePath, client: OkH
     /**
      * To obtain the request config of the operation getSoil
      *
-     * @param dangerDTO
+     * @param riskDTO 
      * @return RequestConfig
      */
-    fun getSoilRequestConfig(dangerDTO: DangerDTO) : RequestConfig<DangerDTO> {
-        val localVariableBody = dangerDTO
+    fun getSoilRequestConfig(riskDTO: RiskDTO) : RequestConfig<RiskDTO> {
+        val localVariableBody = riskDTO
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
         localVariableHeaders["Content-Type"] = "application/json"
-
+        
         return RequestConfig(
             method = RequestMethod.POST,
-            path = "/danger/soil",
+            path = "/risk/soil",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = false,
