@@ -3,8 +3,6 @@ build.gradle
 docs/AuthControllerApi.md
 docs/Coordinate.md
 docs/CoordinateSequence.md
-docs/DangerControllerApi.md
-docs/DangerDTO.md
 docs/Earthquake.md
 docs/Envelope.md
 docs/Geometry.md
@@ -19,6 +17,8 @@ docs/RestApiResponseEarthquake.md
 docs/RestApiResponseLoggedInUserDTO.md
 docs/RestApiResponseSoil.md
 docs/RestApiResponseVoid.md
+docs/RiskControllerApi.md
+docs/RiskDTO.md
 docs/Soil.md
 gradle/wrapper/gradle-wrapper.jar
 gradle/wrapper/gradle-wrapper.properties
@@ -26,7 +26,7 @@ gradlew
 gradlew.bat
 settings.gradle
 src/main/kotlin/com/tuvarna/geo/rest_api/apis/AuthControllerApi.kt
-src/main/kotlin/com/tuvarna/geo/rest_api/apis/DangerControllerApi.kt
+src/main/kotlin/com/tuvarna/geo/rest_api/apis/RiskControllerApi.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/infrastructure/ApiAbstractions.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/infrastructure/ApiClient.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/infrastructure/ApiResponse.kt
@@ -46,7 +46,6 @@ src/main/kotlin/com/tuvarna/geo/rest_api/infrastructure/URIAdapter.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/infrastructure/UUIDAdapter.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/models/Coordinate.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/models/CoordinateSequence.kt
-src/main/kotlin/com/tuvarna/geo/rest_api/models/DangerDTO.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/models/Earthquake.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/models/Envelope.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/models/Geometry.kt
@@ -61,12 +60,12 @@ src/main/kotlin/com/tuvarna/geo/rest_api/models/RestApiResponseEarthquake.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/models/RestApiResponseLoggedInUserDTO.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/models/RestApiResponseSoil.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/models/RestApiResponseVoid.kt
+src/main/kotlin/com/tuvarna/geo/rest_api/models/RiskDTO.kt
 src/main/kotlin/com/tuvarna/geo/rest_api/models/Soil.kt
 src/test/kotlin/com/tuvarna/geo/rest_api/apis/AuthControllerApiTest.kt
-src/test/kotlin/com/tuvarna/geo/rest_api/apis/DangerControllerApiTest.kt
+src/test/kotlin/com/tuvarna/geo/rest_api/apis/RiskControllerApiTest.kt
 src/test/kotlin/com/tuvarna/geo/rest_api/models/CoordinateSequenceTest.kt
 src/test/kotlin/com/tuvarna/geo/rest_api/models/CoordinateTest.kt
-src/test/kotlin/com/tuvarna/geo/rest_api/models/DangerDTOTest.kt
 src/test/kotlin/com/tuvarna/geo/rest_api/models/EarthquakeTest.kt
 src/test/kotlin/com/tuvarna/geo/rest_api/models/EnvelopeTest.kt
 src/test/kotlin/com/tuvarna/geo/rest_api/models/GeometryFactoryTest.kt
@@ -81,4 +80,5 @@ src/test/kotlin/com/tuvarna/geo/rest_api/models/RestApiResponseEarthquakeTest.kt
 src/test/kotlin/com/tuvarna/geo/rest_api/models/RestApiResponseLoggedInUserDTOTest.kt
 src/test/kotlin/com/tuvarna/geo/rest_api/models/RestApiResponseSoilTest.kt
 src/test/kotlin/com/tuvarna/geo/rest_api/models/RestApiResponseVoidTest.kt
+src/test/kotlin/com/tuvarna/geo/rest_api/models/RiskDTOTest.kt
 src/test/kotlin/com/tuvarna/geo/rest_api/models/SoilTest.kt

@@ -6,17 +6,17 @@ servers:
 - url: http://localhost:8080/api.tuvarna.geo.com/v1
   description: Generated server url
 paths:
-  /danger/soil:
+  /risk/soil:
     post:
       tags:
-      - danger-controller
+      - risk-controller
       summary: Retrieve soil type
       operationId: getSoil
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DangerDTO'
+              $ref: '#/components/schemas/RiskDTO'
         required: true
       responses:
         "400":
@@ -43,17 +43,17 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/RestApiResponseSoil'
-  /danger/earthquake:
+  /risk/earthquake:
     post:
       tags:
-      - danger-controller
+      - risk-controller
       summary: Retrieve earthquake
       operationId: getEarthquake
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DangerDTO'
+              $ref: '#/components/schemas/RiskDTO'
         required: true
       responses:
         "400":
@@ -150,7 +150,7 @@ paths:
                 $ref: '#/components/schemas/RestApiResponseLoggedInUserDTO'
 components:
   schemas:
-    DangerDTO:
+    RiskDTO:
       type: object
       properties:
         latitude:
@@ -236,15 +236,13 @@ components:
           type: boolean
         simple:
           type: boolean
-        envelopeInternal:
-          $ref: '#/components/schemas/Envelope'
-        srid:
+        boundaryDimension:
           type: integer
           format: int32
-        precisionModel:
-          $ref: '#/components/schemas/PrecisionModel'
-        rectangle:
-          type: boolean
+        geometryType:
+          type: string
+        boundary:
+          $ref: '#/components/schemas/Geometry'
         numGeometries:
           type: integer
           format: int32
@@ -260,17 +258,19 @@ components:
         area:
           type: number
           format: double
-        geometryType:
-          type: string
-        boundary:
-          $ref: '#/components/schemas/Geometry'
+        envelopeInternal:
+          $ref: '#/components/schemas/Envelope'
+        srid:
+          type: integer
+          format: int32
+        precisionModel:
+          $ref: '#/components/schemas/PrecisionModel'
+        rectangle:
+          type: boolean
         centroid:
           $ref: '#/components/schemas/Point'
         interiorPoint:
           $ref: '#/components/schemas/Point'
-        boundaryDimension:
-          type: integer
-          format: int32
         dimension:
           type: integer
           format: int32
@@ -293,13 +293,13 @@ components:
           $ref: '#/components/schemas/GeometryFactory'
         userData:
           type: object
+        boundaryDimension:
+          type: integer
+          format: int32
         geometryType:
           type: string
         boundary:
           $ref: '#/components/schemas/Geometry'
-        boundaryDimension:
-          type: integer
-          format: int32
         dimension:
           type: integer
           format: int32
@@ -355,19 +355,10 @@ components:
             $ref: '#/components/schemas/Coordinate'
         empty:
           type: boolean
-        simple:
-          type: boolean
-        coordinate:
-          $ref: '#/components/schemas/Coordinate'
         coordinateSequence:
           $ref: '#/components/schemas/CoordinateSequence'
-        numPoints:
-          type: integer
-          format: int32
-        geometryType:
-          type: string
-        boundary:
-          $ref: '#/components/schemas/Geometry'
+        simple:
+          type: boolean
         x:
           type: number
           format: double
@@ -375,6 +366,15 @@ components:
           type: number
           format: double
         boundaryDimension:
+          type: integer
+          format: int32
+        geometryType:
+          type: string
+        boundary:
+          $ref: '#/components/schemas/Geometry'
+        coordinate:
+          $ref: '#/components/schemas/Coordinate'
+        numPoints:
           type: integer
           format: int32
         dimension:
@@ -385,6 +385,12 @@ components:
           format: double
         valid:
           type: boolean
+        numGeometries:
+          type: integer
+          format: int32
+        area:
+          type: number
+          format: double
         envelopeInternal:
           $ref: '#/components/schemas/Envelope'
         srid:
@@ -394,12 +400,6 @@ components:
           $ref: '#/components/schemas/PrecisionModel'
         rectangle:
           type: boolean
-        numGeometries:
-          type: integer
-          format: int32
-        area:
-          type: number
-          format: double
         centroid:
           $ref: '#/components/schemas/Point'
         interiorPoint:

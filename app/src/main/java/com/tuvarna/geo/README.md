@@ -47,8 +47,8 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *AuthControllerApi* | [**create**](docs/AuthControllerApi.md#create) | **POST** /auth/register | Register a new user
 *AuthControllerApi* | [**login**](docs/AuthControllerApi.md#login) | **POST** /auth/login | Logging on a new user
-*DangerControllerApi* | [**getEarthquake**](docs/DangerControllerApi.md#getearthquake) | **POST** /danger/earthquake | Retrieve earthquake
-*DangerControllerApi* | [**getSoil**](docs/DangerControllerApi.md#getsoil) | **POST** /danger/soil | Retrieve soil type
+*RiskControllerApi* | [**getEarthquake**](docs/RiskControllerApi.md#getearthquake) | **POST** /risk/earthquake | Retrieve earthquake
+*RiskControllerApi* | [**getSoil**](docs/RiskControllerApi.md#getsoil) | **POST** /risk/soil | Retrieve soil type
 
 
 <a id="documentation-for-models"></a>
@@ -56,7 +56,6 @@ Class | Method | HTTP request | Description
 
  - [com.tuvarna.geo.rest_api.models.Coordinate](docs/Coordinate.md)
  - [com.tuvarna.geo.rest_api.models.CoordinateSequence](docs/CoordinateSequence.md)
- - [com.tuvarna.geo.rest_api.models.DangerDTO](docs/DangerDTO.md)
  - [com.tuvarna.geo.rest_api.models.Earthquake](docs/Earthquake.md)
  - [com.tuvarna.geo.rest_api.models.Envelope](docs/Envelope.md)
  - [com.tuvarna.geo.rest_api.models.Geometry](docs/Geometry.md)
@@ -71,6 +70,7 @@ Class | Method | HTTP request | Description
  - [com.tuvarna.geo.rest_api.models.RestApiResponseLoggedInUserDTO](docs/RestApiResponseLoggedInUserDTO.md)
  - [com.tuvarna.geo.rest_api.models.RestApiResponseSoil](docs/RestApiResponseSoil.md)
  - [com.tuvarna.geo.rest_api.models.RestApiResponseVoid](docs/RestApiResponseVoid.md)
+ - [com.tuvarna.geo.rest_api.models.RiskDTO](docs/RiskDTO.md)
  - [com.tuvarna.geo.rest_api.models.Soil](docs/Soil.md)
 
 

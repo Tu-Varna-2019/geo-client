@@ -33,24 +33,24 @@ import com.squareup.moshi.JsonClass
  * @param userData 
  * @param coordinates 
  * @param empty 
- * @param simple 
- * @param coordinate 
  * @param coordinateSequence 
- * @param numPoints 
- * @param geometryType 
- * @param boundary 
+ * @param simple 
  * @param x 
  * @param y 
  * @param boundaryDimension 
+ * @param geometryType 
+ * @param boundary 
+ * @param coordinate 
+ * @param numPoints 
  * @param dimension 
  * @param length 
  * @param valid 
+ * @param numGeometries 
+ * @param area 
  * @param envelopeInternal 
  * @param srid 
  * @param precisionModel 
  * @param rectangle 
- * @param numGeometries 
- * @param area 
  * @param centroid 
  * @param interiorPoint 
  */
@@ -73,23 +73,11 @@ data class Point (
     @Json(name = "empty")
     val empty: kotlin.Boolean? = null,
 
-    @Json(name = "simple")
-    val simple: kotlin.Boolean? = null,
-
-    @Json(name = "coordinate")
-    val coordinate: Coordinate? = null,
-
     @Json(name = "coordinateSequence")
     val coordinateSequence: CoordinateSequence? = null,
 
-    @Json(name = "numPoints")
-    val numPoints: kotlin.Int? = null,
-
-    @Json(name = "geometryType")
-    val geometryType: kotlin.String? = null,
-
-    @Json(name = "boundary")
-    val boundary: Geometry? = null,
+    @Json(name = "simple")
+    val simple: kotlin.Boolean? = null,
 
     @Json(name = "x")
     val x: kotlin.Double? = null,
@@ -100,6 +88,18 @@ data class Point (
     @Json(name = "boundaryDimension")
     val boundaryDimension: kotlin.Int? = null,
 
+    @Json(name = "geometryType")
+    val geometryType: kotlin.String? = null,
+
+    @Json(name = "boundary")
+    val boundary: Geometry? = null,
+
+    @Json(name = "coordinate")
+    val coordinate: Coordinate? = null,
+
+    @Json(name = "numPoints")
+    val numPoints: kotlin.Int? = null,
+
     @Json(name = "dimension")
     val dimension: kotlin.Int? = null,
 
@@ -108,6 +108,12 @@ data class Point (
 
     @Json(name = "valid")
     val valid: kotlin.Boolean? = null,
+
+    @Json(name = "numGeometries")
+    val numGeometries: kotlin.Int? = null,
+
+    @Json(name = "area")
+    val area: kotlin.Double? = null,
 
     @Json(name = "envelopeInternal")
     val envelopeInternal: Envelope? = null,
@@ -120,12 +126,6 @@ data class Point (
 
     @Json(name = "rectangle")
     val rectangle: kotlin.Boolean? = null,
-
-    @Json(name = "numGeometries")
-    val numGeometries: kotlin.Int? = null,
-
-    @Json(name = "area")
-    val area: kotlin.Double? = null,
 
     @Json(name = "centroid")
     val centroid: Point? = null,

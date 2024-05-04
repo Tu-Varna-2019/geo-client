@@ -1,8 +1,8 @@
 package com.tuvarna.geo.repository
 
-import com.tuvarna.geo.rest_api.apis.DangerControllerApi
-import com.tuvarna.geo.rest_api.models.DangerDTO
+import com.tuvarna.geo.rest_api.apis.RiskControllerApi
 import com.tuvarna.geo.rest_api.models.Earthquake
+import com.tuvarna.geo.rest_api.models.RiskDTO
 import com.tuvarna.geo.rest_api.models.Soil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -11,9 +11,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DangerRepository @Inject constructor(private val dangerApi: DangerControllerApi) :
+class RiskRepository @Inject constructor(private val dangerApi: RiskControllerApi) :
   BaseRepository {
-  suspend fun getSoil(point: DangerDTO): ApiPayload<Soil> {
+  suspend fun getSoil(point: RiskDTO): ApiPayload<Soil> {
     return withContext(Dispatchers.IO) {
       try {
         Timber.d("Sending point latitude/longitude: %s", point)
@@ -27,7 +27,7 @@ class DangerRepository @Inject constructor(private val dangerApi: DangerControll
     }
   }
 
-  suspend fun getEarthquake(point: DangerDTO): ApiPayload<Earthquake> {
+  suspend fun getEarthquake(point: RiskDTO): ApiPayload<Earthquake> {
     return withContext(Dispatchers.IO) {
       try {
         Timber.d("Sending point latitude/longitude: %s", point)

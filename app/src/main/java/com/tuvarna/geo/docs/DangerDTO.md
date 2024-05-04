@@ -1,11 +1,11 @@
-
-# DangerDTO
+# RiskDTO
 
 ## Properties
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**latitude** | **kotlin.Double** |  |  [optional]
-**longitude** | **kotlin.Double** |  |  [optional]
+
+ Name          | Type              | Description | Notes
+---------------|-------------------|-------------|------------
+ **latitude**  | **kotlin.Double** |             | [optional]
+ **longitude** | **kotlin.Double** |             | [optional]
 
 
 
