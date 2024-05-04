@@ -35,13 +35,8 @@ class HomeViewModel @Inject constructor(private val dangerRepository: RiskReposi
     riskHierarchy.riskState = riskChoices
     _riskLocations.update { map -> map + (latLng to riskHierarchy) }
 
-    /* Bug: This part solves the problem regarding the recomposition of the _riskLocations
-    to properly re-add the polygon if the user tries to re-choose the first risk type
-    (i.e he start from: 1.Soil, 2.Earthquake, 3.Soil).
-    However it also introduces another bug, where after that action the  snackbar manager won't appear for future marker creations, due to the mutableStateFlow.value.
-     */
-    if (mutableStateFlow.value.state != UIFeedback.States.Nothing)
-      mutableStateFlow.value = UIFeedback(state = UIFeedback.States.Nothing)
+    if (mutableStateFlow.value.state != UIFeedback.States.Success)
+      mutableStateFlow.value = UIFeedback(state = UIFeedback.States.Success)
   }
 
   fun getRiskByLocation(latLng: LatLng): RiskHierarchy? {

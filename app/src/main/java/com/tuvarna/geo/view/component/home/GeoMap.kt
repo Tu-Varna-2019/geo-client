@@ -58,7 +58,6 @@ import com.tuvarna.geo.rest_api.models.Soil
 import com.tuvarna.geo.view.component.accessibility.LoadingIndicator
 import com.tuvarna.geo.view.theme.MapsTheme
 import com.tuvarna.geo.viewmodel.HomeViewModel
-import timber.log.Timber
 
 private val userMarkerState: UserMarkerState = UserMarkerState()
 private val uiColorStyle: Color = Color(151, 212, 168)
@@ -275,8 +274,11 @@ fun BottomBarContent(homeViewModel: HomeViewModel) {
 
       // First check if the user clicked on a marker with already fetched risk, in order to avoid
       // making a redundant api call
-      if (riskLocations != null && riskLocations.soil != Soil()) {
-        Timber.d("Updating something Soil")
+      if (
+        riskLocations != null &&
+          riskLocations.riskState != RiskChoices.None &&
+          riskLocations.soil != Soil()
+      ) {
         homeViewModel.updateRiskStateByLocation(
           userMarkerState.clickedMarker.value,
           RiskChoices.Soil,
@@ -304,8 +306,11 @@ fun BottomBarContent(homeViewModel: HomeViewModel) {
       riskLocations = homeViewModel.getRiskByLocation(userMarkerState.clickedMarker.value)
       // First check if the user clicked on a marker with already fetched risk, in order to avoid
       // making a redundant api call
-      if (riskLocations != null && riskLocations.earthquake != Earthquake()) {
-        Timber.d("Updating something Earthquake")
+      if (
+        riskLocations != null &&
+          riskLocations.riskState != RiskChoices.None &&
+          riskLocations.earthquake != Earthquake()
+      ) {
         homeViewModel.updateRiskStateByLocation(
           userMarkerState.clickedMarker.value,
           RiskChoices.Earthquake,
