@@ -123,6 +123,7 @@ class AdminControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHt
     /**
      * Retrieve user logs
      * 
+     * @param userType 
      * @return RestApiResponseListLoggerDTO
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
@@ -132,8 +133,8 @@ class AdminControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHt
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun getLogs() : RestApiResponseListLoggerDTO {
-        val localVarResponse = getLogsWithHttpInfo()
+    fun getLogs(userType: kotlin.String) : RestApiResponseListLoggerDTO {
+        val localVarResponse = getLogsWithHttpInfo(userType = userType)
 
         return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as RestApiResponseListLoggerDTO
@@ -153,14 +154,15 @@ class AdminControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHt
     /**
      * Retrieve user logs
      * 
+     * @param userType 
      * @return ApiResponse<RestApiResponseListLoggerDTO?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun getLogsWithHttpInfo() : ApiResponse<RestApiResponseListLoggerDTO?> {
-        val localVariableConfig = getLogsRequestConfig()
+    fun getLogsWithHttpInfo(userType: kotlin.String) : ApiResponse<RestApiResponseListLoggerDTO?> {
+        val localVariableConfig = getLogsRequestConfig(userType = userType)
 
         return request<Unit, RestApiResponseListLoggerDTO>(
             localVariableConfig
@@ -170,16 +172,17 @@ class AdminControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHt
     /**
      * To obtain the request config of the operation getLogs
      *
+     * @param userType 
      * @return RequestConfig
      */
-    fun getLogsRequestConfig() : RequestConfig<Unit> {
+    fun getLogsRequestConfig(userType: kotlin.String) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
         
         return RequestConfig(
             method = RequestMethod.GET,
-            path = "/admin/fetch/logs",
+            path = "/admin/fetch/logs/{userType}".replace("{"+"userType"+"}", encodeURIComponent(userType.toString())),
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = false,
@@ -190,6 +193,7 @@ class AdminControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHt
     /**
      * Save log
      * 
+     * @param userType 
      * @param loggerDTO 
      * @return RestApiResponseVoid
      * @throws IllegalStateException If the request is not correctly configured
@@ -200,8 +204,8 @@ class AdminControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHt
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun saveLog(loggerDTO: LoggerDTO) : RestApiResponseVoid {
-        val localVarResponse = saveLogWithHttpInfo(loggerDTO = loggerDTO)
+    fun saveLog(userType: kotlin.String, loggerDTO: LoggerDTO) : RestApiResponseVoid {
+        val localVarResponse = saveLogWithHttpInfo(userType = userType, loggerDTO = loggerDTO)
 
         return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as RestApiResponseVoid
@@ -221,6 +225,7 @@ class AdminControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHt
     /**
      * Save log
      * 
+     * @param userType 
      * @param loggerDTO 
      * @return ApiResponse<RestApiResponseVoid?>
      * @throws IllegalStateException If the request is not correctly configured
@@ -228,8 +233,8 @@ class AdminControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHt
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun saveLogWithHttpInfo(loggerDTO: LoggerDTO) : ApiResponse<RestApiResponseVoid?> {
-        val localVariableConfig = saveLogRequestConfig(loggerDTO = loggerDTO)
+    fun saveLogWithHttpInfo(userType: kotlin.String, loggerDTO: LoggerDTO) : ApiResponse<RestApiResponseVoid?> {
+        val localVariableConfig = saveLogRequestConfig(userType = userType, loggerDTO = loggerDTO)
 
         return request<LoggerDTO, RestApiResponseVoid>(
             localVariableConfig
@@ -239,10 +244,11 @@ class AdminControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHt
     /**
      * To obtain the request config of the operation saveLog
      *
+     * @param userType 
      * @param loggerDTO 
      * @return RequestConfig
      */
-    fun saveLogRequestConfig(loggerDTO: LoggerDTO) : RequestConfig<LoggerDTO> {
+    fun saveLogRequestConfig(userType: kotlin.String, loggerDTO: LoggerDTO) : RequestConfig<LoggerDTO> {
         val localVariableBody = loggerDTO
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
@@ -250,7 +256,7 @@ class AdminControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHt
         
         return RequestConfig(
             method = RequestMethod.POST,
-            path = "/admin/save/log",
+            path = "/admin/save/log/{userType}".replace("{"+"userType"+"}", encodeURIComponent(userType.toString())),
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = false,

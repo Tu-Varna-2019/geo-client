@@ -11,16 +11,17 @@ Name | Type | Description | Notes
 **empty** | **kotlin.Boolean** |  |  [optional]
 **coordinateSequence** | [**CoordinateSequence**](CoordinateSequence.md) |  |  [optional]
 **simple** | **kotlin.Boolean** |  |  [optional]
-**x** | **kotlin.Double** |  |  [optional]
-**y** | **kotlin.Double** |  |  [optional]
 **boundaryDimension** | **kotlin.Int** |  |  [optional]
 **coordinate** | [**Coordinate**](Coordinate.md) |  |  [optional]
+**numPoints** | **kotlin.Int** |  |  [optional]
 **geometryType** | **kotlin.String** |  |  [optional]
 **boundary** | [**Geometry**](Geometry.md) |  |  [optional]
-**numPoints** | **kotlin.Int** |  |  [optional]
+**x** | **kotlin.Double** |  |  [optional]
+**y** | **kotlin.Double** |  |  [optional]
 **dimension** | **kotlin.Int** |  |  [optional]
 **length** | **kotlin.Double** |  |  [optional]
 **valid** | **kotlin.Boolean** |  |  [optional]
+**envelopeInternal** | [**Envelope**](Envelope.md) |  |  [optional]
 **srid** | **kotlin.Int** |  |  [optional]
 **precisionModel** | [**PrecisionModel**](PrecisionModel.md) |  |  [optional]
 **rectangle** | **kotlin.Boolean** |  |  [optional]
@@ -28,7 +29,6 @@ Name | Type | Description | Notes
 **interiorPoint** | [**Point**](Point.md) |  |  [optional]
 **numGeometries** | **kotlin.Int** |  |  [optional]
 **area** | **kotlin.Double** |  |  [optional]
-**envelopeInternal** | [**Envelope**](Envelope.md) |  |  [optional]
 
 
 

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -48,6 +49,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+private val FORBIDDEN_USER_TYPE_ADMIN_PANEL: String = "customer"
+
 @Composable
 fun ProfileView(navController: NavController, userSessionStorage: UserSessionStorage) {
 
@@ -69,7 +72,12 @@ fun ProfileView(navController: NavController, userSessionStorage: UserSessionSto
 
   Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
     Card(
-      modifier = Modifier.padding(0.dp).fillMaxSize().padding(8.dp),
+      modifier =
+        Modifier.padding(0.dp)
+          .fillMaxSize()
+          .padding(8.dp)
+          .wrapContentHeight()
+          .align(Alignment.TopCenter),
       elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
       colors =
         CardDefaults.cardColors(containerColor = Color.White, contentColor = Color.LightGray),
@@ -144,6 +152,14 @@ fun ProfileView(navController: NavController, userSessionStorage: UserSessionSto
         )
 
         Spacer(modifier = Modifier.height(80.dp))
+        if (userProps.userType != FORBIDDEN_USER_TYPE_ADMIN_PANEL)
+          Button(
+            onClick = { navController.navigate("admin") },
+            modifier = Modifier.fillMaxWidth(0.5f).align(Alignment.CenterHorizontally),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(204, 136, 0)),
+          ) {
+            Text(text = "Admin panel")
+          }
 
         Button(
           onClick = { profileViewModel.logout() },

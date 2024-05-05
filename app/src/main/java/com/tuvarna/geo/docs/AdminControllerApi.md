@@ -5,8 +5,8 @@ All URIs are relative to *http://localhost:8080/api.tuvarna.geo.com/v1*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**blockUser**](AdminControllerApi.md#blockUser) | **PUT** /admin/users/{email}/block/{blocked} | Block user
-[**getLogs**](AdminControllerApi.md#getLogs) | **GET** /admin/fetch/logs | Retrieve user logs
-[**saveLog**](AdminControllerApi.md#saveLog) | **POST** /admin/save/log | Save log
+[**getLogs**](AdminControllerApi.md#getLogs) | **GET** /admin/fetch/logs/{userType} | Retrieve user logs
+[**saveLog**](AdminControllerApi.md#saveLog) | **POST** /admin/save/log/{userType} | Save log
 
 
 <a id="blockUser"></a>
@@ -58,7 +58,7 @@ No authorization required
 
 <a id="getLogs"></a>
 # **getLogs**
-> RestApiResponseListLoggerDTO getLogs()
+> RestApiResponseListLoggerDTO getLogs(userType)
 
 Retrieve user logs
 
@@ -69,8 +69,9 @@ Retrieve user logs
 //import com.tuvarna.geo.rest_api.models.*
 
 val apiInstance = AdminControllerApi()
+val userType : kotlin.String = userType_example // kotlin.String | 
 try {
-    val result : RestApiResponseListLoggerDTO = apiInstance.getLogs()
+    val result : RestApiResponseListLoggerDTO = apiInstance.getLogs(userType)
     println(result)
 } catch (e: ClientException) {
     println("4xx response calling AdminControllerApi#getLogs")
@@ -82,7 +83,10 @@ try {
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userType** | **kotlin.String**|  |
 
 ### Return type
 
@@ -99,7 +103,7 @@ No authorization required
 
 <a id="saveLog"></a>
 # **saveLog**
-> RestApiResponseVoid saveLog(loggerDTO)
+> RestApiResponseVoid saveLog(userType, loggerDTO)
 
 Save log
 
@@ -110,9 +114,10 @@ Save log
 //import com.tuvarna.geo.rest_api.models.*
 
 val apiInstance = AdminControllerApi()
+val userType : kotlin.String = userType_example // kotlin.String | 
 val loggerDTO : LoggerDTO =  // LoggerDTO | 
 try {
-    val result : RestApiResponseVoid = apiInstance.saveLog(loggerDTO)
+    val result : RestApiResponseVoid = apiInstance.saveLog(userType, loggerDTO)
     println(result)
 } catch (e: ClientException) {
     println("4xx response calling AdminControllerApi#saveLog")
@@ -127,6 +132,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **userType** | **kotlin.String**|  |
  **loggerDTO** | [**LoggerDTO**](LoggerDTO.md)|  |
 
 ### Return type

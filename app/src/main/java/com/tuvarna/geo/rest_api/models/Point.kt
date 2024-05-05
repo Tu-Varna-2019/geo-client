@@ -35,16 +35,17 @@ import com.squareup.moshi.JsonClass
  * @param empty 
  * @param coordinateSequence 
  * @param simple 
- * @param x 
- * @param y 
  * @param boundaryDimension 
  * @param coordinate 
+ * @param numPoints 
  * @param geometryType 
  * @param boundary 
- * @param numPoints 
+ * @param x 
+ * @param y 
  * @param dimension 
  * @param length 
  * @param valid 
+ * @param envelopeInternal 
  * @param srid 
  * @param precisionModel 
  * @param rectangle 
@@ -52,7 +53,6 @@ import com.squareup.moshi.JsonClass
  * @param interiorPoint 
  * @param numGeometries 
  * @param area 
- * @param envelopeInternal 
  */
 
 
@@ -79,17 +79,14 @@ data class Point (
     @Json(name = "simple")
     val simple: kotlin.Boolean? = null,
 
-    @Json(name = "x")
-    val x: kotlin.Double? = null,
-
-    @Json(name = "y")
-    val y: kotlin.Double? = null,
-
     @Json(name = "boundaryDimension")
     val boundaryDimension: kotlin.Int? = null,
 
     @Json(name = "coordinate")
     val coordinate: Coordinate? = null,
+
+    @Json(name = "numPoints")
+    val numPoints: kotlin.Int? = null,
 
     @Json(name = "geometryType")
     val geometryType: kotlin.String? = null,
@@ -97,8 +94,11 @@ data class Point (
     @Json(name = "boundary")
     val boundary: Geometry? = null,
 
-    @Json(name = "numPoints")
-    val numPoints: kotlin.Int? = null,
+    @Json(name = "x")
+    val x: kotlin.Double? = null,
+
+    @Json(name = "y")
+    val y: kotlin.Double? = null,
 
     @Json(name = "dimension")
     val dimension: kotlin.Int? = null,
@@ -108,6 +108,9 @@ data class Point (
 
     @Json(name = "valid")
     val valid: kotlin.Boolean? = null,
+
+    @Json(name = "envelopeInternal")
+    val envelopeInternal: Envelope? = null,
 
     @Json(name = "srid")
     val srid: kotlin.Int? = null,
@@ -128,10 +131,7 @@ data class Point (
     val numGeometries: kotlin.Int? = null,
 
     @Json(name = "area")
-    val area: kotlin.Double? = null,
-
-    @Json(name = "envelopeInternal")
-    val envelopeInternal: Envelope? = null
+    val area: kotlin.Double? = null
 
 )
 
