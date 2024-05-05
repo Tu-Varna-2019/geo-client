@@ -10,8 +10,8 @@ Name | Type | Description | Notes
 **diameter** | **kotlin.Double** |  |  [optional]
 **minX** | **kotlin.Double** |  |  [optional]
 **maxX** | **kotlin.Double** |  |  [optional]
-**minY** | **kotlin.Double** |  |  [optional]
 **maxY** | **kotlin.Double** |  |  [optional]
+**minY** | **kotlin.Double** |  |  [optional]
 **area** | **kotlin.Double** |  |  [optional]
 
 

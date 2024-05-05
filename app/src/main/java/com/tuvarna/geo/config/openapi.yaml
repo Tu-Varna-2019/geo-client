@@ -6,6 +6,48 @@ servers:
 - url: http://localhost:8080/api.tuvarna.geo.com/v1
   description: Generated server url
 paths:
+  /admin/users/{email}/block/{blocked}:
+    put:
+      tags:
+      - admin-controller
+      summary: Block user
+      operationId: blockUser
+      parameters:
+      - name: email
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: blocked
+        in: path
+        required: true
+        schema:
+          type: boolean
+      responses:
+        "400":
+          description: Bad request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "201":
+          description: User blocked!
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
   /risk/soil:
     post:
       tags:
@@ -148,8 +190,86 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/RestApiResponseLoggedInUserDTO'
+  /admin/save/log:
+    post:
+      tags:
+      - admin-controller
+      summary: Save log
+      operationId: saveLog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoggerDTO'
+        required: true
+      responses:
+        "400":
+          description: Bad request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "201":
+          description: User blocked!
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+  /admin/fetch/logs:
+    get:
+      tags:
+      - admin-controller
+      summary: Retrieve user logs
+      operationId: getLogs
+      responses:
+        "400":
+          description: Bad request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseListLoggerDTO'
+        "201":
+          description: Logs retrieved!
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseListLoggerDTO'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseListLoggerDTO'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseListLoggerDTO'
 components:
   schemas:
+    RestApiResponseVoid:
+      type: object
+      properties:
+        data:
+          type: object
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32
     RiskDTO:
       type: object
       properties:
@@ -209,10 +329,10 @@ components:
         maxX:
           type: number
           format: double
-        minY:
+        maxY:
           type: number
           format: double
-        maxY:
+        minY:
           type: number
           format: double
         area:
@@ -236,30 +356,6 @@ components:
           type: boolean
         simple:
           type: boolean
-        boundaryDimension:
-          type: integer
-          format: int32
-        geometryType:
-          type: string
-        boundary:
-          $ref: '#/components/schemas/Geometry'
-        numGeometries:
-          type: integer
-          format: int32
-        coordinate:
-          $ref: '#/components/schemas/Coordinate'
-        coordinates:
-          type: array
-          items:
-            $ref: '#/components/schemas/Coordinate'
-        numPoints:
-          type: integer
-          format: int32
-        area:
-          type: number
-          format: double
-        envelopeInternal:
-          $ref: '#/components/schemas/Envelope'
         srid:
           type: integer
           format: int32
@@ -271,6 +367,30 @@ components:
           $ref: '#/components/schemas/Point'
         interiorPoint:
           $ref: '#/components/schemas/Point'
+        boundaryDimension:
+          type: integer
+          format: int32
+        coordinate:
+          $ref: '#/components/schemas/Coordinate'
+        coordinates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Coordinate'
+        geometryType:
+          type: string
+        boundary:
+          $ref: '#/components/schemas/Geometry'
+        numGeometries:
+          type: integer
+          format: int32
+        numPoints:
+          type: integer
+          format: int32
+        area:
+          type: number
+          format: double
+        envelopeInternal:
+          $ref: '#/components/schemas/Envelope'
         dimension:
           type: integer
           format: int32
@@ -308,15 +428,15 @@ components:
           format: double
         empty:
           type: boolean
-        numGeometries:
-          type: integer
-          format: int32
         coordinate:
           $ref: '#/components/schemas/Coordinate'
         coordinates:
           type: array
           items:
             $ref: '#/components/schemas/Coordinate'
+        numGeometries:
+          type: integer
+          format: int32
         numPoints:
           type: integer
           format: int32
@@ -327,8 +447,6 @@ components:
           type: boolean
         simple:
           type: boolean
-        envelopeInternal:
-          $ref: '#/components/schemas/Envelope'
         srid:
           type: integer
           format: int32
@@ -340,6 +458,8 @@ components:
           $ref: '#/components/schemas/Point'
         interiorPoint:
           $ref: '#/components/schemas/Point'
+        envelopeInternal:
+          $ref: '#/components/schemas/Envelope'
     Point:
       type: object
       properties:
@@ -368,12 +488,12 @@ components:
         boundaryDimension:
           type: integer
           format: int32
+        coordinate:
+          $ref: '#/components/schemas/Coordinate'
         geometryType:
           type: string
         boundary:
           $ref: '#/components/schemas/Geometry'
-        coordinate:
-          $ref: '#/components/schemas/Coordinate'
         numPoints:
           type: integer
           format: int32
@@ -385,14 +505,6 @@ components:
           format: double
         valid:
           type: boolean
-        numGeometries:
-          type: integer
-          format: int32
-        area:
-          type: number
-          format: double
-        envelopeInternal:
-          $ref: '#/components/schemas/Envelope'
         srid:
           type: integer
           format: int32
@@ -404,6 +516,14 @@ components:
           $ref: '#/components/schemas/Point'
         interiorPoint:
           $ref: '#/components/schemas/Point'
+        numGeometries:
+          type: integer
+          format: int32
+        area:
+          type: number
+          format: double
+        envelopeInternal:
+          $ref: '#/components/schemas/Envelope'
     PrecisionModel:
       type: object
       properties:
@@ -504,16 +624,6 @@ components:
           type: boolean
         usertype:
           type: string
-    RestApiResponseVoid:
-      type: object
-      properties:
-        data:
-          type: object
-        message:
-          type: string
-        status:
-          type: integer
-          format: int32
     LoginUserDTO:
       type: object
       properties:
@@ -540,6 +650,29 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/LoggedInUserDTO'
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32
+    LoggerDTO:
+      type: object
+      properties:
+        username:
+          type: string
+        event:
+          type: string
+        ip:
+          type: string
+        timestamp:
+          type: string
+    RestApiResponseListLoggerDTO:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoggerDTO'
         message:
           type: string
         status:

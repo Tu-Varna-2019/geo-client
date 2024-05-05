@@ -45,6 +45,9 @@ All URIs are relative to *http://localhost:8080/api.tuvarna.geo.com/v1*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*AdminControllerApi* | [**blockUser**](docs/AdminControllerApi.md#blockuser) | **PUT** /admin/users/{email}/block/{blocked} | Block user
+*AdminControllerApi* | [**getLogs**](docs/AdminControllerApi.md#getlogs) | **GET** /admin/fetch/logs | Retrieve user logs
+*AdminControllerApi* | [**saveLog**](docs/AdminControllerApi.md#savelog) | **POST** /admin/save/log | Save log
 *AuthControllerApi* | [**create**](docs/AuthControllerApi.md#create) | **POST** /auth/register | Register a new user
 *AuthControllerApi* | [**login**](docs/AuthControllerApi.md#login) | **POST** /auth/login | Logging on a new user
 *RiskControllerApi* | [**getEarthquake**](docs/RiskControllerApi.md#getearthquake) | **POST** /risk/earthquake | Retrieve earthquake
@@ -61,12 +64,14 @@ Class | Method | HTTP request | Description
  - [com.tuvarna.geo.rest_api.models.Geometry](docs/Geometry.md)
  - [com.tuvarna.geo.rest_api.models.GeometryFactory](docs/GeometryFactory.md)
  - [com.tuvarna.geo.rest_api.models.LoggedInUserDTO](docs/LoggedInUserDTO.md)
+ - [com.tuvarna.geo.rest_api.models.LoggerDTO](docs/LoggerDTO.md)
  - [com.tuvarna.geo.rest_api.models.LoginUserDTO](docs/LoginUserDTO.md)
  - [com.tuvarna.geo.rest_api.models.MultiPolygon](docs/MultiPolygon.md)
  - [com.tuvarna.geo.rest_api.models.Point](docs/Point.md)
  - [com.tuvarna.geo.rest_api.models.PrecisionModel](docs/PrecisionModel.md)
  - [com.tuvarna.geo.rest_api.models.RegisterUserDTO](docs/RegisterUserDTO.md)
  - [com.tuvarna.geo.rest_api.models.RestApiResponseEarthquake](docs/RestApiResponseEarthquake.md)
+ - [com.tuvarna.geo.rest_api.models.RestApiResponseListLoggerDTO](docs/RestApiResponseListLoggerDTO.md)
  - [com.tuvarna.geo.rest_api.models.RestApiResponseLoggedInUserDTO](docs/RestApiResponseLoggedInUserDTO.md)
  - [com.tuvarna.geo.rest_api.models.RestApiResponseSoil](docs/RestApiResponseSoil.md)
  - [com.tuvarna.geo.rest_api.models.RestApiResponseVoid](docs/RestApiResponseVoid.md)
