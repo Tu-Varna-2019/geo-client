@@ -6,6 +6,8 @@ import com.tuvarna.geo.repository.AdminRepository
 import com.tuvarna.geo.repository.ApiPayload
 import com.tuvarna.geo.rest_api.models.LoggerDTO
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -13,6 +15,9 @@ import javax.inject.Inject
 @HiltViewModel
 class AdminViewModel @Inject constructor(private val adminRepositoy: AdminRepository) :
   UIStateViewModel() {
+
+  private val _userLogs = MutableStateFlow<List<LoggerDTO>>(emptyList())
+  val userLogs = _userLogs.asStateFlow()
 
   fun sendLog(userType: String, loggerDTO: LoggerDTO) {
     Timber.d("%s is sending log %s to the server! Moving on...", userType, loggerDTO)
@@ -42,6 +47,7 @@ class AdminViewModel @Inject constructor(private val adminRepositoy: AdminReposi
       val message =
         when (val result: ApiPayload<Any> = adminRepositoy.getLogs(userType)) {
           is ApiPayload.Success -> {
+            _userLogs.value = (result.data as List<LoggerDTO>?)!!
             returnStatus = UIFeedback.States.Success
             result.message!!
           }

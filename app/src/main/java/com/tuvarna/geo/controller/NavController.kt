@@ -27,11 +27,11 @@ sealed class Screen(val route: String) {
 fun NavController(userSessionStorage: UserSessionStorage) {
   val navController = rememberNavController()
   // TODO: Change startDest to Login
-  NavHost(navController = navController, startDestination = Screen.Home.route) {
+  NavHost(navController = navController, startDestination = Screen.Admin.route) {
     composable(Screen.Login.route) { LoginView(navController) }
     composable(Screen.SignUp.route) { RegisterView(navController) }
     composable(Screen.Home.route) { HomeView(navController, userSessionStorage) }
     composable(Screen.Profile.route) { ProfileView(navController, userSessionStorage) }
-    composable(Screen.Admin.route) { AdminView(navController) }
+    composable(Screen.Admin.route) { AdminView(navController, userSessionStorage) }
   }
 }
