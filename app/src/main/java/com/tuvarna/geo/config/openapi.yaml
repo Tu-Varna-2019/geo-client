@@ -233,6 +233,43 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/RestApiResponseVoid'
+  /admin/fetch/users/{userType}:
+    get:
+      tags:
+      - admin-controller
+      summary: Get all users
+      operationId: getUsers
+      parameters:
+      - name: userType
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "400":
+          description: Bad request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseListUserInfoDTO'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseListUserInfoDTO'
+        "201":
+          description: Users retrieved!
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseListUserInfoDTO'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseListUserInfoDTO'
   /admin/fetch/logs/{userType}:
     get:
       tags:
@@ -305,11 +342,11 @@ components:
           format: double
         valid:
           type: boolean
-        coordinate:
-          $ref: '#/components/schemas/Coordinate'
         m:
           type: number
           format: double
+        coordinate:
+          $ref: '#/components/schemas/Coordinate'
     CoordinateSequence:
       type: object
       properties:
@@ -326,6 +363,9 @@ components:
       properties:
         "null":
           type: boolean
+        area:
+          type: number
+          format: double
         width:
           type: number
           format: double
@@ -347,9 +387,6 @@ components:
         maxY:
           type: number
           format: double
-        area:
-          type: number
-          format: double
     Geometry:
       type: object
       properties:
@@ -368,22 +405,13 @@ components:
           type: boolean
         simple:
           type: boolean
-        envelopeInternal:
-          $ref: '#/components/schemas/Envelope'
-        srid:
-          type: integer
-          format: int32
-        precisionModel:
-          $ref: '#/components/schemas/PrecisionModel'
-        rectangle:
-          type: boolean
-        centroid:
-          $ref: '#/components/schemas/Point'
-        interiorPoint:
-          $ref: '#/components/schemas/Point'
         boundaryDimension:
           type: integer
           format: int32
+        geometryType:
+          type: string
+        boundary:
+          $ref: '#/components/schemas/Geometry'
         numGeometries:
           type: integer
           format: int32
@@ -399,10 +427,19 @@ components:
         area:
           type: number
           format: double
-        geometryType:
-          type: string
-        boundary:
-          $ref: '#/components/schemas/Geometry'
+        envelopeInternal:
+          $ref: '#/components/schemas/Envelope'
+        srid:
+          type: integer
+          format: int32
+        precisionModel:
+          $ref: '#/components/schemas/PrecisionModel'
+        rectangle:
+          type: boolean
+        centroid:
+          $ref: '#/components/schemas/Point'
+        interiorPoint:
+          $ref: '#/components/schemas/Point'
         dimension:
           type: integer
           format: int32
@@ -491,24 +528,24 @@ components:
           $ref: '#/components/schemas/CoordinateSequence'
         simple:
           type: boolean
-        boundaryDimension:
-          type: integer
-          format: int32
-        coordinate:
-          $ref: '#/components/schemas/Coordinate'
-        numPoints:
-          type: integer
-          format: int32
-        geometryType:
-          type: string
-        boundary:
-          $ref: '#/components/schemas/Geometry'
         x:
           type: number
           format: double
         "y":
           type: number
           format: double
+        boundaryDimension:
+          type: integer
+          format: int32
+        geometryType:
+          type: string
+        boundary:
+          $ref: '#/components/schemas/Geometry'
+        coordinate:
+          $ref: '#/components/schemas/Coordinate'
+        numPoints:
+          type: integer
+          format: int32
         dimension:
           type: integer
           format: int32
@@ -517,6 +554,12 @@ components:
           format: double
         valid:
           type: boolean
+        numGeometries:
+          type: integer
+          format: int32
+        area:
+          type: number
+          format: double
         envelopeInternal:
           $ref: '#/components/schemas/Envelope'
         srid:
@@ -530,12 +573,6 @@ components:
           $ref: '#/components/schemas/Point'
         interiorPoint:
           $ref: '#/components/schemas/Point'
-        numGeometries:
-          type: integer
-          format: int32
-        area:
-          type: number
-          format: double
     PrecisionModel:
       type: object
       properties:
@@ -677,6 +714,29 @@ components:
         ip:
           type: string
         timestamp:
+          type: string
+    RestApiResponseListUserInfoDTO:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserInfoDTO'
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32
+    UserInfoDTO:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        isblocked:
+          type: boolean
+        userType:
           type: string
     RestApiResponseListLoggerDTO:
       type: object

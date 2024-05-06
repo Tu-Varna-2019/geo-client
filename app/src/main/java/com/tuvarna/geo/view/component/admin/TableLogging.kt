@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -112,11 +113,11 @@ fun AdminTabOption(adminViewModel: AdminViewModel, admin: UserEntity) {
 
       when (selectedTab) {
         "User logs" -> {
-          adminViewModel.fetchLogs("customer")
+          LaunchedEffect(key1 = Unit) { adminViewModel.fetchLogs("customer") }
           TableLogging(userLogs = filteredUserLogs)
         }
         "Admin logs" -> {
-          adminViewModel.fetchLogs("admin")
+          LaunchedEffect(key1 = Unit) { adminViewModel.fetchLogs("admin") }
           TableLogging(userLogs = filteredUserLogs)
         }
         "User management" -> {

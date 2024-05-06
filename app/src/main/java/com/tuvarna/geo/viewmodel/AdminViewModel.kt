@@ -5,6 +5,7 @@ import com.tuvarna.geo.controller.UIFeedback
 import com.tuvarna.geo.repository.AdminRepository
 import com.tuvarna.geo.repository.ApiPayload
 import com.tuvarna.geo.rest_api.models.LoggerDTO
+import com.tuvarna.geo.rest_api.models.UserInfoDTO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -67,6 +68,26 @@ class AdminViewModel @Inject constructor(private val adminRepositoy: AdminReposi
 
       val message =
         when (val result: ApiPayload<Any> = adminRepositoy.blockUser(email, isblocked)) {
+          is ApiPayload.Success -> {
+            returnStatus = UIFeedback.States.Success
+            result.message!!
+          }
+          is ApiPayload.Failure -> {
+            returnStatus = UIFeedback.States.Failed
+            result.message
+          }
+        }
+      mutableStateFlow.value = UIFeedback(state = returnStatus, message = message)
+    }
+  }
+
+  fun getUsers(userType: String) {
+    Timber.d("Admin sent a request to fetch all users with type:  %s! Moving on...", userType)
+    viewModelScope.launch {
+      mutableStateFlow.value = UIFeedback(state = UIFeedback.States.Waiting)
+
+      val message =
+        when (val result: ApiPayload<List<UserInfoDTO>> = adminRepositoy.getUsers(userType)) {
           is ApiPayload.Success -> {
             returnStatus = UIFeedback.States.Success
             result.message!!

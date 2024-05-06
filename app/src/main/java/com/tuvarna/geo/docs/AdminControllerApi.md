@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**blockUser**](AdminControllerApi.md#blockUser) | **PUT** /admin/users/{email}/block/{blocked} | Block user
 [**getLogs**](AdminControllerApi.md#getLogs) | **GET** /admin/fetch/logs/{userType} | Retrieve user logs
+[**getUsers**](AdminControllerApi.md#getUsers) | **GET** /admin/fetch/users/{userType} | Get all users
 [**saveLog**](AdminControllerApi.md#saveLog) | **POST** /admin/save/log/{userType} | Save log
 
 
@@ -91,6 +92,51 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**RestApiResponseListLoggerDTO**](RestApiResponseListLoggerDTO.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+<a id="getUsers"></a>
+# **getUsers**
+> RestApiResponseListUserInfoDTO getUsers(userType)
+
+Get all users
+
+### Example
+```kotlin
+// Import classes:
+//import com.tuvarna.geo.rest_api.infrastructure.*
+//import com.tuvarna.geo.rest_api.models.*
+
+val apiInstance = AdminControllerApi()
+val userType : kotlin.String = userType_example // kotlin.String | 
+try {
+    val result : RestApiResponseListUserInfoDTO = apiInstance.getUsers(userType)
+    println(result)
+} catch (e: ClientException) {
+    println("4xx response calling AdminControllerApi#getUsers")
+    e.printStackTrace()
+} catch (e: ServerException) {
+    println("5xx response calling AdminControllerApi#getUsers")
+    e.printStackTrace()
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userType** | **kotlin.String**|  |
+
+### Return type
+
+[**RestApiResponseListUserInfoDTO**](RestApiResponseListUserInfoDTO.md)
 
 ### Authorization
 

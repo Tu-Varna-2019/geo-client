@@ -2,6 +2,7 @@ package com.tuvarna.geo.repository
 
 import com.tuvarna.geo.rest_api.apis.AdminControllerApi
 import com.tuvarna.geo.rest_api.models.LoggerDTO
+import com.tuvarna.geo.rest_api.models.UserInfoDTO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -40,6 +41,19 @@ class AdminRepository @Inject constructor(private val adminControllerApi: AdminC
       try {
         Timber.d("Sending a request to block= %s user: %s", isblocked, email)
         val response = adminControllerApi.blockUser(email, isblocked)
+        ApiPayload.Success(response.message, response.data)
+      } catch (e: Exception) {
+        handleApiError(e)
+      }
+    }
+  }
+
+  suspend fun getUsers(userType: String): ApiPayload<List<UserInfoDTO>> {
+    return withContext(Dispatchers.IO) {
+      try {
+        Timber.d("Sending a request to retrieve all  users with type: %s", userType)
+
+        val response = adminControllerApi.getUsers(userType)
         ApiPayload.Success(response.message, response.data)
       } catch (e: Exception) {
         handleApiError(e)

@@ -47,6 +47,7 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *AdminControllerApi* | [**blockUser**](docs/AdminControllerApi.md#blockuser) | **PUT** /admin/users/{email}/block/{blocked} | Block user
 *AdminControllerApi* | [**getLogs**](docs/AdminControllerApi.md#getlogs) | **GET** /admin/fetch/logs/{userType} | Retrieve user logs
+*AdminControllerApi* | [**getUsers**](docs/AdminControllerApi.md#getusers) | **GET** /admin/fetch/users/{userType} | Get all users
 *AdminControllerApi* | [**saveLog**](docs/AdminControllerApi.md#savelog) | **POST** /admin/save/log/{userType} | Save log
 *AuthControllerApi* | [**create**](docs/AuthControllerApi.md#create) | **POST** /auth/register | Register a new user
 *AuthControllerApi* | [**login**](docs/AuthControllerApi.md#login) | **POST** /auth/login | Logging on a new user
@@ -72,11 +73,13 @@ Class | Method | HTTP request | Description
  - [com.tuvarna.geo.rest_api.models.RegisterUserDTO](docs/RegisterUserDTO.md)
  - [com.tuvarna.geo.rest_api.models.RestApiResponseEarthquake](docs/RestApiResponseEarthquake.md)
  - [com.tuvarna.geo.rest_api.models.RestApiResponseListLoggerDTO](docs/RestApiResponseListLoggerDTO.md)
+ - [com.tuvarna.geo.rest_api.models.RestApiResponseListUserInfoDTO](docs/RestApiResponseListUserInfoDTO.md)
  - [com.tuvarna.geo.rest_api.models.RestApiResponseLoggedInUserDTO](docs/RestApiResponseLoggedInUserDTO.md)
  - [com.tuvarna.geo.rest_api.models.RestApiResponseSoil](docs/RestApiResponseSoil.md)
  - [com.tuvarna.geo.rest_api.models.RestApiResponseVoid](docs/RestApiResponseVoid.md)
  - [com.tuvarna.geo.rest_api.models.RiskDTO](docs/RiskDTO.md)
  - [com.tuvarna.geo.rest_api.models.Soil](docs/Soil.md)
+ - [com.tuvarna.geo.rest_api.models.UserInfoDTO](docs/UserInfoDTO.md)
 
 
 <a id="documentation-for-authorization"></a>

@@ -21,6 +21,7 @@ import okhttp3.HttpUrl
 
 import com.tuvarna.geo.rest_api.models.LoggerDTO
 import com.tuvarna.geo.rest_api.models.RestApiResponseListLoggerDTO
+import com.tuvarna.geo.rest_api.models.RestApiResponseListUserInfoDTO
 import com.tuvarna.geo.rest_api.models.RestApiResponseVoid
 
 import com.squareup.moshi.Json
@@ -183,6 +184,76 @@ class AdminControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHt
         return RequestConfig(
             method = RequestMethod.GET,
             path = "/admin/fetch/logs/{userType}".replace("{"+"userType"+"}", encodeURIComponent(userType.toString())),
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = false,
+            body = localVariableBody
+        )
+    }
+
+    /**
+     * Get all users
+     * 
+     * @param userType 
+     * @return RestApiResponseListUserInfoDTO
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
+    fun getUsers(userType: kotlin.String) : RestApiResponseListUserInfoDTO {
+        val localVarResponse = getUsersWithHttpInfo(userType = userType)
+
+        return when (localVarResponse.responseType) {
+            ResponseType.Success -> (localVarResponse as Success<*>).data as RestApiResponseListUserInfoDTO
+            ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
+            ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
+            ResponseType.ClientError -> {
+                val localVarError = localVarResponse as ClientError<*>
+                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+            }
+            ResponseType.ServerError -> {
+                val localVarError = localVarResponse as ServerError<*>
+                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)
+            }
+        }
+    }
+
+    /**
+     * Get all users
+     * 
+     * @param userType 
+     * @return ApiResponse<RestApiResponseListUserInfoDTO?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(IllegalStateException::class, IOException::class)
+    fun getUsersWithHttpInfo(userType: kotlin.String) : ApiResponse<RestApiResponseListUserInfoDTO?> {
+        val localVariableConfig = getUsersRequestConfig(userType = userType)
+
+        return request<Unit, RestApiResponseListUserInfoDTO>(
+            localVariableConfig
+        )
+    }
+
+    /**
+     * To obtain the request config of the operation getUsers
+     *
+     * @param userType 
+     * @return RequestConfig
+     */
+    fun getUsersRequestConfig(userType: kotlin.String) : RequestConfig<Unit> {
+        val localVariableBody = null
+        val localVariableQuery: MultiValueMap = mutableMapOf()
+        val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
+        
+        return RequestConfig(
+            method = RequestMethod.GET,
+            path = "/admin/fetch/users/{userType}".replace("{"+"userType"+"}", encodeURIComponent(userType.toString())),
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = false,

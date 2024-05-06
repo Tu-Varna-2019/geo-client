@@ -35,24 +35,24 @@ import com.squareup.moshi.JsonClass
  * @param empty 
  * @param coordinateSequence 
  * @param simple 
- * @param boundaryDimension 
- * @param coordinate 
- * @param numPoints 
- * @param geometryType 
- * @param boundary 
  * @param x 
  * @param y 
+ * @param boundaryDimension 
+ * @param geometryType 
+ * @param boundary 
+ * @param coordinate 
+ * @param numPoints 
  * @param dimension 
  * @param length 
  * @param valid 
+ * @param numGeometries 
+ * @param area 
  * @param envelopeInternal 
  * @param srid 
  * @param precisionModel 
  * @param rectangle 
  * @param centroid 
  * @param interiorPoint 
- * @param numGeometries 
- * @param area 
  */
 
 
@@ -79,14 +79,14 @@ data class Point (
     @Json(name = "simple")
     val simple: kotlin.Boolean? = null,
 
+    @Json(name = "x")
+    val x: kotlin.Double? = null,
+
+    @Json(name = "y")
+    val y: kotlin.Double? = null,
+
     @Json(name = "boundaryDimension")
     val boundaryDimension: kotlin.Int? = null,
-
-    @Json(name = "coordinate")
-    val coordinate: Coordinate? = null,
-
-    @Json(name = "numPoints")
-    val numPoints: kotlin.Int? = null,
 
     @Json(name = "geometryType")
     val geometryType: kotlin.String? = null,
@@ -94,11 +94,11 @@ data class Point (
     @Json(name = "boundary")
     val boundary: Geometry? = null,
 
-    @Json(name = "x")
-    val x: kotlin.Double? = null,
+    @Json(name = "coordinate")
+    val coordinate: Coordinate? = null,
 
-    @Json(name = "y")
-    val y: kotlin.Double? = null,
+    @Json(name = "numPoints")
+    val numPoints: kotlin.Int? = null,
 
     @Json(name = "dimension")
     val dimension: kotlin.Int? = null,
@@ -108,6 +108,12 @@ data class Point (
 
     @Json(name = "valid")
     val valid: kotlin.Boolean? = null,
+
+    @Json(name = "numGeometries")
+    val numGeometries: kotlin.Int? = null,
+
+    @Json(name = "area")
+    val area: kotlin.Double? = null,
 
     @Json(name = "envelopeInternal")
     val envelopeInternal: Envelope? = null,
@@ -125,13 +131,7 @@ data class Point (
     val centroid: Point? = null,
 
     @Json(name = "interiorPoint")
-    val interiorPoint: Point? = null,
-
-    @Json(name = "numGeometries")
-    val numGeometries: kotlin.Int? = null,
-
-    @Json(name = "area")
-    val area: kotlin.Double? = null
+    val interiorPoint: Point? = null
 
 )
 
