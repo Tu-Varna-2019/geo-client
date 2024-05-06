@@ -6,6 +6,48 @@ servers:
 - url: http://localhost:8080/api.tuvarna.geo.com/v1
   description: Generated server url
 paths:
+  /admin/users/{email}/block/{blocked}:
+    put:
+      tags:
+      - admin-controller
+      summary: Block user
+      operationId: blockUser
+      parameters:
+      - name: email
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: blocked
+        in: path
+        required: true
+        schema:
+          type: boolean
+      responses:
+        "400":
+          description: Bad request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "201":
+          description: User blocked!
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
   /risk/soil:
     post:
       tags:
@@ -148,8 +190,135 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/RestApiResponseLoggedInUserDTO'
+  /admin/save/log/{userType}:
+    post:
+      tags:
+      - admin-controller
+      summary: Save log
+      operationId: saveLog
+      parameters:
+      - name: userType
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoggerDTO'
+        required: true
+      responses:
+        "400":
+          description: Bad request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "201":
+          description: User blocked!
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+  /admin/fetch/users/{userType}:
+    get:
+      tags:
+      - admin-controller
+      summary: Get all users
+      operationId: getUsers
+      parameters:
+      - name: userType
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "400":
+          description: Bad request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseListUserInfoDTO'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseListUserInfoDTO'
+        "201":
+          description: Users retrieved!
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseListUserInfoDTO'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseListUserInfoDTO'
+  /admin/fetch/logs/{userType}:
+    get:
+      tags:
+      - admin-controller
+      summary: Retrieve user logs
+      operationId: getLogs
+      parameters:
+      - name: userType
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "400":
+          description: Bad request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseListLoggerDTO'
+        "201":
+          description: Logs retrieved!
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseListLoggerDTO'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseListLoggerDTO'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseListLoggerDTO'
 components:
   schemas:
+    RestApiResponseVoid:
+      type: object
+      properties:
+        data:
+          type: object
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32
     RiskDTO:
       type: object
       properties:
@@ -173,11 +342,11 @@ components:
           format: double
         valid:
           type: boolean
-        coordinate:
-          $ref: '#/components/schemas/Coordinate'
         m:
           type: number
           format: double
+        coordinate:
+          $ref: '#/components/schemas/Coordinate'
     CoordinateSequence:
       type: object
       properties:
@@ -194,6 +363,9 @@ components:
       properties:
         "null":
           type: boolean
+        area:
+          type: number
+          format: double
         width:
           type: number
           format: double
@@ -213,9 +385,6 @@ components:
           type: number
           format: double
         maxY:
-          type: number
-          format: double
-        area:
           type: number
           format: double
     Geometry:
@@ -504,16 +673,6 @@ components:
           type: boolean
         usertype:
           type: string
-    RestApiResponseVoid:
-      type: object
-      properties:
-        data:
-          type: object
-        message:
-          type: string
-        status:
-          type: integer
-          format: int32
     LoginUserDTO:
       type: object
       properties:
@@ -540,6 +699,52 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/LoggedInUserDTO'
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32
+    LoggerDTO:
+      type: object
+      properties:
+        username:
+          type: string
+        event:
+          type: string
+        ip:
+          type: string
+        timestamp:
+          type: string
+    RestApiResponseListUserInfoDTO:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserInfoDTO'
+        message:
+          type: string
+        status:
+          type: integer
+          format: int32
+    UserInfoDTO:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        isblocked:
+          type: boolean
+        userType:
+          type: string
+    RestApiResponseListLoggerDTO:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoggerDTO'
         message:
           type: string
         status:
