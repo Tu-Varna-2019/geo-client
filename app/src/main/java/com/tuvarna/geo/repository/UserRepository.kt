@@ -15,8 +15,8 @@ class UserRepository @Inject constructor(private val authApi: AuthControllerApi)
   suspend fun login(user: UserEntity): ApiPayload<UserEntity> {
     return withContext(Dispatchers.IO) {
       try {
-        Timber.d("Logging in user: %s", user)
         val userDTO: LoginUserDTO = UserMapper.toLoginUserDTO(user)
+        Timber.d("Logging in user: %s", userDTO)
         val response = authApi.login(userDTO)
 
         ApiPayload.Success(response.message, UserEntity(response.data!!))

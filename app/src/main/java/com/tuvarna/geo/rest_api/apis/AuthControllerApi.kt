@@ -50,8 +50,8 @@ class AuthControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHtt
 
     /**
      * Register a new user
-     * 
-     * @param registerUserDTO 
+     *
+     * @param registerUserDTO
      * @return RestApiResponseVoid
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
@@ -81,8 +81,8 @@ class AuthControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHtt
 
     /**
      * Register a new user
-     * 
-     * @param registerUserDTO 
+     *
+     * @param registerUserDTO
      * @return ApiResponse<RestApiResponseVoid?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
@@ -100,7 +100,7 @@ class AuthControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHtt
     /**
      * To obtain the request config of the operation create
      *
-     * @param registerUserDTO 
+     * @param registerUserDTO
      * @return RequestConfig
      */
     fun createRequestConfig(registerUserDTO: RegisterUserDTO) : RequestConfig<RegisterUserDTO> {
@@ -108,7 +108,7 @@ class AuthControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHtt
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
         localVariableHeaders["Content-Type"] = "application/json"
-        
+
         return RequestConfig(
             method = RequestMethod.POST,
             path = "/auth/register",
@@ -121,8 +121,8 @@ class AuthControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHtt
 
     /**
      * Logging on a new user
-     * 
-     * @param loginUserDTO 
+     *
+     * @param loginUserDTO
      * @return RestApiResponseLoggedInUserDTO
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
@@ -152,8 +152,8 @@ class AuthControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHtt
 
     /**
      * Logging on a new user
-     * 
-     * @param loginUserDTO 
+     *
+     * @param loginUserDTO
      * @return ApiResponse<RestApiResponseLoggedInUserDTO?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
@@ -171,7 +171,7 @@ class AuthControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHtt
     /**
      * To obtain the request config of the operation login
      *
-     * @param loginUserDTO 
+     * @param loginUserDTO
      * @return RequestConfig
      */
     fun loginRequestConfig(loginUserDTO: LoginUserDTO) : RequestConfig<LoginUserDTO> {
@@ -179,7 +179,7 @@ class AuthControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHtt
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
         localVariableHeaders["Content-Type"] = "application/json"
-        
+
         return RequestConfig(
             method = RequestMethod.POST,
             path = "/auth/login",

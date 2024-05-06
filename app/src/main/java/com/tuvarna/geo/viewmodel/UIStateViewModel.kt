@@ -5,7 +5,7 @@ import com.tuvarna.geo.controller.UIFeedback
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-abstract class UIStateViewModel : ViewModel() {
+abstract class UIStateViewModel() : ViewModel() {
   protected val mutableStateFlow =
     MutableStateFlow<UIFeedback>(UIFeedback(state = UIFeedback.States.Nothing))
   val stateFlow: StateFlow<UIFeedback> = mutableStateFlow

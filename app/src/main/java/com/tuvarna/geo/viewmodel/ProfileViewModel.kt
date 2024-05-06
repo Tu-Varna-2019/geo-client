@@ -1,7 +1,6 @@
 package com.tuvarna.geo.viewmodel
 
 import com.tuvarna.geo.controller.LoggerManager
-import com.tuvarna.geo.repository.UserRepository
 import com.tuvarna.geo.storage.UserSessionStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -13,7 +12,6 @@ import javax.inject.Inject
 class ProfileViewModel
 @Inject
 constructor(
-  private val userRepository: UserRepository,
   private val loggerManager: LoggerManager,
   private val userSessionStorage: UserSessionStorage,
 ) : UIStateViewModel() {
