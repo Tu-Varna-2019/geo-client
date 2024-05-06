@@ -1,8 +1,9 @@
 package com.tuvarna.geo.app
 
 import android.content.Context
+import com.tuvarna.geo.rest_api.apis.AdminControllerApi
 import com.tuvarna.geo.rest_api.apis.AuthControllerApi
-import com.tuvarna.geo.rest_api.apis.DangerControllerApi
+import com.tuvarna.geo.rest_api.apis.RiskControllerApi
 import com.tuvarna.geo.storage.UserSessionStorage
 import dagger.Module
 import dagger.Provides
@@ -42,9 +43,16 @@ object AppModule {
 
   @Singleton
   @Provides
-  fun provideDangerControllerApi(client: OkHttpClient): DangerControllerApi {
+  fun provideRiskControllerApi(client: OkHttpClient): RiskControllerApi {
 
-    return DangerControllerApi(BASE_URL, client)
+    return RiskControllerApi(BASE_URL, client)
+  }
+
+  @Singleton
+  @Provides
+  fun provideAdminControllerApi(client: OkHttpClient): AdminControllerApi {
+
+    return AdminControllerApi(BASE_URL, client)
   }
 
   @Provides
