@@ -84,7 +84,10 @@ fun ProfileView(navController: NavController, userSessionStorage: UserSessionSto
       shape = RoundedCornerShape(8.dp),
     ) {
       Button(
-        onClick = { navController.popBackStack() },
+        onClick = {
+          profileViewModel.logUserViewNavigation("GeoMap")
+          navController.popBackStack()
+        },
         colors =
           ButtonDefaults.buttonColors(
             contentColor = Color.Black,
@@ -154,7 +157,10 @@ fun ProfileView(navController: NavController, userSessionStorage: UserSessionSto
         Spacer(modifier = Modifier.height(80.dp))
         if (userProps.userType != FORBIDDEN_USER_TYPE_ADMIN_PANEL)
           Button(
-            onClick = { navController.navigate("admin") },
+            onClick = {
+              profileViewModel.logUserViewNavigation("Admin")
+              navController.navigate("admin")
+            },
             modifier = Modifier.fillMaxWidth(0.5f).align(Alignment.CenterHorizontally),
             colors = ButtonDefaults.buttonColors(containerColor = Color(204, 136, 0)),
           ) {
@@ -162,14 +168,20 @@ fun ProfileView(navController: NavController, userSessionStorage: UserSessionSto
           }
 
         Button(
-          onClick = { profileViewModel.logout() },
+          onClick = {
+            profileViewModel.logUserViewNavigation("Logout -> Login")
+            navController.navigate("login")
+          },
           modifier = Modifier.fillMaxWidth(0.5f).align(Alignment.CenterHorizontally),
         ) {
           Text("Log out")
         }
 
         Button(
-          onClick = { showAlertDialog.value = true },
+          onClick = {
+            profileViewModel.logUserViewNavigation("Delete account")
+            showAlertDialog.value = true
+          },
           modifier = Modifier.fillMaxWidth(0.5f).align(Alignment.CenterHorizontally),
           colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
         ) {
