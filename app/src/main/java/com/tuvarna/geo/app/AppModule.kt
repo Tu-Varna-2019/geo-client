@@ -15,6 +15,7 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import javax.inject.Provider
 import javax.inject.Singleton
 
 @Module
@@ -23,16 +24,11 @@ object AppModule {
 
   private const val BASE_URL = "http://10.0.2.2:8080/api.tuvarna.geo.com/v1"
 
-  @Singleton
   @Provides
-  fun provideOkHttpClient(userSessionStorage: UserSessionStorage): OkHttpClient {
-
-    return OkHttpClient.Builder().addInterceptor(providerAuthOkHttp(userSessionStorage)).build()
-  }
-
-  @Provides
-  fun providerAuthOkHttp(userSessionStorage: UserSessionStorage): AuthInterceptor {
-    return AuthInterceptor(userSessionStorage)
+  fun provideOkHttpClient(userSessionStorageProvider: Provider<UserSessionStorage>): OkHttpClient {
+    return OkHttpClient.Builder()
+      .addInterceptor(AuthInterceptor(userSessionStorageProvider))
+      .build()
   }
 
   @Singleton
@@ -62,10 +58,12 @@ object AppModule {
   }
 }
 
-class AuthInterceptor(private val userSessionStorage: UserSessionStorage) : Interceptor {
+class AuthInterceptor(private val userSessionStorageProvider: Provider<UserSessionStorage>) :
+  Interceptor {
 
   override fun intercept(chain: Interceptor.Chain): Response {
     val originalRequest = chain.request()
+    val userSessionStorage = userSessionStorageProvider.get()
     val accessToken = runBlocking { userSessionStorage.readAccessToken().first() }
     val requestWithAuthHeader =
       originalRequest.newBuilder().header("Authorization", "Bearer $accessToken").build()

@@ -8,7 +8,9 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 
 class UserSessionStorage(private val context: Context) {
   private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
@@ -28,6 +30,16 @@ class UserSessionStorage(private val context: Context) {
         userType = preferences[userType]!!,
       )
     }
+  }
+
+  suspend fun readUsername(): String {
+    return runBlocking { context.dataStore.data.map { preference -> preference[username] ?: "" } }
+      .first()
+  }
+
+  suspend fun readUserType(): String {
+    return runBlocking { context.dataStore.data.map { preference -> preference[userType] ?: "" } }
+      .first()
   }
 
   fun readAccessToken(): Flow<String> {

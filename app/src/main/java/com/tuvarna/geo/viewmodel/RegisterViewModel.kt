@@ -1,6 +1,7 @@
 package com.tuvarna.geo.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import com.tuvarna.geo.controller.LoggerManager
 import com.tuvarna.geo.controller.UIFeedback
 import com.tuvarna.geo.entity.UserEntity
 import com.tuvarna.geo.repository.ApiPayload
@@ -11,8 +12,12 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor(private val userRepository: UserRepository) :
+class RegisterViewModel
+@Inject
+constructor(private val userRepository: UserRepository, private val loggerManager: LoggerManager) :
   UIStateViewModel() {
+  private val USER_TYPE: String = "customer"
+
   fun register(user: UserEntity, userType: String) {
     Timber.d("UserEntity %s clicked the registration button! Moving on...", user)
     viewModelScope.launch {
@@ -22,12 +27,22 @@ class RegisterViewModel @Inject constructor(private val userRepository: UserRepo
         when (val result = userRepository.register(user, userType)) {
           is ApiPayload.Success -> {
             Timber.d("User registered successfully! Payload received from server %s", result)
+            loggerManager.sendLog(
+              user.username,
+              USER_TYPE,
+              "User has registered an account to the system!",
+            )
 
             returnStatus = UIFeedback.States.Success
             result.message!!
           }
           is ApiPayload.Failure -> {
             returnStatus = UIFeedback.States.Failed
+            loggerManager.sendLog(
+              user.username,
+              USER_TYPE,
+              "User has encountered an issue while registering: " + result.message,
+            )
             result.message
           }
         }

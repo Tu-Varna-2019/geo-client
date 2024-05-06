@@ -1,6 +1,8 @@
 package com.tuvarna.geo.view.component.admin
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -36,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -75,7 +78,6 @@ fun AdminTabOption(adminViewModel: AdminViewModel, admin: UserEntity) {
 
   var searchText by remember { mutableStateOf("") }
   var selectedTab by remember { mutableStateOf("User logs") }
-
   val filteredUserLogs = userLogs.filter { it.username!!.contains(searchText, ignoreCase = true) }
 
   Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
@@ -84,11 +86,19 @@ fun AdminTabOption(adminViewModel: AdminViewModel, admin: UserEntity) {
       color = Color.Black,
       style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.SemiBold),
     )
+    Spacer(modifier = Modifier.height(16.dp))
     Column(modifier = Modifier.fillMaxWidth().padding(25.dp)) {
+      TabBar(
+        selectedTab = selectedTab,
+        userType = admin.username,
+        onTabSelected = { selectedTab = it },
+      )
+      Spacer(modifier = Modifier.height(16.dp))
+
       TextField(
         value = searchText,
         onValueChange = { newText -> searchText = newText },
-        modifier = Modifier.fillMaxWidth().padding(16.dp).fillMaxWidth(0.8f),
+        modifier = Modifier.fillMaxWidth().padding(6.dp).fillMaxWidth(0.8f),
         shape = RoundedCornerShape(22.dp),
         leadingIcon = {
           Icon(imageVector = Icons.Default.Search, contentDescription = "Search here")
@@ -103,31 +113,36 @@ fun AdminTabOption(adminViewModel: AdminViewModel, admin: UserEntity) {
           ),
         singleLine = true,
       )
-
-      Spacer(modifier = Modifier.height(16.dp))
-      TabBar(
-        selectedTab = selectedTab,
-        userType = admin.username,
-        onTabSelected = { selectedTab = it },
-      )
-
-      when (selectedTab) {
-        "User logs" -> {
-          LaunchedEffect(key1 = Unit) { adminViewModel.fetchLogs("customer") }
-          TableLogging(userLogs = filteredUserLogs)
+      Box(modifier = Modifier.weight(1f)) {
+        when (selectedTab) {
+          "User logs" -> {
+            LaunchedEffect(key1 = Unit) { adminViewModel.fetchLogs("customer") }
+            TableLogging(userLogs = filteredUserLogs)
+          }
+          "Admin logs" -> {
+            LaunchedEffect(key1 = Unit) { adminViewModel.fetchLogs("admin") }
+            TableLogging(userLogs = filteredUserLogs)
+          }
+          "User management" -> {
+            // adminViewModel.fetchLogs("dbt")
+            TableLogging(userLogs = filteredUserLogs)
+          }
+          else -> {}
         }
-        "Admin logs" -> {
-          LaunchedEffect(key1 = Unit) { adminViewModel.fetchLogs("admin") }
-          TableLogging(userLogs = filteredUserLogs)
-        }
-        "User management" -> {
-          // adminViewModel.fetchLogs("dbt")
-          TableLogging(userLogs = filteredUserLogs)
-        }
-        else -> {}
       }
+      val context = LocalContext.current
+      val exportCsvLauncher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.CreateDocument()) { uri
+          ->
+          uri?.let { adminViewModel.exportTableToCSV(context, userLogs, it) }
+        }
+
       Button(
-        onClick = { /*REMINDER: PROHIBIT ADMINS TO EXPORT LOGS OLDER THAN 3 MONTHS*/ },
+        onClick = {
+          exportCsvLauncher.launch(
+            "output.csv"
+          ) /*REMINDER: PROHIBIT ADMINS TO EXPORT LOGS OLDER THAN 3 MONTHS*/
+        },
         modifier = Modifier.fillMaxWidth(0.5f).align(Alignment.CenterHorizontally),
         colors = ButtonDefaults.buttonColors(containerColor = Color(151, 212, 168)),
       ) {
@@ -146,7 +161,7 @@ fun TabBar(selectedTab: String, userType: String, onTabSelected: (String) -> Uni
     else listOf("User logs", "User management")
 
   TabRow(selectedTabIndex = tabOptions.indexOf(selectedTab)) {
-    tabOptions.forEachIndexed { index, text ->
+    tabOptions.forEachIndexed { _, text ->
       Tab(selected = selectedTab == text, onClick = { onTabSelected(text) }, text = { Text(text) })
     }
   }

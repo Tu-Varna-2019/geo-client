@@ -149,7 +149,10 @@ private fun TopBottomBar(homeViewModel: HomeViewModel, navController: NavControl
 
             Button(
               colors = ButtonDefaults.buttonColors(containerColor = uiColorStyle),
-              onClick = { navController.navigate("profile") },
+              onClick = {
+                homeViewModel.logUserViewNavigation("Profile")
+                navController.navigate("profile")
+              },
             ) {
               Icon(Icons.Filled.AccountCircle, contentDescription = null)
             }

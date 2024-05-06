@@ -15,7 +15,7 @@ class AdminRepository @Inject constructor(private val adminControllerApi: AdminC
   suspend fun getLogs(userType: String): ApiPayload<List<LoggerDTO>> {
     return withContext(Dispatchers.IO) {
       try {
-        Timber.d("Retrieveing logs...")
+        Timber.d("Retrieving logs...")
         val response = adminControllerApi.getLogs(userType)
         ApiPayload.Success(response.message, response.data)
       } catch (e: Exception) {
