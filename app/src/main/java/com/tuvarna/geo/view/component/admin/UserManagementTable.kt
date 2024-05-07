@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Divider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,12 +32,12 @@ fun UserManagementTable(adminViewModel: AdminViewModel, users: List<UserInfoDTO>
       Modifier.padding(16.dp)
         .fillMaxWidth()
         .verticalScroll(rememberScrollState())
-        .background(color = Color(151, 212, 168), shape = RoundedCornerShape(16.dp))
-        .border(BorderStroke(1.dp, Color.Black))
+        .background(color = Color.White, shape = RoundedCornerShape(16.dp))
+        .border(BorderStroke(1.dp, Color(151, 212, 168)), shape = RoundedCornerShape(16.dp))
         .padding(8.dp)
   ) {
     Column(modifier = Modifier.fillMaxWidth()) {
-      for (user: UserInfoDTO in users) {
+      users.forEachIndexed { index, user ->
         TableKeyValueTextRow("Username:", user.username!!)
         TableKeyValueTextRow("Email:", user.email!!)
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -54,6 +55,13 @@ fun UserManagementTable(adminViewModel: AdminViewModel, users: List<UserInfoDTO>
           )
         }
         TableKeyValueTextRow("userType:", user.userType!!)
+
+        if (index < users.size - 1)
+          Divider(
+            color = Color.Gray,
+            thickness = 1.dp,
+            modifier = Modifier.padding(vertical = 8.dp),
+          )
       }
     }
   }
