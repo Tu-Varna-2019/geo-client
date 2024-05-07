@@ -9,7 +9,7 @@ import com.tuvarna.geo.entity.UserTypeEntity
 import com.tuvarna.geo.storage.UserSessionStorage
 import com.tuvarna.geo.storage.UserStorage
 import com.tuvarna.geo.view.component.accessibility.LoadingIndicator
-import com.tuvarna.geo.view.component.admin.AdminTabOption
+import com.tuvarna.geo.view.component.admin.AdminPanel
 import com.tuvarna.geo.viewmodel.AdminViewModel
 
 @Composable
@@ -27,5 +27,5 @@ fun AdminView(navController: NavController, userSessionStorage: UserSessionStora
     route = "",
   )
 
-  AdminTabOption(adminViewModel = adminViewModel, admin = admin)
+  AdminPanel(navController = navController, adminViewModel = adminViewModel, admin = admin)
 }

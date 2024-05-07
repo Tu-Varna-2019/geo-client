@@ -3,9 +3,6 @@ package com.tuvarna.geo.view.component.admin
 import android.annotation.SuppressLint
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,10 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
@@ -43,42 +39,21 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.tuvarna.geo.entity.UserEntity
-import com.tuvarna.geo.rest_api.models.LoggerDTO
-import com.tuvarna.geo.view.component.home.TableRow
 import com.tuvarna.geo.viewmodel.AdminViewModel
-
-@Composable
-fun TableLogging(userLogs: List<LoggerDTO>) {
-  Box(
-    modifier =
-      Modifier.padding(16.dp)
-        .fillMaxWidth()
-        .verticalScroll(rememberScrollState())
-        .background(color = Color(151, 212, 168), shape = RoundedCornerShape(16.dp))
-        .border(BorderStroke(1.dp, Color.Black))
-        .padding(8.dp)
-  ) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-      for (userLog: LoggerDTO in userLogs) {
-        TableRow("Username:", userLog.username!!)
-        TableRow("Event:", userLog.event!!)
-        TableRow("Ip:", userLog.ip!!)
-        TableRow("Timestamp:", userLog.timestamp!!)
-      }
-    }
-  }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun AdminTabOption(adminViewModel: AdminViewModel, admin: UserEntity) {
+fun AdminPanel(navController: NavController, adminViewModel: AdminViewModel, admin: UserEntity) {
   val userLogs by adminViewModel.userLogs.collectAsState()
+  val users by adminViewModel.userInfos.collectAsState()
 
   var searchText by remember { mutableStateOf("") }
   var selectedTab by remember { mutableStateOf("User logs") }
   val filteredUserLogs = userLogs.filter { it.username!!.contains(searchText, ignoreCase = true) }
+  val filteredUsers = users.filter { it.email!!.contains(searchText, ignoreCase = true) }
 
   Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
     Text(
@@ -86,8 +61,21 @@ fun AdminTabOption(adminViewModel: AdminViewModel, admin: UserEntity) {
       color = Color.Black,
       style = TextStyle(fontSize = 25.sp, fontWeight = FontWeight.SemiBold),
     )
-    Spacer(modifier = Modifier.height(16.dp))
+
+    Button(
+      modifier = Modifier.align(Alignment.TopStart),
+      onClick = {
+        adminViewModel.logUserViewNavigation("ProfileView")
+        navController.popBackStack()
+      },
+      colors =
+        ButtonDefaults.buttonColors(contentColor = Color.Black, containerColor = Color.Transparent),
+    ) {
+      Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+    }
+
     Column(modifier = Modifier.fillMaxWidth().padding(25.dp)) {
+      Spacer(modifier = Modifier.height(16.dp))
       TabBar(
         selectedTab = selectedTab,
         userType = admin.username,
@@ -117,15 +105,15 @@ fun AdminTabOption(adminViewModel: AdminViewModel, admin: UserEntity) {
         when (selectedTab) {
           "User logs" -> {
             LaunchedEffect(key1 = Unit) { adminViewModel.fetchLogs("customer") }
-            TableLogging(userLogs = filteredUserLogs)
+            UserLogsTable(userLogs = filteredUserLogs)
           }
           "Admin logs" -> {
             LaunchedEffect(key1 = Unit) { adminViewModel.fetchLogs("admin") }
-            TableLogging(userLogs = filteredUserLogs)
+            UserLogsTable(userLogs = filteredUserLogs)
           }
           "User management" -> {
-            // adminViewModel.fetchLogs("dbt")
-            TableLogging(userLogs = filteredUserLogs)
+            LaunchedEffect(key1 = Unit) { adminViewModel.getUsers("customer") }
+            UserManagementTable(adminViewModel = adminViewModel, users = filteredUsers)
           }
           else -> {}
         }
@@ -137,17 +125,19 @@ fun AdminTabOption(adminViewModel: AdminViewModel, admin: UserEntity) {
           uri?.let { adminViewModel.exportTableToCSV(context, userLogs, it) }
         }
 
-      Button(
-        onClick = {
-          exportCsvLauncher.launch(
-            "output.csv"
-          ) /*REMINDER: PROHIBIT ADMINS TO EXPORT LOGS OLDER THAN 3 MONTHS*/
-        },
-        modifier = Modifier.fillMaxWidth(0.5f).align(Alignment.CenterHorizontally),
-        colors = ButtonDefaults.buttonColors(containerColor = Color(151, 212, 168)),
-      ) {
-        Icon(imageVector = Icons.Default.Done, contentDescription = "Export")
-        Text(text = "Export logs to CSV")
+      if (selectedTab != "User management") {
+        Button(
+          onClick = {
+            exportCsvLauncher.launch(
+              "output.csv"
+            ) /*REMINDER: PROHIBIT ADMINS TO EXPORT LOGS OLDER THAN 3 MONTHS*/
+          },
+          modifier = Modifier.fillMaxWidth(0.5f).align(Alignment.CenterHorizontally),
+          colors = ButtonDefaults.buttonColors(containerColor = Color(151, 212, 168)),
+        ) {
+          Icon(imageVector = Icons.Default.Done, contentDescription = "Export")
+          Text(text = "Export logs to CSV")
+        }
       }
     }
   }

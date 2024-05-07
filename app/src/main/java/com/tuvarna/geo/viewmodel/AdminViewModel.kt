@@ -28,9 +28,30 @@ constructor(
   private val loggerManager: LoggerManager,
   private val userSessionStorage: UserSessionStorage,
 ) : UIStateViewModel() {
-
   private val _userLogs = MutableStateFlow<List<LoggerDTO>>(emptyList())
   val userLogs = _userLogs.asStateFlow()
+
+  private val _userInfos = MutableStateFlow<List<UserInfoDTO>>(emptyList())
+  val userInfos = _userInfos.asStateFlow()
+
+  private fun updateUserInfoIsBlocked(email: String) {
+    _userInfos.value =
+      _userInfos.value.map { userInfo ->
+        if (userInfo.email == email)
+          UserInfoDTO(userInfo.username, userInfo.email, !userInfo.isblocked!!, userInfo.userType)
+        else userInfo
+      }
+  }
+
+  fun logUserViewNavigation(viewName: String) {
+    CoroutineScope(Dispatchers.IO).launch {
+      loggerManager.sendLog(
+        userSessionStorage.readUsername(),
+        userSessionStorage.readUserType(),
+        "User clicked a button to navigate to: $viewName",
+      )
+    }
+  }
 
   fun fetchLogs(userType: String) {
     Timber.d("%s sent a request to retrieve all logs to  the server! Moving on...", userType)
@@ -74,6 +95,7 @@ constructor(
       val message =
         when (val result: ApiPayload<Any> = adminRepositoy.blockUser(email, isblocked)) {
           is ApiPayload.Success -> {
+            updateUserInfoIsBlocked(email)
 
             loggerManager.sendLog(
               userSessionStorage.readUsername(),
@@ -107,6 +129,8 @@ constructor(
       val message =
         when (val result: ApiPayload<List<UserInfoDTO>> = adminRepositoy.getUsers(userType)) {
           is ApiPayload.Success -> {
+            _userInfos.value = result.data!!
+
             loggerManager.sendLog(
               userSessionStorage.readUsername(),
               userSessionStorage.readUserType(),
@@ -138,11 +162,12 @@ constructor(
     logs.let { log ->
       context.contentResolver.openFileDescriptor(uri, "w")?.use { parcelFileDescriptor ->
         val fileOutputStream = FileOutputStream(parcelFileDescriptor.fileDescriptor)
-        val header = "username,event,ip,timestamp\n"
-        val body = log.joinToString("\n") { "${it.username},${it.event},${it.ip},${it.timestamp}" }
-        val csvData = header + body
+        val csvData =
+          "username,event,ip,timestamp\n" +
+            log.joinToString("\n") { "${it.username},${it.event},${it.ip},${it.timestamp}" }
         fileOutputStream.write(csvData.toByteArray())
         fileOutputStream.close()
+
         CoroutineScope(Dispatchers.IO).launch {
           loggerManager.sendLog(
             userSessionStorage.readUsername(),
