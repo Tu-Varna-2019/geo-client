@@ -41,14 +41,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.tuvarna.geo.entity.UserEntity
+import com.tuvarna.geo.view.component.dialog_box.DialogTimeRange
+import com.tuvarna.geo.view.component.dialog_box.convertStrToLocalDateTime
 import com.tuvarna.geo.viewmodel.AdminViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnrememberedMutableState")
+@SuppressLint("UnrememberedMutableState", "CoroutineCreationDuringComposition")
 @Composable
 fun AdminPanel(navController: NavController, adminViewModel: AdminViewModel, admin: UserEntity) {
+  val showExportLogsTimeRangeDialog = remember { mutableStateOf(false) }
   val userLogs by adminViewModel.userLogs.collectAsState()
   val users by adminViewModel.userInfos.collectAsState()
+
+  val context = LocalContext.current
+  var userLogSorted = userLogs
+
+  val exportCsvLauncher =
+    rememberLauncherForActivityResult(contract = ActivityResultContracts.CreateDocument()) { uri ->
+      uri?.let { adminViewModel.exportTableToCSV(context, userLogSorted, it) }
+    }
 
   var searchText by remember { mutableStateOf("") }
   var selectedTab by remember { mutableStateOf("User logs") }
@@ -118,20 +133,30 @@ fun AdminPanel(navController: NavController, adminViewModel: AdminViewModel, adm
           else -> {}
         }
       }
-      val context = LocalContext.current
-      val exportCsvLauncher =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.CreateDocument()) { uri
-          ->
-          uri?.let { adminViewModel.exportTableToCSV(context, userLogs, it) }
-        }
 
+      if (showExportLogsTimeRangeDialog.value) {
+        DialogTimeRange(
+          title = "Choose time range to export logs",
+          onConfirm = { dateStart, dateEnd ->
+            CoroutineScope(Dispatchers.Main).launch {
+              userLogSorted =
+                userLogSorted.filter {
+                  val logTimestamp = convertStrToLocalDateTime(it.timestamp!!)
+                  Timber.d(
+                    "Timestamp of the sort: ${logTimestamp} ($dateStart, $dateEnd) = ${logTimestamp.isAfter(dateStart) && logTimestamp.isBefore(dateEnd)}"
+                  )
+                  logTimestamp.isAfter(dateStart) && logTimestamp.isBefore(dateEnd)
+                }
+              exportCsvLauncher.launch("output.csv")
+              showExportLogsTimeRangeDialog.value = false
+            }
+          },
+          onDismiss = { showExportLogsTimeRangeDialog.value = false },
+        )
+      }
       if (selectedTab != "User management") {
         Button(
-          onClick = {
-            exportCsvLauncher.launch(
-              "output.csv"
-            ) /*REMINDER: PROHIBIT ADMINS TO EXPORT LOGS OLDER THAN 3 MONTHS*/
-          },
+          onClick = { showExportLogsTimeRangeDialog.value = true },
           modifier = Modifier.fillMaxWidth(0.5f).align(Alignment.CenterHorizontally),
           colors = ButtonDefaults.buttonColors(containerColor = Color(151, 212, 168)),
         ) {
