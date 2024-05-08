@@ -47,9 +47,8 @@ fun SoilTableContent(soil: Soil, soilTypes: SoilTypesDTO) {
     ) {
       Column(modifier = Modifier.padding(8.dp),
           verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        TableRow("Gid:", soil.gid.toString())
-        TableRow("Snum:", soil.snum.toString())
-        TableRow("Domsoi:", formattedSoilType ?: "No data")
+        TableRow("Sequential code:", soil.snum.toString())
+        TableRow("Soil:", formattedSoilType ?: "No data")
           if (!soil.phase1.isNullOrBlank() || !soil.phase2.isNullOrBlank()) {
               TableRow("Phases:", listOfNotNull(soil.phase1, soil.phase2).joinToString(" "))
           }
@@ -57,7 +56,7 @@ fun SoilTableContent(soil: Soil, soilTypes: SoilTypesDTO) {
               TableRow("Misclus:", listOfNotNull(soil.misclu1, soil.misclu2).joinToString(" "))
           }
         TableRow("Country:", formattedCountry ?: "No data")
-        TableRow("SQ Kilometers:", soil.sqkm.toString())
+        TableRow("Square Kilometers:", soil.sqkm.toString())
       }
     }
   }
@@ -70,7 +69,7 @@ fun TableRow(name: String, value: String) {
       text = name,
       fontSize = 18.sp,
       textAlign = TextAlign.Start,
-      modifier = Modifier.padding(vertical = 4.dp),
+      modifier = Modifier.padding(vertical = 8.dp),
       color = Color.Black,
     )
     Text(
@@ -95,7 +94,6 @@ fun EarthquakeTableContent(earthquake: Earthquake) {
           .padding(8.dp)
     ) {
       Column(modifier = Modifier.fillMaxWidth()) {
-        TableRow("Id:", earthquake.id.toString())
         TableRow("Frequency: ", earthquake.dn.toString())
       }
     }
