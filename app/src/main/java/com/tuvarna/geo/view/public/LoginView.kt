@@ -20,6 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.tuvarna.geo.R
 import com.tuvarna.geo.entity.UserEntity
+import com.tuvarna.geo.helpers.Utils
 import com.tuvarna.geo.view.component.accessibility.LoadingIndicator
 import com.tuvarna.geo.viewmodel.LoginViewModel
 
@@ -77,23 +79,23 @@ fun LoginView(navController: NavController) {
 @Composable
 fun LoginForm(navController: NavController, user: UserEntity, loginViewModel: LoginViewModel) {
 
-    val isEmailValid = user.email.isEmpty() // || Utils.isValidEmail(user.email)
-    val isPasswordValid = user.password.isEmpty() // || Utils.isValidPassword(user.password)
-    val isSubmitBtnDisabled = isEmailValid || isPasswordValid
+
+    var isEmailValid by remember { mutableStateOf(true) }
+    var isPasswordValid by remember { mutableStateOf(true) }
 
     val textFieldModifier: Modifier = Modifier.fillMaxWidth().padding(8.dp).height(60.dp)
     val errorTextModifier: Modifier = Modifier.fillMaxWidth().padding(start = 8.dp)
 
     OutlinedTextField(
         value = user.email,
-        isError = isEmailValid,
-        onValueChange = { user.email = it },
+        isError = !isEmailValid,
+        onValueChange = {  user.email = it },
         label = { Text("Email") },
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
         modifier = textFieldModifier,
     )
 
-    if (isEmailValid) {
+    if (!isEmailValid) {
         Text(
             text = "Email is invalid",
             color = Color.Red,
@@ -103,16 +105,16 @@ fun LoginForm(navController: NavController, user: UserEntity, loginViewModel: Lo
     }
 
     OutlinedTextField(
-        value = user.password,
-        isError = isPasswordValid,
-        onValueChange = { user.password = it },
+        value =  user.password,
+        isError = !isPasswordValid,
+        onValueChange = {  user.password = it },
         label = { Text("Password") },
         visualTransformation = PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
         modifier = textFieldModifier,
     )
 
-    if (isPasswordValid) {
+    if (!isPasswordValid) {
         Text(
             text = "Password does not conform the rules",
             color = Color.Red,
@@ -126,8 +128,15 @@ fun LoginForm(navController: NavController, user: UserEntity, loginViewModel: Lo
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Button(
-            onClick = { loginViewModel.login(user) },
-            enabled = !isSubmitBtnDisabled,
+            onClick = {
+
+                isEmailValid =  user.email.isNotEmpty()
+                isPasswordValid =  user.password.isNotEmpty()
+
+                if(isEmailValid && isPasswordValid) {
+                    loginViewModel.login(user)
+                }
+            },
             modifier = Modifier.weight(1f).padding(end = 10.dp),
         ) {
             Text("Login")
