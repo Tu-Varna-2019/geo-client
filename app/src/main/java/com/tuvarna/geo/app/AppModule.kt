@@ -22,51 +22,50 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-  private const val BASE_URL = "http://10.0.2.2:8080/api.tuvarna.geo.com/v1"
+    private const val BASE_URL = "http://10.0.2.2:8080/api.tuvarna.geo.com/v1"
 
-  @Provides
-  fun provideOkHttpClient(userSessionStorageProvider: Provider<UserSessionStorage>): OkHttpClient {
-    return OkHttpClient.Builder()
-      .addInterceptor(AuthInterceptor(userSessionStorageProvider))
-      .build()
-  }
+    @Provides
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .build()
+    }
 
-  @Singleton
-  @Provides
-  fun provideAuthControllerApi(client: OkHttpClient): AuthControllerApi {
-    return AuthControllerApi(BASE_URL, client)
-  }
+    @Singleton
+    @Provides
+    fun provideAuthControllerApi(client: OkHttpClient): AuthControllerApi {
+        return AuthControllerApi(BASE_URL, client)
+    }
 
-  @Singleton
-  @Provides
-  fun provideRiskControllerApi(client: OkHttpClient): RiskControllerApi {
+    @Singleton
+    @Provides
+    fun provideRiskControllerApi(client: OkHttpClient): RiskControllerApi {
 
-    return RiskControllerApi(BASE_URL, client)
-  }
+        return RiskControllerApi(BASE_URL, client)
+    }
 
-  @Singleton
-  @Provides
-  fun provideAdminControllerApi(client: OkHttpClient): AdminControllerApi {
+    @Singleton
+    @Provides
+    fun provideAdminControllerApi(client: OkHttpClient): AdminControllerApi {
 
-    return AdminControllerApi(BASE_URL, client)
-  }
+        return AdminControllerApi(BASE_URL, client)
+    }
 
-  @Provides
-  @Singleton
-  fun provideUserSessionStorage(@ApplicationContext context: Context): UserSessionStorage {
-    return UserSessionStorage(context)
-  }
+    @Provides
+    @Singleton
+    fun provideUserSessionStorage(@ApplicationContext context: Context): UserSessionStorage {
+        return UserSessionStorage(context)
+    }
 }
 
-class AuthInterceptor(private val userSessionStorageProvider: Provider<UserSessionStorage>) :
-  Interceptor {
-
-  override fun intercept(chain: Interceptor.Chain): Response {
-    val originalRequest = chain.request()
-    val userSessionStorage = userSessionStorageProvider.get()
-    val accessToken = runBlocking { userSessionStorage.readAccessToken().first() }
-    val requestWithAuthHeader =
-      originalRequest.newBuilder().header("Authorization", "Bearer $accessToken").build()
-    return chain.proceed(requestWithAuthHeader)
-  }
-}
+//class AuthInterceptor(private val userSessionStorageProvider: Provider<UserSessionStorage>) :
+//  Interceptor {
+//
+//  override fun intercept(chain: Interceptor.Chain): Response {
+//    val originalRequest = chain.request()
+//    val userSessionStorage = userSessionStorageProvider.get()
+//    val accessToken = runBlocking { userSessionStorage.readAccessToken().first() }
+//    val requestWithAuthHeader =
+//      originalRequest.newBuilder().header("Authorization", "Bearer $accessToken").build()
+//    return chain.proceed(requestWithAuthHeader)
+//  }
+//}
