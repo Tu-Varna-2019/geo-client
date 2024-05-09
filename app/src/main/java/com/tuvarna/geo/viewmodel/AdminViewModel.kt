@@ -34,6 +34,24 @@ constructor(
   private val _userInfos = MutableStateFlow<List<UserInfoDTO>>(emptyList())
   val userInfos = _userInfos.asStateFlow()
 
+  fun sortUserLogsByEvent() {
+    _userLogs.value = _userLogs.value.sortedBy { it.event }
+    mutableStateFlow.value =
+      UIFeedback(state = UIFeedback.States.Success, message = "Logs sorted by event!")
+  }
+
+  fun sortUserLogsByUsername() {
+    _userLogs.value = _userLogs.value.sortedBy { it.username }
+    mutableStateFlow.value =
+      UIFeedback(state = UIFeedback.States.Success, message = "Logs sorted by username!")
+  }
+
+  fun sortUserLogsByIP() {
+    _userLogs.value = _userLogs.value.sortedBy { it.ip }
+    mutableStateFlow.value =
+      UIFeedback(state = UIFeedback.States.Success, message = "Logs sorted by IP!")
+  }
+
   private fun updateUserInfoIsBlocked(email: String) {
     _userInfos.value =
       _userInfos.value.map { userInfo ->
@@ -62,6 +80,8 @@ constructor(
         when (val result: ApiPayload<Any> = adminRepositoy.getLogs(userType)) {
           is ApiPayload.Success -> {
             _userLogs.value = (result.data as List<LoggerDTO>?)!!
+            // Default behavior: sort by event type
+            sortUserLogsByEvent()
 
             loggerManager.sendLog(
               userSessionStorage.readUsername(),

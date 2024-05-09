@@ -11,11 +11,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -41,11 +41,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.tuvarna.geo.R
 import com.tuvarna.geo.entity.UserEntity
 import com.tuvarna.geo.view.component.dialog_box.DialogTimeRange
 import com.tuvarna.geo.view.component.dialog_box.convertStrToLocalDateTime
@@ -92,7 +94,7 @@ fun AdminPanel(navController: NavController, adminViewModel: AdminViewModel, adm
       colors =
         ButtonDefaults.buttonColors(contentColor = Color.Black, containerColor = Color.Transparent),
     ) {
-      Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+      Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "Back")
     }
 
     Column(modifier = Modifier.fillMaxWidth().padding(25.dp)) {
@@ -124,11 +126,12 @@ fun AdminPanel(navController: NavController, adminViewModel: AdminViewModel, adm
           singleLine = true,
         )
         Box {
-          IconButton(
-            onClick = { showDropDownMenu = !showDropDownMenu }
-            //  modifier = Modifier.weight(0.5f),
-          ) {
-            Icon(imageVector = Icons.Default.Menu, contentDescription = "SotBy")
+          IconButton(onClick = { showDropDownMenu = !showDropDownMenu }) {
+            Icon(
+              painter = painterResource(id = R.drawable.filter_icon),
+              contentDescription = "SortBy",
+              modifier = Modifier.size(20.dp),
+            )
           }
 
           Spacer(modifier = Modifier.height(20.dp))
@@ -139,8 +142,18 @@ fun AdminPanel(navController: NavController, adminViewModel: AdminViewModel, adm
               expanded = showDropDownMenu,
               onDismissRequest = { showDropDownMenu = false },
             ) {
-              DropdownMenuItem(onClick = { /**/ }, text = { Text("Create new chat") })
-              DropdownMenuItem(onClick = { /**/ }, text = { Text("Add friend") })
+              DropdownMenuItem(
+                onClick = { adminViewModel.sortUserLogsByUsername() },
+                text = { Text("Sort by username") },
+              )
+              DropdownMenuItem(
+                onClick = { adminViewModel.sortUserLogsByIP() },
+                text = { Text("Sort by IP") },
+              )
+              DropdownMenuItem(
+                onClick = { adminViewModel.sortUserLogsByEvent() },
+                text = { Text("Sort by event") },
+              )
             }
           }
         }
