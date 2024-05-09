@@ -5,6 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,11 +15,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -59,11 +65,11 @@ fun AdminPanel(navController: NavController, adminViewModel: AdminViewModel, adm
 
   val context = LocalContext.current
   var userLogSorted by remember { mutableStateOf(userLogs) }
-
   val exportCsvLauncher =
     rememberLauncherForActivityResult(contract = ActivityResultContracts.CreateDocument()) { uri ->
       uri?.let { adminViewModel.exportTableToCSV(context, userLogSorted, it) }
     }
+  var showDropDownMenu by remember { mutableStateOf(false) }
 
   var searchText by remember { mutableStateOf("") }
   var selectedTab by remember { mutableStateOf("User logs") }
@@ -98,24 +104,47 @@ fun AdminPanel(navController: NavController, adminViewModel: AdminViewModel, adm
       )
       Spacer(modifier = Modifier.height(16.dp))
 
-      TextField(
-        value = searchText,
-        onValueChange = { newText -> searchText = newText },
-        modifier = Modifier.fillMaxWidth().padding(6.dp).fillMaxWidth(0.8f),
-        shape = RoundedCornerShape(22.dp),
-        leadingIcon = {
-          Icon(imageVector = Icons.Default.Search, contentDescription = "Search here")
-        },
-        label = { Text("Search something...") },
-        colors =
-          TextFieldDefaults.textFieldColors(
-            containerColor = Color(151, 212, 168),
-            cursorColor = Color.Black,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-          ),
-        singleLine = true,
-      )
+      Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+        TextField(
+          value = searchText,
+          onValueChange = { newText -> searchText = newText },
+          modifier = Modifier.weight(1f),
+          shape = RoundedCornerShape(22.dp),
+          leadingIcon = {
+            Icon(imageVector = Icons.Default.Search, contentDescription = "Search here")
+          },
+          label = { Text("Search something...") },
+          colors =
+            TextFieldDefaults.textFieldColors(
+              containerColor = Color(151, 212, 168),
+              cursorColor = Color.Black,
+              focusedIndicatorColor = Color.Transparent,
+              unfocusedIndicatorColor = Color.Transparent,
+            ),
+          singleLine = true,
+        )
+        Box {
+          IconButton(
+            onClick = { showDropDownMenu = !showDropDownMenu }
+            //  modifier = Modifier.weight(0.5f),
+          ) {
+            Icon(imageVector = Icons.Default.Menu, contentDescription = "SotBy")
+          }
+
+          Spacer(modifier = Modifier.height(20.dp))
+          MaterialTheme(
+            colorScheme = MaterialTheme.colorScheme.copy(surface = Color(151, 212, 168))
+          ) {
+            DropdownMenu(
+              expanded = showDropDownMenu,
+              onDismissRequest = { showDropDownMenu = false },
+            ) {
+              DropdownMenuItem(onClick = { /**/ }, text = { Text("Create new chat") })
+              DropdownMenuItem(onClick = { /**/ }, text = { Text("Add friend") })
+            }
+          }
+        }
+      }
       Box(modifier = Modifier.weight(1f)) {
         when (selectedTab) {
           "User logs" -> {
