@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.tuvarna.geo.R
 import com.tuvarna.geo.entity.UserEntity
+import com.tuvarna.geo.helpers.Utils
 import com.tuvarna.geo.view.component.dialog_box.DialogTimeRange
 import com.tuvarna.geo.view.component.dialog_box.convertStrToLocalDateTime
 import com.tuvarna.geo.viewmodel.AdminViewModel
@@ -75,7 +76,12 @@ fun AdminPanel(navController: NavController, adminViewModel: AdminViewModel, adm
 
   var searchText by remember { mutableStateOf("") }
   var selectedTab by remember { mutableStateOf("User logs") }
-  val filteredUserLogs = userLogs.filter { it.username!!.contains(searchText, ignoreCase = true) }
+
+  val filteredUserLogs =
+    Utils.filterLogsByRegex(
+      searchText,
+      userLogs,
+    ) // userLogs.filter { it.username!!.contains(searchText, ignoreCase = true) }
   val filteredUsers = users.filter { it.email!!.contains(searchText, ignoreCase = true) }
 
   Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
@@ -94,7 +100,7 @@ fun AdminPanel(navController: NavController, adminViewModel: AdminViewModel, adm
       colors =
         ButtonDefaults.buttonColors(contentColor = Color.Black, containerColor = Color.Transparent),
     ) {
-      Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "Back")
+      Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
     }
 
     Column(modifier = Modifier.fillMaxWidth().padding(25.dp)) {
