@@ -58,7 +58,7 @@ fun AdminPanel(navController: NavController, adminViewModel: AdminViewModel, adm
   val users by adminViewModel.userInfos.collectAsState()
 
   val context = LocalContext.current
-  var userLogSorted = userLogs
+  var userLogSorted by remember { mutableStateOf(userLogs) }
 
   val exportCsvLauncher =
     rememberLauncherForActivityResult(contract = ActivityResultContracts.CreateDocument()) { uri ->
@@ -138,15 +138,15 @@ fun AdminPanel(navController: NavController, adminViewModel: AdminViewModel, adm
         DialogTimeRange(
           title = "Choose time range to export logs",
           onConfirm = { dateStart, dateEnd ->
+            userLogSorted =
+              userLogs.filter {
+                val logTimestamp = convertStrToLocalDateTime(it.timestamp!!)
+                Timber.d(
+                  "Timestamp of the sort: ${logTimestamp} ($dateStart, $dateEnd) = ${logTimestamp.isAfter(dateStart) && logTimestamp.isBefore(dateEnd)}"
+                )
+                logTimestamp.isAfter(dateStart) && logTimestamp.isBefore(dateEnd)
+              }
             CoroutineScope(Dispatchers.Main).launch {
-              userLogSorted =
-                userLogSorted.filter {
-                  val logTimestamp = convertStrToLocalDateTime(it.timestamp!!)
-                  Timber.d(
-                    "Timestamp of the sort: ${logTimestamp} ($dateStart, $dateEnd) = ${logTimestamp.isAfter(dateStart) && logTimestamp.isBefore(dateEnd)}"
-                  )
-                  logTimestamp.isAfter(dateStart) && logTimestamp.isBefore(dateEnd)
-                }
               exportCsvLauncher.launch("output.csv")
               showExportLogsTimeRangeDialog.value = false
             }
