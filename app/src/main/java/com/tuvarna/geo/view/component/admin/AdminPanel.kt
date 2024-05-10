@@ -56,7 +56,6 @@ import com.tuvarna.geo.viewmodel.AdminViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnrememberedMutableState", "CoroutineCreationDuringComposition")
@@ -77,11 +76,7 @@ fun AdminPanel(navController: NavController, adminViewModel: AdminViewModel, adm
   var searchText by remember { mutableStateOf("") }
   var selectedTab by remember { mutableStateOf("User logs") }
 
-  val filteredUserLogs =
-    Utils.filterLogsByRegex(
-      searchText,
-      userLogs,
-    ) // userLogs.filter { it.username!!.contains(searchText, ignoreCase = true) }
+  val filteredUserLogs = Utils.filterLogsByRegex(searchText, userLogs)
   val filteredUsers = users.filter { it.email!!.contains(searchText, ignoreCase = true) }
 
   Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
@@ -189,9 +184,6 @@ fun AdminPanel(navController: NavController, adminViewModel: AdminViewModel, adm
             userLogSorted =
               userLogs.filter {
                 val logTimestamp = convertStrToLocalDateTime(it.timestamp!!)
-                Timber.d(
-                  "Timestamp of the sort: ${logTimestamp} ($dateStart, $dateEnd) = ${logTimestamp.isAfter(dateStart) && logTimestamp.isBefore(dateEnd)}"
-                )
                 logTimestamp.isAfter(dateStart) && logTimestamp.isBefore(dateEnd)
               }
             CoroutineScope(Dispatchers.Main).launch {
