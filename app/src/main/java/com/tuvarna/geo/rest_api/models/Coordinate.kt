@@ -26,8 +26,8 @@ import com.squareup.moshi.JsonClass
  * @param y 
  * @param z 
  * @param valid 
- * @param m 
  * @param coordinate 
+ * @param m 
  */
 
 
@@ -45,11 +45,11 @@ data class Coordinate (
     @Json(name = "valid")
     val valid: kotlin.Boolean? = null,
 
-    @Json(name = "m")
-    val m: kotlin.Double? = null,
-
     @Json(name = "coordinate")
-    val coordinate: Coordinate? = null
+    val coordinate: Coordinate? = null,
+
+    @Json(name = "m")
+    val m: kotlin.Double? = null
 
 )
 

@@ -48,6 +48,7 @@ Class | Method | HTTP request | Description
 *AdminControllerApi* | [**blockUser**](docs/AdminControllerApi.md#blockuser) | **PUT** /admin/users/{email}/block/{blocked} | Block user
 *AdminControllerApi* | [**getLogs**](docs/AdminControllerApi.md#getlogs) | **GET** /admin/fetch/logs/{userType} | Retrieve user logs
 *AdminControllerApi* | [**getUsers**](docs/AdminControllerApi.md#getusers) | **GET** /admin/fetch/users/{userType} | Get all users
+*AdminControllerApi* | [**promoteUser**](docs/AdminControllerApi.md#promoteuser) | **PUT** /admin/users/{email}/promote/{userType} | Promote or denote user to admin
 *AdminControllerApi* | [**saveLog**](docs/AdminControllerApi.md#savelog) | **POST** /admin/save/log/{userType} | Save log
 *AuthControllerApi* | [**create**](docs/AuthControllerApi.md#create) | **POST** /auth/register | Register a new user
 *AuthControllerApi* | [**login**](docs/AuthControllerApi.md#login) | **POST** /auth/login | Logging on a new user

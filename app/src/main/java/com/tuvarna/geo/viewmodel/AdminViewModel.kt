@@ -61,6 +61,15 @@ constructor(
       }
   }
 
+  private fun updateUserInfoUserType(email: String, userType: String) {
+    _userInfos.value =
+      _userInfos.value.map { userInfo ->
+        if (userInfo.email == email)
+          UserInfoDTO(userInfo.username, userInfo.email, userInfo.isblocked, userType)
+        else userInfo
+      }
+  }
+
   fun logUserViewNavigation(viewName: String) {
     CoroutineScope(Dispatchers.IO).launch {
       loggerManager.sendLog(
@@ -141,6 +150,39 @@ constructor(
     }
   }
 
+  fun promoteUser(email: String, userType: String) {
+    Timber.d("Admin sent a request to promote=%s user: %s! Moving on...", userType, email)
+    viewModelScope.launch {
+      mutableStateFlow.value = UIFeedback(state = UIFeedback.States.Waiting)
+
+      val message =
+        when (val result: ApiPayload<Any> = adminRepositoy.promoteUser(email, userType)) {
+          is ApiPayload.Success -> {
+            updateUserInfoUserType(email, userType)
+
+            loggerManager.sendLog(
+              userSessionStorage.readUsername(),
+              userSessionStorage.readUserType(),
+              "Admin chose to promote=$userType user: $email",
+            )
+            returnStatus = UIFeedback.States.Success
+            result.message!!
+          }
+          is ApiPayload.Failure -> {
+            loggerManager.sendLog(
+              userSessionStorage.readUsername(),
+              userSessionStorage.readUserType(),
+              "Admin has failed to promote=$userType user: $email",
+            )
+
+            returnStatus = UIFeedback.States.Failed
+            result.message
+          }
+        }
+      mutableStateFlow.value = UIFeedback(state = returnStatus, message = message)
+    }
+  }
+
   fun getUsers(userType: String) {
     Timber.d("Admin sent a request to fetch all users with type:  %s! Moving on...", userType)
     viewModelScope.launch {
@@ -149,7 +191,10 @@ constructor(
       val message =
         when (val result: ApiPayload<List<UserInfoDTO>> = adminRepositoy.getUsers(userType)) {
           is ApiPayload.Success -> {
-            _userInfos.value = result.data!!
+            // Include the combination of customers and admins into a single table
+            // TODO: Improve this
+            if (userType == "admin") _userInfos.value += result.data!!
+            else _userInfos.value = result.data!!
 
             loggerManager.sendLog(
               userSessionStorage.readUsername(),

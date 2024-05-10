@@ -77,7 +77,7 @@ fun AdminPanel(navController: NavController, adminViewModel: AdminViewModel, adm
   var selectedTab by remember { mutableStateOf("User logs") }
 
   val filteredUserLogs = Utils.filterLogsByRegex(searchText, userLogs)
-  val filteredUsers = users.filter { it.email!!.contains(searchText, ignoreCase = true) }
+  val filteredUsers = users.filter { it.username!!.contains(searchText, ignoreCase = true) }
 
   Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
     Text(
@@ -170,7 +170,11 @@ fun AdminPanel(navController: NavController, adminViewModel: AdminViewModel, adm
             UserLogsTable(userLogs = filteredUserLogs)
           }
           "User management" -> {
-            LaunchedEffect(key1 = Unit) { adminViewModel.getUsers("customer") }
+            LaunchedEffect(key1 = Unit) {
+              adminViewModel.getUsers("customer")
+              adminViewModel.getUsers("admin")
+            }
+
             UserManagementTable(adminViewModel = adminViewModel, users = filteredUsers)
           }
           else -> {}
@@ -213,7 +217,7 @@ fun TabBar(selectedTab: String, userType: String, onTabSelected: (String) -> Uni
   // TODO: Please improve this
   val tabOptions =
     if (userType != "admin") listOf("User logs", "Admin logs", "User management")
-    else listOf("User logs", "User management")
+    else listOf("User logs")
 
   TabRow(selectedTabIndex = tabOptions.indexOf(selectedTab)) {
     tabOptions.forEachIndexed { _, text ->

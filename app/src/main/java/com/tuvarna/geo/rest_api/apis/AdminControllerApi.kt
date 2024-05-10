@@ -262,6 +262,79 @@ class AdminControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHt
     }
 
     /**
+     * Promote or denote user to admin
+     * 
+     * @param email 
+     * @param userType 
+     * @return RestApiResponseVoid
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
+    fun promoteUser(email: kotlin.String, userType: kotlin.String) : RestApiResponseVoid {
+        val localVarResponse = promoteUserWithHttpInfo(email = email, userType = userType)
+
+        return when (localVarResponse.responseType) {
+            ResponseType.Success -> (localVarResponse as Success<*>).data as RestApiResponseVoid
+            ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
+            ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
+            ResponseType.ClientError -> {
+                val localVarError = localVarResponse as ClientError<*>
+                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+            }
+            ResponseType.ServerError -> {
+                val localVarError = localVarResponse as ServerError<*>
+                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)
+            }
+        }
+    }
+
+    /**
+     * Promote or denote user to admin
+     * 
+     * @param email 
+     * @param userType 
+     * @return ApiResponse<RestApiResponseVoid?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(IllegalStateException::class, IOException::class)
+    fun promoteUserWithHttpInfo(email: kotlin.String, userType: kotlin.String) : ApiResponse<RestApiResponseVoid?> {
+        val localVariableConfig = promoteUserRequestConfig(email = email, userType = userType)
+
+        return request<Unit, RestApiResponseVoid>(
+            localVariableConfig
+        )
+    }
+
+    /**
+     * To obtain the request config of the operation promoteUser
+     *
+     * @param email 
+     * @param userType 
+     * @return RequestConfig
+     */
+    fun promoteUserRequestConfig(email: kotlin.String, userType: kotlin.String) : RequestConfig<Unit> {
+        val localVariableBody = null
+        val localVariableQuery: MultiValueMap = mutableMapOf()
+        val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
+        
+        return RequestConfig(
+            method = RequestMethod.PUT,
+            path = "/admin/users/{email}/promote/{userType}".replace("{"+"email"+"}", encodeURIComponent(email.toString())).replace("{"+"userType"+"}", encodeURIComponent(userType.toString())),
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = false,
+            body = localVariableBody
+        )
+    }
+
+    /**
      * Save log
      * 
      * @param userType 

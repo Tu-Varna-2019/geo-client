@@ -8,8 +8,8 @@ Name | Type | Description | Notes
 **y** | **kotlin.Double** |  |  [optional]
 **z** | **kotlin.Double** |  |  [optional]
 **valid** | **kotlin.Boolean** |  |  [optional]
-**m** | **kotlin.Double** |  |  [optional]
 **coordinate** | [**Coordinate**](Coordinate.md) |  |  [optional]
+**m** | **kotlin.Double** |  |  [optional]
 
 
 

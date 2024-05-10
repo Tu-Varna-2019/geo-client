@@ -48,6 +48,18 @@ class AdminRepository @Inject constructor(private val adminControllerApi: AdminC
     }
   }
 
+  suspend fun promoteUser(email: String, userType: String): ApiPayload<Any> {
+    return withContext(Dispatchers.IO) {
+      try {
+        Timber.d("Sending a request to promote= %s user: %s", userType, email)
+        val response = adminControllerApi.promoteUser(email, userType)
+        ApiPayload.Success(response.message, response.data)
+      } catch (e: Exception) {
+        handleApiError(e)
+      }
+    }
+  }
+
   suspend fun getUsers(userType: String): ApiPayload<List<UserInfoDTO>> {
     return withContext(Dispatchers.IO) {
       try {

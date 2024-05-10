@@ -6,6 +6,48 @@ servers:
 - url: http://localhost:8080/api.tuvarna.geo.com/v1
   description: Generated server url
 paths:
+  /admin/users/{email}/promote/{userType}:
+    put:
+      tags:
+      - admin-controller
+      summary: Promote or denote user to admin
+      operationId: promoteUser
+      parameters:
+      - name: email
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userType
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "400":
+          description: Bad request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "201":
+          description: User promoted/denoted!
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RestApiResponseVoid'
   /admin/users/{email}/block/{blocked}:
     put:
       tags:
@@ -342,11 +384,11 @@ components:
           format: double
         valid:
           type: boolean
+        coordinate:
+          $ref: '#/components/schemas/Coordinate'
         m:
           type: number
           format: double
-        coordinate:
-          $ref: '#/components/schemas/Coordinate'
     CoordinateSequence:
       type: object
       properties:
@@ -363,9 +405,6 @@ components:
       properties:
         "null":
           type: boolean
-        area:
-          type: number
-          format: double
         width:
           type: number
           format: double
@@ -385,6 +424,9 @@ components:
           type: number
           format: double
         maxY:
+          type: number
+          format: double
+        area:
           type: number
           format: double
     Geometry:
@@ -412,9 +454,6 @@ components:
           type: string
         boundary:
           $ref: '#/components/schemas/Geometry'
-        numGeometries:
-          type: integer
-          format: int32
         coordinate:
           $ref: '#/components/schemas/Coordinate'
         coordinates:
@@ -422,6 +461,9 @@ components:
           items:
             $ref: '#/components/schemas/Coordinate'
         numPoints:
+          type: integer
+          format: int32
+        numGeometries:
           type: integer
           format: int32
         area:
@@ -477,9 +519,6 @@ components:
           format: double
         empty:
           type: boolean
-        numGeometries:
-          type: integer
-          format: int32
         coordinate:
           $ref: '#/components/schemas/Coordinate'
         coordinates:
@@ -487,6 +526,9 @@ components:
           items:
             $ref: '#/components/schemas/Coordinate'
         numPoints:
+          type: integer
+          format: int32
+        numGeometries:
           type: integer
           format: int32
         area:
