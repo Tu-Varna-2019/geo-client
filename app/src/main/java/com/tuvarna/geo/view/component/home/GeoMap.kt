@@ -301,7 +301,7 @@ fun BottomBarContent(homeViewModel: HomeViewModel) {
       }
       // In here put all of the available data types to visualize the respective table
       soil?.let {
-        SoilTableContent(soil = it)
+        SoilTable(soil = it)
         userMarkerState.changeTitle("Soil")
       }
     }
@@ -333,7 +333,7 @@ fun BottomBarContent(homeViewModel: HomeViewModel) {
       }
       // In here put all of the available data types to visualize the respective table
       earthquake?.let {
-        EarthquakeTableContent(earthquake = it)
+        EarthquakeTable(earthquake = it)
         userMarkerState.changeTitle("Earthquake")
       }
     }

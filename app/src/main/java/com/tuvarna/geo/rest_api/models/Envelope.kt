@@ -23,7 +23,6 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param `null` 
- * @param area 
  * @param width 
  * @param height 
  * @param diameter 
@@ -31,6 +30,7 @@ import com.squareup.moshi.JsonClass
  * @param maxX 
  * @param minY 
  * @param maxY 
+ * @param area 
  */
 
 
@@ -38,9 +38,6 @@ data class Envelope (
 
     @Json(name = "null")
     val `null`: kotlin.Boolean? = null,
-
-    @Json(name = "area")
-    val area: kotlin.Double? = null,
 
     @Json(name = "width")
     val width: kotlin.Double? = null,
@@ -61,7 +58,10 @@ data class Envelope (
     val minY: kotlin.Double? = null,
 
     @Json(name = "maxY")
-    val maxY: kotlin.Double? = null
+    val maxY: kotlin.Double? = null,
+
+    @Json(name = "area")
+    val area: kotlin.Double? = null
 
 )
 

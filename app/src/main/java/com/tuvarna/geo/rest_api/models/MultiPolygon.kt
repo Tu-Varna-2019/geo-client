@@ -37,10 +37,10 @@ import com.squareup.moshi.JsonClass
  * @param dimension 
  * @param length 
  * @param empty 
- * @param numGeometries 
  * @param coordinate 
  * @param coordinates 
  * @param numPoints 
+ * @param numGeometries 
  * @param area 
  * @param valid 
  * @param simple 
@@ -82,9 +82,6 @@ data class MultiPolygon (
     @Json(name = "empty")
     val empty: kotlin.Boolean? = null,
 
-    @Json(name = "numGeometries")
-    val numGeometries: kotlin.Int? = null,
-
     @Json(name = "coordinate")
     val coordinate: Coordinate? = null,
 
@@ -93,6 +90,9 @@ data class MultiPolygon (
 
     @Json(name = "numPoints")
     val numPoints: kotlin.Int? = null,
+
+    @Json(name = "numGeometries")
+    val numGeometries: kotlin.Int? = null,
 
     @Json(name = "area")
     val area: kotlin.Double? = null,

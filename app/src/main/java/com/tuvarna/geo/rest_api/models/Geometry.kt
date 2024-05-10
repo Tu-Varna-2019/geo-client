@@ -37,10 +37,10 @@ import com.squareup.moshi.JsonClass
  * @param boundaryDimension 
  * @param geometryType 
  * @param boundary 
- * @param numGeometries 
  * @param coordinate 
  * @param coordinates 
  * @param numPoints 
+ * @param numGeometries 
  * @param area 
  * @param envelopeInternal 
  * @param srid 
@@ -84,9 +84,6 @@ data class Geometry (
     @Json(name = "boundary")
     val boundary: Geometry? = null,
 
-    @Json(name = "numGeometries")
-    val numGeometries: kotlin.Int? = null,
-
     @Json(name = "coordinate")
     val coordinate: Coordinate? = null,
 
@@ -95,6 +92,9 @@ data class Geometry (
 
     @Json(name = "numPoints")
     val numPoints: kotlin.Int? = null,
+
+    @Json(name = "numGeometries")
+    val numGeometries: kotlin.Int? = null,
 
     @Json(name = "area")
     val area: kotlin.Double? = null,

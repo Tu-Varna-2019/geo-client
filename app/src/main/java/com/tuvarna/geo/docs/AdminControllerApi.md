@@ -7,6 +7,7 @@ Method | HTTP request | Description
 [**blockUser**](AdminControllerApi.md#blockUser) | **PUT** /admin/users/{email}/block/{blocked} | Block user
 [**getLogs**](AdminControllerApi.md#getLogs) | **GET** /admin/fetch/logs/{userType} | Retrieve user logs
 [**getUsers**](AdminControllerApi.md#getUsers) | **GET** /admin/fetch/users/{userType} | Get all users
+[**promoteUser**](AdminControllerApi.md#promoteUser) | **PUT** /admin/users/{email}/promote/{userType} | Promote or denote user to admin
 [**saveLog**](AdminControllerApi.md#saveLog) | **POST** /admin/save/log/{userType} | Save log
 
 
@@ -137,6 +138,53 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**RestApiResponseListUserInfoDTO**](RestApiResponseListUserInfoDTO.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+<a id="promoteUser"></a>
+# **promoteUser**
+> RestApiResponseVoid promoteUser(email, userType)
+
+Promote or denote user to admin
+
+### Example
+```kotlin
+// Import classes:
+//import com.tuvarna.geo.rest_api.infrastructure.*
+//import com.tuvarna.geo.rest_api.models.*
+
+val apiInstance = AdminControllerApi()
+val email : kotlin.String = email_example // kotlin.String | 
+val userType : kotlin.String = userType_example // kotlin.String | 
+try {
+    val result : RestApiResponseVoid = apiInstance.promoteUser(email, userType)
+    println(result)
+} catch (e: ClientException) {
+    println("4xx response calling AdminControllerApi#promoteUser")
+    e.printStackTrace()
+} catch (e: ServerException) {
+    println("5xx response calling AdminControllerApi#promoteUser")
+    e.printStackTrace()
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **email** | **kotlin.String**|  |
+ **userType** | **kotlin.String**|  |
+
+### Return type
+
+[**RestApiResponseVoid**](RestApiResponseVoid.md)
 
 ### Authorization
 
