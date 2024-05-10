@@ -20,6 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,110 +34,118 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.tuvarna.geo.R
 import com.tuvarna.geo.entity.UserEntity
+import com.tuvarna.geo.helpers.Utils
 import com.tuvarna.geo.view.component.accessibility.LoadingIndicator
 import com.tuvarna.geo.viewmodel.LoginViewModel
 
 @Composable
 fun LoginView(navController: NavController) {
-  val loginViewModel = hiltViewModel<LoginViewModel>()
-  val user by remember { mutableStateOf(UserEntity(0, "", "", "", false)) }
+    val loginViewModel = hiltViewModel<LoginViewModel>()
+    val user by remember { mutableStateOf(UserEntity(0, "", "", "", false)) }
 
-  LoadingIndicator(
-    stateFlow = loginViewModel.stateFlow.collectAsState().value,
-    navController = navController,
-    route = "home",
-  )
-  Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
-    Column(
-      modifier = Modifier.padding(5.dp).fillMaxWidth(0.8f),
-      verticalArrangement = Arrangement.Center,
-    ) {
-      Text(
-        text = "Login",
-        style = MaterialTheme.typography.bodyMedium,
-        modifier = Modifier.padding(16.dp).align(Alignment.CenterHorizontally),
-        fontWeight = FontWeight.Bold,
-        fontSize = 30.sp,
-      )
+    LoadingIndicator(
+        stateFlow = loginViewModel.stateFlow.collectAsState().value,
+        navController = navController,
+        route = "home",
+    )
+    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
+        Column(
+            modifier = Modifier.padding(5.dp).fillMaxWidth(0.8f),
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Text(
+                text = "Login",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(16.dp).align(Alignment.CenterHorizontally),
+                fontWeight = FontWeight.Bold,
+                fontSize = 30.sp,
+            )
 
-      Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
-      Image(
-        painter = painterResource(id = R.drawable.earth),
-        contentDescription = "Earth Icon",
-        modifier = Modifier.size(110.dp).fillMaxWidth().align(Alignment.CenterHorizontally),
-      )
+            Image(
+                painter = painterResource(id = R.drawable.earth),
+                contentDescription = "Earth Icon",
+                modifier = Modifier.size(110.dp).fillMaxWidth().align(Alignment.CenterHorizontally),
+            )
 
-      Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
-      LoginForm(user = user, loginViewModel = loginViewModel, navController = navController)
+            LoginForm(user = user, loginViewModel = loginViewModel, navController = navController)
+        }
     }
-  }
 }
 
 @Composable
 fun LoginForm(navController: NavController, user: UserEntity, loginViewModel: LoginViewModel) {
 
-  val isEmailValid = user.email.isEmpty() // || Utils.isValidEmail(user.email)
-  val isPasswordValid = user.password.isEmpty() // || Utils.isValidPassword(user.password)
-  val isSubmitBtnDisabled = isEmailValid || isPasswordValid
 
-  val textFieldModifier: Modifier = Modifier.fillMaxWidth().padding(8.dp).height(60.dp)
-  val errorTextModifier: Modifier = Modifier.fillMaxWidth().padding(start = 8.dp)
+    var isEmailValid by remember { mutableStateOf(true) }
+    var isPasswordValid by remember { mutableStateOf(true) }
 
-  OutlinedTextField(
-    value = user.email,
-    isError = isEmailValid,
-    onValueChange = { user.email = it },
-    label = { Text("Email") },
-    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-    modifier = textFieldModifier,
-  )
+    val textFieldModifier: Modifier = Modifier.fillMaxWidth().padding(8.dp).height(60.dp)
+    val errorTextModifier: Modifier = Modifier.fillMaxWidth().padding(start = 8.dp)
 
-  if (isEmailValid) {
-    Text(
-      text = "Email is invalid",
-      color = Color.Red,
-      style = MaterialTheme.typography.bodyMedium,
-      modifier = errorTextModifier,
+    OutlinedTextField(
+        value = user.email,
+        isError = !isEmailValid,
+        onValueChange = {  user.email = it },
+        label = { Text("Email") },
+        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+        modifier = textFieldModifier,
     )
-  }
 
-  OutlinedTextField(
-    value = user.password,
-    isError = isPasswordValid,
-    onValueChange = { user.password = it },
-    label = { Text("Password") },
-    visualTransformation = PasswordVisualTransformation(),
-    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-    modifier = textFieldModifier,
-  )
+    if (!isEmailValid) {
+        Text(
+            text = "Email is invalid",
+            color = Color.Red,
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = errorTextModifier,
+        )
+    }
 
-  if (isPasswordValid) {
-    Text(
-      text = "Password does not conform the rules",
-      color = Color.Red,
-      style = MaterialTheme.typography.bodyMedium,
-      modifier = errorTextModifier,
+    OutlinedTextField(
+        value =  user.password,
+        isError = !isPasswordValid,
+        onValueChange = {  user.password = it },
+        label = { Text("Password") },
+        visualTransformation = PasswordVisualTransformation(),
+        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+        modifier = textFieldModifier,
     )
-  }
 
-  Row(
-    modifier = Modifier.fillMaxWidth().padding(8.dp),
-    horizontalArrangement = Arrangement.SpaceBetween,
-  ) {
-    Button(
-      onClick = { loginViewModel.login(user) },
-      enabled = !isSubmitBtnDisabled,
-      modifier = Modifier.weight(1f).padding(end = 10.dp),
-    ) {
-      Text("Login")
+    if (!isPasswordValid) {
+        Text(
+            text = "Password does not conform the rules",
+            color = Color.Red,
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = errorTextModifier,
+        )
     }
-    Button(
-      onClick = { navController.navigate("signup") },
-      modifier = Modifier.weight(1f).padding(end = 10.dp),
+
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-      Text("Sign up")
+        Button(
+            onClick = {
+
+                isEmailValid =  user.email.isNotEmpty()
+                isPasswordValid =  user.password.isNotEmpty()
+
+                if(isEmailValid && isPasswordValid) {
+                    loginViewModel.login(user)
+                }
+            },
+            modifier = Modifier.weight(1f).padding(end = 10.dp),
+        ) {
+            Text("Login")
+        }
+        Button(
+            onClick = { navController.navigate("signup") },
+            modifier = Modifier.weight(1f).padding(end = 10.dp),
+        ) {
+            Text("Sign up")
+        }
     }
-  }
 }
