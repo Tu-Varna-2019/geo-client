@@ -139,7 +139,7 @@ private fun TopBottomBar(homeViewModel: HomeViewModel, navController: NavControl
                     containerColor = Color.White,
                     titleContentColor = Color.Black,
                 ),
-                modifier = Modifier.height(0.dp),
+                modifier = Modifier.height(56.dp),
                 title = {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
