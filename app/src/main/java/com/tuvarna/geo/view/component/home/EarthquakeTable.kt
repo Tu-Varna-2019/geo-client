@@ -30,7 +30,7 @@ fun EarthquakeTable(earthquake: Earthquake) {
           .padding(8.dp)
     ) {
       Column(modifier = Modifier.fillMaxWidth()) {
-        TableKeyValueTextRow("Id:", earthquake.id.toString())
+        // TableKeyValueTextRow("Id:", earthquake.id.toString())
         TableKeyValueTextRow("Frequency: ", earthquake.dn.toString())
       }
     }

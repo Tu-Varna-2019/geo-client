@@ -72,6 +72,8 @@ dependencies {
   kapt("com.google.dagger:hilt-android-compiler:2.51")
   implementation(libs.androidx.appcompat)
   implementation("androidx.compose.material:material:1.0.5")
+  implementation("com.fasterxml.jackson.core:jackson-core:2.17.1")
+  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.1")
 
   // Datastore preferences
   implementation("androidx.datastore:datastore-preferences-core:1.1.0")
