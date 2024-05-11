@@ -13,14 +13,24 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.tuvarna.geo.mapper.SoilMapper
 import com.tuvarna.geo.rest_api.models.Soil
 import com.tuvarna.geo.view.component.table.TableKeyValueTextRow
 
 @Composable
 fun SoilTable(soil: Soil) {
   if (soil.gid != null) {
-
+    val soilMapper =
+      SoilMapper(
+        context = LocalContext.current,
+        faosoi = soil.faosoil!!,
+        domsoi = soil.domsoi,
+        phases = soil.phase1 ?: soil.phase2,
+        misc1 = soil.misclu1,
+        misc2 = soil.misclu2,
+      )
     Box(
       modifier =
         Modifier.padding(16.dp)
@@ -33,14 +43,21 @@ fun SoilTable(soil: Soil) {
       Column(modifier = Modifier.fillMaxWidth()) {
         // TableKeyValueTextRow("Gid:", soil.gid.toString())
         TableKeyValueTextRow("Sequential code:", soil.snum.toString())
-        TableKeyValueTextRow("Dominant soil:", soil.faosoil ?: "None") // Bk
-        TableKeyValueTextRow("Texture class:", soil.faosoil ?: "None") // 2/3
-        TableKeyValueTextRow("Slope class:", soil.faosoil ?: "None") // ab
+        TableKeyValueTextRow("Dominant soil:", soilMapper.domsoiFullDescription)
 
-        if (soil.phase1 != null || soil.phase2 != null)
-          TableKeyValueTextRow("Phases:", "${soil.phase1 ?: ""} ${soil.phase2 ?: ""}")
-        if (soil.misclu1 != null || soil.misclu2 != null)
-          TableKeyValueTextRow("Miscues:", "${soil.misclu1 ?: ""} ${soil.misclu2 ?: ""}")
+        if (soilMapper.textureClass != "")
+          TableKeyValueTextRow("Texture class:", soilMapper.textureClass)
+        if (soilMapper.slopeClass != "") TableKeyValueTextRow("Slope class:", soilMapper.slopeClass)
+
+        if (soilMapper.mappingUnit != "")
+          TableKeyValueTextRow("Mapping unit:", soilMapper.mappingUnit)
+
+        if (soilMapper.phaseFullDescription != "")
+          TableKeyValueTextRow("Phases:", soilMapper.phaseFullDescription)
+        if (soilMapper.misc1FullDescription != "")
+          TableKeyValueTextRow("Miscellaneous 1:", soilMapper.misc1FullDescription)
+        if (soilMapper.misc2FullDescription != "")
+          TableKeyValueTextRow("Miscellaneous 2:", soilMapper.misc2FullDescription)
 
         if (soil.permafrost != null) {
           TableKeyValueTextRow(
