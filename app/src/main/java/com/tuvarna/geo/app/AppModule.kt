@@ -1,9 +1,9 @@
 package com.tuvarna.geo.app
 
 import android.content.Context
-import com.tuvarna.geo.rest_api.apis.AdminControllerApi
-import com.tuvarna.geo.rest_api.apis.AuthControllerApi
-import com.tuvarna.geo.rest_api.apis.RiskControllerApi
+import com.tuvarna.geo.controller.apis.AdminControllerApi
+import com.tuvarna.geo.controller.apis.AuthControllerApi
+import com.tuvarna.geo.controller.apis.RiskControllerApi
 import com.tuvarna.geo.storage.UserSessionStorage
 import dagger.Module
 import dagger.Provides
