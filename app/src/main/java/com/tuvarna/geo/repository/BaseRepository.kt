@@ -1,9 +1,9 @@
 package com.tuvarna.geo.repository
 
-import com.tuvarna.geo.rest_api.infrastructure.ClientError
-import com.tuvarna.geo.rest_api.infrastructure.ClientException
-import com.tuvarna.geo.rest_api.infrastructure.ServerError
-import com.tuvarna.geo.rest_api.infrastructure.ServerException
+import com.tuvarna.geo.controller.infrastructure.ClientError
+import com.tuvarna.geo.controller.infrastructure.ClientException
+import com.tuvarna.geo.controller.infrastructure.ServerError
+import com.tuvarna.geo.controller.infrastructure.ServerException
 import org.json.JSONObject
 import timber.log.Timber
 

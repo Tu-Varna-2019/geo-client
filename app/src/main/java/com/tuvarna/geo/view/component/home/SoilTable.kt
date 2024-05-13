@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.tuvarna.geo.mapper.SoilMapper
-import com.tuvarna.geo.rest_api.models.Soil
+import com.tuvarna.geo.controller.models.Soil
 import com.tuvarna.geo.view.component.table.TableKeyValueTextRow
 
 @Composable

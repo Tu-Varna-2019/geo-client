@@ -1,8 +1,8 @@
 package com.tuvarna.geo.repository
 
-import com.tuvarna.geo.rest_api.apis.AdminControllerApi
-import com.tuvarna.geo.rest_api.models.LoggerDTO
-import com.tuvarna.geo.rest_api.models.UserInfoDTO
+import com.tuvarna.geo.controller.apis.AdminControllerApi
+import com.tuvarna.geo.controller.models.LoggerDTO
+import com.tuvarna.geo.controller.models.UserInfoDTO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber

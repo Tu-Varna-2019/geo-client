@@ -1,7 +1,7 @@
 package com.tuvarna.geo.entity
 
-import com.tuvarna.geo.rest_api.models.Earthquake
-import com.tuvarna.geo.rest_api.models.Soil
+import com.tuvarna.geo.controller.models.Earthquake
+import com.tuvarna.geo.controller.models.Soil
 
 enum class RiskChoices {
   None,

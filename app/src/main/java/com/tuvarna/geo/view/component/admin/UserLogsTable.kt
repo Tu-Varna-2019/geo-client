@@ -15,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.tuvarna.geo.rest_api.models.LoggerDTO
+import com.tuvarna.geo.controller.models.LoggerDTO
 import com.tuvarna.geo.view.component.table.TableKeyValueTextRow
 
 @Composable

@@ -1,8 +1,8 @@
 package com.tuvarna.geo.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import com.tuvarna.geo.controller.LoggerManager
-import com.tuvarna.geo.controller.UIFeedback
+import com.tuvarna.geo.navigation.LoggerManager
+import com.tuvarna.geo.navigation.UIFeedback
 import com.tuvarna.geo.entity.UserEntity
 import com.tuvarna.geo.repository.ApiPayload
 import com.tuvarna.geo.repository.UserRepository

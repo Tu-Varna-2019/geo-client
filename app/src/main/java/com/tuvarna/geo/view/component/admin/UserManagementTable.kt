@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.tuvarna.geo.rest_api.models.UserInfoDTO
+import com.tuvarna.geo.controller.models.UserInfoDTO
 import com.tuvarna.geo.view.component.table.TableKeyValueTextRow
 import com.tuvarna.geo.viewmodel.AdminViewModel
 

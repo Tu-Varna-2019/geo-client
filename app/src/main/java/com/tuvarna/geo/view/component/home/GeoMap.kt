@@ -52,9 +52,9 @@ import com.tuvarna.geo.entity.PointEntity
 import com.tuvarna.geo.entity.RiskChoices
 import com.tuvarna.geo.entity.RiskHierarchy
 import com.tuvarna.geo.entity.state.UserMarkerState
-import com.tuvarna.geo.rest_api.models.Earthquake
-import com.tuvarna.geo.rest_api.models.RiskDTO
-import com.tuvarna.geo.rest_api.models.Soil
+import com.tuvarna.geo.controller.models.Earthquake
+import com.tuvarna.geo.controller.models.RiskDTO
+import com.tuvarna.geo.controller.models.Soil
 import com.tuvarna.geo.view.component.accessibility.LoadingIndicator
 import com.tuvarna.geo.view.theme.MapsTheme
 import com.tuvarna.geo.viewmodel.HomeViewModel
