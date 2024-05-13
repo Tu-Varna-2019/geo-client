@@ -1,8 +1,8 @@
 package com.tuvarna.geo.mapper
 
+import com.tuvarna.geo.controller.models.LoginUserDTO
+import com.tuvarna.geo.controller.models.RegisterUserDTO
 import com.tuvarna.geo.entity.UserEntity
-import com.tuvarna.geo.rest_api.models.LoginUserDTO
-import com.tuvarna.geo.rest_api.models.RegisterUserDTO
 
 object UserMapper {
 

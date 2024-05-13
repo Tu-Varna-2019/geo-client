@@ -1,6 +1,6 @@
 package com.tuvarna.geo.viewmodel
 
-import com.tuvarna.geo.controller.LoggerManager
+import com.tuvarna.geo.navigation.LoggerManager
 import com.tuvarna.geo.storage.UserSessionStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope

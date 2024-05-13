@@ -2,15 +2,15 @@ package com.tuvarna.geo.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
-import com.tuvarna.geo.controller.LoggerManager
-import com.tuvarna.geo.controller.UIFeedback
+import com.tuvarna.geo.navigation.LoggerManager
+import com.tuvarna.geo.navigation.UIFeedback
 import com.tuvarna.geo.entity.RiskChoices
 import com.tuvarna.geo.entity.RiskHierarchy
 import com.tuvarna.geo.repository.ApiPayload
 import com.tuvarna.geo.repository.RiskRepository
-import com.tuvarna.geo.rest_api.models.Earthquake
-import com.tuvarna.geo.rest_api.models.RiskDTO
-import com.tuvarna.geo.rest_api.models.Soil
+import com.tuvarna.geo.controller.models.Earthquake
+import com.tuvarna.geo.controller.models.RiskDTO
+import com.tuvarna.geo.controller.models.Soil
 import com.tuvarna.geo.storage.UserSessionStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope

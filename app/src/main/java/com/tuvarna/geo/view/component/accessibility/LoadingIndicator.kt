@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
-import com.tuvarna.geo.controller.UIFeedback
+import com.tuvarna.geo.navigation.UIFeedback
 import com.tuvarna.geo.view.component.dialog_box.SnackbarManager
 
 @Composable

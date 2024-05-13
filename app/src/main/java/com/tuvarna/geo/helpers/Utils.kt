@@ -1,7 +1,7 @@
 package com.tuvarna.geo.helpers
 
 import android.util.Patterns
-import com.tuvarna.geo.rest_api.models.LoggerDTO
+import com.tuvarna.geo.controller.models.LoggerDTO
 import timber.log.Timber
 
 class Utils {

@@ -2,8 +2,8 @@ package com.tuvarna.geo.repository
 
 import com.tuvarna.geo.entity.UserEntity
 import com.tuvarna.geo.mapper.UserMapper
-import com.tuvarna.geo.rest_api.apis.AuthControllerApi
-import com.tuvarna.geo.rest_api.models.LoginUserDTO
+import com.tuvarna.geo.controller.apis.AuthControllerApi
+import com.tuvarna.geo.controller.models.LoginUserDTO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber

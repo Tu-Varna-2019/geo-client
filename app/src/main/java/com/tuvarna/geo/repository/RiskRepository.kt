@@ -1,9 +1,9 @@
 package com.tuvarna.geo.repository
 
-import com.tuvarna.geo.rest_api.apis.RiskControllerApi
-import com.tuvarna.geo.rest_api.models.Earthquake
-import com.tuvarna.geo.rest_api.models.RiskDTO
-import com.tuvarna.geo.rest_api.models.Soil
+import com.tuvarna.geo.controller.apis.RiskControllerApi
+import com.tuvarna.geo.controller.models.Earthquake
+import com.tuvarna.geo.controller.models.RiskDTO
+import com.tuvarna.geo.controller.models.Soil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber

@@ -3,12 +3,12 @@ package com.tuvarna.geo.viewmodel
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
-import com.tuvarna.geo.controller.LoggerManager
-import com.tuvarna.geo.controller.UIFeedback
+import com.tuvarna.geo.navigation.LoggerManager
+import com.tuvarna.geo.navigation.UIFeedback
 import com.tuvarna.geo.repository.AdminRepository
 import com.tuvarna.geo.repository.ApiPayload
-import com.tuvarna.geo.rest_api.models.LoggerDTO
-import com.tuvarna.geo.rest_api.models.UserInfoDTO
+import com.tuvarna.geo.controller.models.LoggerDTO
+import com.tuvarna.geo.controller.models.UserInfoDTO
 import com.tuvarna.geo.storage.UserSessionStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope

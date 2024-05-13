@@ -5,7 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.tuvarna.geo.rest_api.models.LoggedInUserDTO
+import com.tuvarna.geo.controller.models.LoggedInUserDTO
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
