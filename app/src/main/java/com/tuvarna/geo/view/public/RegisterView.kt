@@ -35,11 +35,11 @@ import androidx.navigation.NavController
 import com.tuvarna.geo.R
 import com.tuvarna.geo.entity.UserEntity
 import com.tuvarna.geo.view.component.accessibility.LoadingIndicator
-import com.tuvarna.geo.viewmodel.RegisterViewModel
+import com.tuvarna.geo.viewmodel.RegisterViewmodel
 
 @Composable
 fun RegisterView(navController: NavController) {
-  val registerViewModel = hiltViewModel<RegisterViewModel>()
+  val registerViewModel = hiltViewModel<RegisterViewmodel>()
   val user by remember { mutableStateOf(UserEntity(0, "", "", "", false)) }
   val confirmPassword = remember { mutableStateOf("") }
 
@@ -86,7 +86,7 @@ fun SignUpForm(
   navController: NavController,
   user: UserEntity,
   confirmPassword: MutableState<String>,
-  registerViewModel: RegisterViewModel,
+  registerViewModel: RegisterViewmodel,
 ) {
 
   val isUsernameValid = user.username.isEmpty()

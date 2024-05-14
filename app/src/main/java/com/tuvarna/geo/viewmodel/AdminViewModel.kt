@@ -3,13 +3,14 @@ package com.tuvarna.geo.viewmodel
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
-import com.tuvarna.geo.navigation.LoggerManager
+import com.tuvarna.geo.controller.models.LoggerDTO
+import com.tuvarna.geo.controller.models.UserInfoDTO
 import com.tuvarna.geo.navigation.UIFeedback
 import com.tuvarna.geo.repository.AdminRepository
 import com.tuvarna.geo.repository.ApiPayload
-import com.tuvarna.geo.controller.models.LoggerDTO
-import com.tuvarna.geo.controller.models.UserInfoDTO
 import com.tuvarna.geo.storage.UserSessionStorage
+import com.tuvarna.geo.viewmodel.states.LoggerManager
+import com.tuvarna.geo.viewmodel.states.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +28,7 @@ constructor(
   private val adminRepositoy: AdminRepository,
   private val loggerManager: LoggerManager,
   private val userSessionStorage: UserSessionStorage,
-) : UIStateViewModel() {
+) : UIState() {
   private val _userLogs = MutableStateFlow<List<LoggerDTO>>(emptyList())
   val userLogs = _userLogs.asStateFlow()
 

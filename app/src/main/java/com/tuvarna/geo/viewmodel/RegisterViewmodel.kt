@@ -1,21 +1,22 @@
 package com.tuvarna.geo.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import com.tuvarna.geo.navigation.LoggerManager
-import com.tuvarna.geo.navigation.UIFeedback
 import com.tuvarna.geo.entity.UserEntity
+import com.tuvarna.geo.navigation.UIFeedback
 import com.tuvarna.geo.repository.ApiPayload
 import com.tuvarna.geo.repository.UserRepository
+import com.tuvarna.geo.viewmodel.states.LoggerManager
+import com.tuvarna.geo.viewmodel.states.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterViewModel
+class RegisterViewmodel
 @Inject
 constructor(private val userRepository: UserRepository, private val loggerManager: LoggerManager) :
-  UIStateViewModel() {
+  UIState() {
   private val USER_TYPE: String = "customer"
 
   fun register(user: UserEntity, userType: String) {
@@ -39,7 +40,7 @@ constructor(private val userRepository: UserRepository, private val loggerManage
           is ApiPayload.Failure -> {
             returnStatus = UIFeedback.States.Failed
             loggerManager.sendLog(
-              user.username,
+              "None",
               USER_TYPE,
               "User has encountered an issue while registering: " + result.message,
             )

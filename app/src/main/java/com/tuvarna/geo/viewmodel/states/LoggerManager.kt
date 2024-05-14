@@ -1,7 +1,7 @@
-package com.tuvarna.geo.navigation
+package com.tuvarna.geo.viewmodel.states
 
-import com.tuvarna.geo.repository.AdminRepository
 import com.tuvarna.geo.controller.models.LoggerDTO
+import com.tuvarna.geo.repository.AdminRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber

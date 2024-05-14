@@ -1,12 +1,13 @@
 package com.tuvarna.geo.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import com.tuvarna.geo.navigation.LoggerManager
-import com.tuvarna.geo.navigation.UIFeedback
 import com.tuvarna.geo.entity.UserEntity
+import com.tuvarna.geo.navigation.UIFeedback
 import com.tuvarna.geo.repository.ApiPayload
 import com.tuvarna.geo.repository.UserRepository
 import com.tuvarna.geo.storage.UserSessionStorage
+import com.tuvarna.geo.viewmodel.states.LoggerManager
+import com.tuvarna.geo.viewmodel.states.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -19,7 +20,7 @@ constructor(
   private val loggerManager: LoggerManager,
   private val userRepository: UserRepository,
   private val userSessionStorage: UserSessionStorage,
-) : UIStateViewModel() {
+) : UIState() {
   private val USER_TYPE: String = "customer"
 
   fun login(user: UserEntity) {
@@ -49,7 +50,7 @@ constructor(
             result.message!!
           }
           is ApiPayload.Failure -> {
-            loggerManager.sendLog(user.username, USER_TYPE, "User failed to log in to the system!")
+            loggerManager.sendLog("None", USER_TYPE, "User failed to log in to the system!")
 
             returnStatus = UIFeedback.States.Failed
             result.message

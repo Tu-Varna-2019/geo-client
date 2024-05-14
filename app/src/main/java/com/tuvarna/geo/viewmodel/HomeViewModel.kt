@@ -2,17 +2,20 @@ package com.tuvarna.geo.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
-import com.tuvarna.geo.navigation.LoggerManager
-import com.tuvarna.geo.navigation.UIFeedback
-import com.tuvarna.geo.entity.RiskChoices
-import com.tuvarna.geo.entity.RiskHierarchy
-import com.tuvarna.geo.repository.ApiPayload
-import com.tuvarna.geo.repository.RiskRepository
 import com.tuvarna.geo.controller.models.Earthquake
 import com.tuvarna.geo.controller.models.RiskDTO
 import com.tuvarna.geo.controller.models.Soil
+import com.tuvarna.geo.entity.RiskChoices
+import com.tuvarna.geo.entity.RiskHierarchy
+import com.tuvarna.geo.navigation.UIFeedback
+import com.tuvarna.geo.repository.ApiPayload
+import com.tuvarna.geo.repository.RiskRepository
 import com.tuvarna.geo.storage.UserSessionStorage
+import com.tuvarna.geo.viewmodel.states.LoggerManager
+import com.tuvarna.geo.viewmodel.states.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import kotlin.math.abs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,8 +23,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
-import kotlin.math.abs
 
 @HiltViewModel
 class HomeViewModel
@@ -30,7 +31,7 @@ constructor(
   private val loggerManager: LoggerManager,
   private val userSessionStorage: UserSessionStorage,
   private val riskRepository: RiskRepository,
-) : UIStateViewModel() {
+) : UIState() {
 
   private val _riskLocations = MutableStateFlow(mapOf<LatLng, RiskHierarchy>())
   val riskLocations = _riskLocations.asStateFlow()
