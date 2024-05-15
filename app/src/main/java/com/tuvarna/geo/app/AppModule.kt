@@ -40,7 +40,6 @@ object AppModule {
   @Singleton
   @Provides
   fun provideRiskControllerApi(client: OkHttpClient): RiskControllerApi {
-
     return RiskControllerApi(BASE_URL, client)
   }
 

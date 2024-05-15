@@ -15,14 +15,8 @@
 
 package com.tuvarna.geo.controller.apis
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.ShouldSpec
 
-import com.tuvarna.geo.controller.apis.AuthControllerApi
-import com.tuvarna.geo.controller.models.LoginUserDTO
-import com.tuvarna.geo.controller.models.RegisterUserDTO
-import com.tuvarna.geo.controller.models.RestApiResponseLoggedInUserDTO
-import com.tuvarna.geo.controller.models.RestApiResponseVoid
+import io.kotest.core.spec.style.ShouldSpec
 
 class AuthControllerApiTest : ShouldSpec() {
     init {

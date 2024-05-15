@@ -1,7 +1,8 @@
 package com.tuvarna.geo.viewmodel
 
-import com.tuvarna.geo.navigation.LoggerManager
 import com.tuvarna.geo.storage.UserSessionStorage
+import com.tuvarna.geo.viewmodel.states.LoggerManager
+import com.tuvarna.geo.viewmodel.states.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +15,7 @@ class ProfileViewModel
 constructor(
   private val loggerManager: LoggerManager,
   private val userSessionStorage: UserSessionStorage,
-) : UIStateViewModel() {
+) : UIState() {
 
   fun logUserViewNavigation(viewName: String) {
     CoroutineScope(Dispatchers.IO).launch {
