@@ -82,7 +82,7 @@ dependencies {
   // Google maps API deps
   implementation("com.google.android.gms:play-services-location:18.0.0")
   implementation("com.google.android.gms:play-services-maps:17.0.1")
-  implementation("com.google.maps.android:android-maps-utils:1.1.0")
+  implementation("com.google.maps.android:android-maps-utils:3.8.2")
   implementation("com.google.maps.android:maps-compose:4.4.1")
 
   testImplementation("io.kotest:kotest-framework-api-jvm:4.6.0")
