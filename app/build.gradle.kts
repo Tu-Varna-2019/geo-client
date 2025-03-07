@@ -63,8 +63,8 @@ dependencies {
 
   implementation("com.squareup.okhttp3:okhttp:4.12.0")
   implementation("com.squareup.okhttp3:okhttp:4.12.0")
-  implementation("com.squareup.moshi:moshi:1.14.0")
-  implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
+  implementation("com.squareup.moshi:moshi:1.15.1")
+  implementation("com.squareup.moshi:moshi-kotlin:1.15.1")
   implementation("io.kotest:kotest-framework-engine:4.6.0")
   implementation("com.google.dagger:hilt-android:2.51")
   implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
